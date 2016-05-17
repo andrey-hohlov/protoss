@@ -8,32 +8,32 @@ var fs = require('fs');
  * @return {Array}      Path to dirs
  */
 
-var loadJsFiles = function (dir) {
-    var results = [];
+var loadJsFiles = function(dir) {
+  var results = [];
 
-    try {
-        var list = fs.readdirSync(dir);
+  try {
+    var list = fs.readdirSync(dir);
 
-        list.forEach(function (file) {
-            var stat;
+    list.forEach(function (file) {
+      var stat;
 
-            file = dir + '/' + file;
-            stat = fs.statSync(file);
+      file = dir + '/' + file;
+      stat = fs.statSync(file);
 
-            if (stat && stat.isDirectory()) {
-                results = results.concat(loadJsFiles(file));
-            } else {
-                if (file.match(/(.js*)/)) {
-                    results.push(file);
-                }
-            }
-        });
-    }
-    catch (e) {
-        console.log(dir + " does not exist.");
-    }
+      if (stat && stat.isDirectory()) {
+        results = results.concat(loadJsFiles(file));
+      } else {
+        if (file.match(/(.js*)/)) {
+          results.push(file);
+        }
+      }
+    });
+  }
+  catch(e) {
+    console.log(dir + " does not exist.");
+  }
 
-    return results.length > 0 ? results : false;
+  return results.length > 0 ? results : false;
 };
 
 module.exports = loadJsFiles;

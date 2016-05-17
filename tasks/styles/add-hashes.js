@@ -1,66 +1,66 @@
 'use strict';
 
-var config = protoss.config.styles,
-    packages = protoss.packages,
-    notifier = protoss.helpers.notifier;
+var config = protoss.config.styles;
+var packages = protoss.packages;
+var notifier = protoss.helpers.notifier;
 
 /**
  * Add cache busting hashes to links
  */
 
-module.exports = function () {
+module.exports = function() {
 
-    packages.gulp.task('protoss/styles/add-hashes', function (cb) {
+  packages.gulp.task('protoss/styles/add-hashes', function(cb) {
 
-        var queue = config.bundles.length;
+    var queue = config.bundles.length;
 
-        var addHashes = function (bundle) {
+    var addHashes = function(bundle) {
 
-            var add = function () {
+      var add = function() {
 
-                packages.gulp.src(bundle.dest + '**/*.css')
+        packages.gulp.src(bundle.dest + '**/*.css')
 
-                    // Prevent pipe breaking
-                    .pipe(packages.plumber(function(error) {
-                        notifier.error('An error occurred while add hashes in css: ' + error);
-                        this.emit('end');
-                    }))
+          // Prevent pipe breaking
+          .pipe(packages.plumber(function(error) {
+            notifier.error('An error occurred while add hashes in css: ' + error);
+            this.emit('end');
+          }))
 
-                    // Add hashes
-                    .pipe(packages.hashSrc({
-                        build_dir: './',
-                        src_path: './',
-                        query_name: '',
-                        hash_len: 10,
-                        exts: ['.css', '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']
-                    }))
+          // Add hashes
+          .pipe(packages.hashSrc({
+            build_dir: './',
+            src_path: './',
+            query_name: '',
+            hash_len: 10,
+            exts: ['.css', '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']
+          }))
 
-                    // Save
-                    .pipe(packages.gulp.dest(bundle.dest))
+          // Save
+          .pipe(packages.gulp.dest(bundle.dest))
 
-                    .on('end', handleQueue);
+          .on('end', handleQueue);
 
-            };
+      };
 
-            var handleQueue = function() {
+      var handleQueue = function() {
 
-                if(queue) {
+        if (queue) {
 
-                    queue--;
+          queue--;
 
-                    if(queue === 0) {
+          if (queue === 0) {
 
-                        cb(null); // End task
+            cb(null); // End task
 
-                    }
-                }
-            };
+          }
+        }
+      };
 
-            return add();
+      return add();
 
-        };
+    };
 
-        config.bundles.forEach(addHashes);
+    config.bundles.forEach(addHashes);
 
-    });
+  });
 };

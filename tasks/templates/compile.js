@@ -1,8 +1,8 @@
 'use strict';
 
-var config = protoss.config.templates,
-  packages = protoss.packages,
-  notifier = protoss.helpers.notifier;
+var config = protoss.config.templates;
+var packages = protoss.packages;
+var notifier = protoss.helpers.notifier;
 
 /**
  * Compile jade templates.
@@ -21,8 +21,14 @@ module.exports = function () {
       // Only pass through changed main files and all the partials
       .pipe(packages.gulpif(
         protoss.flags.isWatching && !protoss.flags.isDataReload,
-        packages.changed(config.dest, {extension: '.html'}),
-        packages.cached('jade'),
+        packages.changed(config.dest, {extension: '.html'})
+      ))
+      .pipe(packages.gulpif(
+        protoss.flags.isWatching && !protoss.flags.isDataReload,
+        packages.cached('jade')
+      ))
+      .pipe(packages.gulpif(
+        protoss.flags.isWatching && !protoss.flags.isDataReload,
         packages.jadeInheritance({basedir: config.src})
       ))
 
