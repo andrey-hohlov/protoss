@@ -66,16 +66,22 @@ module.exports = function () {
                         }))
 
                         // Save icons.svg file
-                        .pipe(packages.gulp.dest(config.dest + 'icons/'))
+                        .pipe(packages.gulpif(
+                            !config.svgIconsInline,
+                            packages.gulp.dest(config.dest + 'icons/')
+                        ))
+                        .on('end', handleQueue)
 
-                        // Save for inline embedding
-                        // TODO: remove or wrap in if statement
-                        .pipe(packages.rename({
-                            prefix: '_',
-                            extname: '.jade'
-                        }))
-                        .pipe(packages.gulp.dest(protoss.config.templates.src + 'icons/'))
 
+                        // Or save in .jade for inline embedding
+                        .pipe(packages.gulpif(
+                            config.svgIconsInline,
+                            packages.rename({prefix: '_',extname: '.jade'})
+                        ))
+                        .pipe(packages.gulpif(
+                            config.svgIconsInline,
+                            packages.gulp.dest(protoss.config.templates.src + 'icons/')
+                        ))
                         .on('end', handleQueue)
 
                 };
