@@ -15,6 +15,6 @@ module.exports = function() {
     })
     .on('all', function (event, path) {
       protoss.helpers.watcherLog(event, path);
-      packages.gulp.start('protoss/images/make-sprite-png');
+      packages.gulp.start('protoss/images/make-png-sprite');
     });
 };
