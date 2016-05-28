@@ -82,6 +82,13 @@ module.exports = function() {
             })
           ))
 
+          // Use csso optimization for remove overridden rules
+          // TODO: remove when cssnano get this feature
+          .pipe(packages.gulpif(
+            !protoss.flags.isDev,
+            packages.csso()
+          ))
+
           // Prettify again css for non-minifying build
           .pipe(packages.gulpif(
             !protoss.flags.isDev && !bundle.minify,

@@ -16,6 +16,7 @@ protoss.packages = {
     concat: require('gulp-concat'),
     csscomb: require('gulp-csscomb'),
     cssnano: require('gulp-cssnano'),
+    csso: require('gulp-csso'),
     del: require('del'),
     favicons: require('gulp-favicons'),
     filter: require('gulp-filter'),
