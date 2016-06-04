@@ -32,7 +32,7 @@ module.exports = function() {
             orientation: 'portrait',
             version: 1.0,
             logging: false,
-            online: config.online,
+            online: false,
             html: false,
             replace: true,
             icons: {

@@ -4,6 +4,9 @@ var config = protoss.config.templates;
 var packages = protoss.packages;
 var notifier = protoss.helpers.notifier;
 
+var jadeData = config.data;
+jadeData.getData = protoss.helpers.getData;
+
 /**
  * Compile jade templates.
  */
@@ -38,13 +41,7 @@ module.exports = function () {
       // Process jade templates
       .pipe(packages.jade({
         pretty: false,
-        data: {
-          getData: protoss.helpers.getData,
-          assetsPath: config.assetsPath,
-          svgIconsPath: !protoss.config.images.svgIconsInline ? config.svgIconsPath : '#',
-          useFavicons: protoss.config.favicons.enabled,
-          faviconsPath: protoss.config.favicons.path || '/'
-        }
+        data: jadeData
       }))
 
       // Prettify HTML

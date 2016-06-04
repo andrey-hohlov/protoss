@@ -15,7 +15,7 @@ module.exports = function() {
 
       var sprites,
         queue,
-        stylesStream = packages.merge(),
+        stylesStream = packages.mergeStream(),
         padding = 2;
 
       var makeSprite = function(sprite, index) {

@@ -56,7 +56,7 @@ module.exports = function () {
       .pipe(packages.gulp.dest(protoss.config.styles.src + 'sprites/'));
 
     // End task
-    return packages.merge(imgStream, cssStream).pipe(
+    return packages.mergeStream(imgStream, cssStream).pipe(
       notifier.success('Png-sprites maked')
     );
 

@@ -50,15 +50,13 @@ module.exports = function() {
                   generator: function(name) {
                     var id = name.substr(0, name.lastIndexOf('.')) || name;
                     id = 'icon-' + id;
-                    if (config.svgIconsPrefix && iconSet != 'main' && config.svgIconsInline)
-                      id = iconSet + '_' + id;
                     return id;
                   }
                 }
               },
               mode: {
                 symbol: {
-                  inline: config.svgIconsInline,
+                  inline: false,
                   sprite: iconSet,
                   dest: '.'
                 }
@@ -66,23 +64,9 @@ module.exports = function() {
             }))
 
             // Save icons.svg file
-            .pipe(packages.gulpif(
-              !config.svgIconsInline,
-              packages.gulp.dest(config.dest + 'icons/')
-            ))
+            .pipe(packages.gulp.dest(config.dest + 'icons/'))
             .on('end', handleQueue)
 
-
-            // Or save in .jade for inline embedding
-            .pipe(packages.gulpif(
-              config.svgIconsInline,
-              packages.rename({prefix: '_',extname: '.jade'})
-            ))
-            .pipe(packages.gulpif(
-              config.svgIconsInline,
-              packages.gulp.dest(protoss.config.templates.src + 'icons/')
-            ))
-            .on('end', handleQueue)
 
         };
 
