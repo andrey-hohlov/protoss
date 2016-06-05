@@ -1,0 +1,34 @@
+{
+// Default options
+'functions': true
+}
+
+{{#options.functions}}
+{{#if options.mixin}}
+// Generate by Protoss
+
+@mixin sprite($filename) {
+  width: nth($filename, 1);
+  height: nth($filename, 2);
+  background-image: url('#{$pathToImages}sprites/' + nth($filename, 7));
+  background-size: nth($filename, 5) nth($filename, 6);
+  background-position: nth($filename, 3) nth($filename, 4);
+  background-repeat: no-repeat;
+{{#if options.retina}}
+  @media screen and (-webkit-min-device-pixel-ratio: 2), only screen and ( min-resolution: 192dpi), only screen and ( min-resolution: 2dppx), only screen and (min-device-pixel-ratio: 2) {
+  background-image: url('#{$pathToImages}sprites/' + nth($filename, 8));
+  }
+{{/if}}
+}
+
+{{/if}}
+{{#if options.retina}}
+{{#each retina_groups}}
+$sprite-{{../options.spriteName}}{{name}}: {{normal.px.width}} {{normal.px.height}} {{normal.px.offset_x}} {{normal.px.offset_y}} {{normal.px.total_width}} {{normal.px.total_height}} '{{normal.image}}' '{{retina.image}}';
+{{/each}}
+{{else}}
+{{#each sprites}}
+$sprite-{{../options.spriteName}}{{name}}: {{px.width}} {{px.height}} {{px.offset_x}} {{px.offset_y}} {{px.total_width}} {{px.total_height}} '{{image}}';
+{{/each}}
+{{/if}}
+{{/options.functions}}

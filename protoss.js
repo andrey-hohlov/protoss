@@ -16,6 +16,7 @@ protoss.packages = {
   concat: require('gulp-concat'),
   csscomb: require('gulp-csscomb'),
   cssnano: require('gulp-cssnano'),
+  csso: require('gulp-csso'),
   del: require('del'),
   favicons: require('gulp-favicons'),
   filter: require('gulp-filter'),
@@ -116,8 +117,8 @@ module.exports = function(gulp, userConfig) {
         'protoss/utils/make-favicons'
       ],
       [
-        'protoss/images/make-svg-sprite',
-        'protoss/images/make-png-sprite',
+        'protoss/images/make-svg-sprites',
+        'protoss/images/make-png-sprites',
         'protoss/images/make-svg-icons'
       ],
       [
@@ -142,8 +143,8 @@ module.exports = function(gulp, userConfig) {
     runSequence(
       [
         'protoss/images/move',
-        'protoss/images/make-svg-sprite',
-        'protoss/images/make-png-sprite',
+        'protoss/images/make-svg-sprites',
+        'protoss/images/make-png-sprites',
         'protoss/images/make-svg-icons',
         'protoss/utils/copy'
       ],

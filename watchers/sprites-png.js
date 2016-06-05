@@ -1,6 +1,6 @@
 'use strict';
 
-var config = protoss.config.images;
+var config = protoss.config.spritesPng;
 var packages = protoss.packages;
 
 /**
@@ -9,12 +9,12 @@ var packages = protoss.packages;
 
 module.exports = function() {
   return packages.chokidar.watch(
-      config.src + 'sprites/**/*.png',
+      config.src + '**/*.png',
     {
       ignoreInitial: true
     })
     .on('all', function (event, path) {
       protoss.helpers.watcherLog(event, path);
-      packages.gulp.start('protoss/images/make-png-sprite');
+      packages.gulp.start('protoss/images/make-png-sprites');
     });
 };

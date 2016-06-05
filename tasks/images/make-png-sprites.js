@@ -1,6 +1,6 @@
 'use strict';
 
-var config = protoss.config.images;
+var config = protoss.config.spritesPng;
 var packages = protoss.packages;
 var notifier = protoss.helpers.notifier;
 
@@ -9,15 +9,15 @@ var notifier = protoss.helpers.notifier;
  */
 
 module.exports = function () {
-  return packages.gulp.task('protoss/images/make-png-sprite', function() {
+  return packages.gulp.task('protoss/images/make-png-sprites', function() {
 
-    if(!config.spritesPng) return;
+    if(!config.enabled) return;
 
-    var src = [config.src + 'sprites/**/*.png'],
-      index = 0;
+    var src = [config.src + '**/*.png'];
+    var index = 0;
 
     if(!config.retina)
-      src.push('!'+config.src + 'sprites/**/*@2x.png');
+      src.push('!'+config.src + '**/*@2x.png');
 
     // Generate our spritesheet
     var spriteData = packages.gulp.src(src)
@@ -36,24 +36,24 @@ module.exports = function () {
           options.Algorithms = 'diagonal';
           options.padding = 2;
           options.cssOpts = {
-            spriteName: (config.spritePrefixPng && sprite != 'main') ? sprite + '-'  : '',
+            spriteName: config.prefix ? sprite + '-'  : '',
             retina: config.retina,
             mixin: index == 0 // Create mixin only for first sprite
           };
-          options.cssTemplate = protoss.config.styles.src + 'sprite-generator-templates/sprite.mustache';
+          options.cssTemplate = config.template;
           index++;
         }
       }));
 
     // Save images
     var imgStream = spriteData.img
-      .pipe(packages.gulp.dest(config.dest + 'sprites/'));
+      .pipe(packages.gulp.dest(config.dest));
 
     var cssStream = spriteData.css
       // Concat all scss to one
-      .pipe(packages.concat('_sprites.scss'))
+      .pipe(packages.concat(config.stylesName))
       // Save scss file
-      .pipe(packages.gulp.dest(protoss.config.styles.src + 'sprites/'));
+      .pipe(packages.gulp.dest(config.stylesDest));
 
     // End task
     return packages.mergeStream(imgStream, cssStream).pipe(

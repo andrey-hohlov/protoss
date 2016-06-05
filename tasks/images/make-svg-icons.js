@@ -1,6 +1,6 @@
 'use strict';
 
-var config = protoss.config.images;
+var config = protoss.config.svgIcons;
 var packages = protoss.packages;
 var notifier = protoss.helpers.notifier;
 
@@ -11,7 +11,7 @@ var notifier = protoss.helpers.notifier;
 module.exports = function() {
   packages.gulp.task('protoss/images/make-svg-icons', function(cb) {
 
-    if (config.svgIcons) {
+    if (config.enabled) {
 
       var icons,
         queue;
@@ -20,7 +20,7 @@ module.exports = function() {
 
         var make = function() {
 
-          packages.gulp.src(config.src + 'svg-icons/' + iconSet + '/*.svg')
+          packages.gulp.src(config.src + iconSet + '/*.svg')
 
             // Prevent pipe breaking
             .pipe(packages.plumber(function(error) {
@@ -45,15 +45,6 @@ module.exports = function() {
               svg: {
                 namespaceClassnames: false
               },
-              shape: {
-                id: {
-                  generator: function(name) {
-                    var id = name.substr(0, name.lastIndexOf('.')) || name;
-                    id = 'icon-' + id;
-                    return id;
-                  }
-                }
-              },
               mode: {
                 symbol: {
                   inline: false,
@@ -64,7 +55,7 @@ module.exports = function() {
             }))
 
             // Save icons.svg file
-            .pipe(packages.gulp.dest(config.dest + 'icons/'))
+            .pipe(packages.gulp.dest(config.dest))
             .on('end', handleQueue)
 
 
@@ -95,7 +86,7 @@ module.exports = function() {
 
       };
 
-      icons = protoss.helpers.listDir(config.src + 'svg-icons', 'dirs', 'names'); // get folders with icons
+      icons = protoss.helpers.listDir(config.src, 'dirs', 'names'); // get folders with icons
       queue = icons.length;
 
       if(queue)

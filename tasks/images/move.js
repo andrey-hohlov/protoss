@@ -10,13 +10,7 @@ var notifier = protoss.helpers.notifier;
 
 module.exports = function() {
   packages.gulp.task('protoss/images/move', function(cb) {
-    packages.gulp.src(
-      [
-        config.src + '**/*.{png,jpg,gif,svg}',
-        '!' + config.src + 'sprites/**/*',
-        '!' + config.src + 'sprites-svg/**/*',
-        '!' + config.src + 'svg-icons/**/*'
-      ])
+    packages.gulp.src(config.src)
 
       // Prevent pipe breaking
       .pipe(packages.plumber(function(error) {

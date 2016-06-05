@@ -1,6 +1,6 @@
 'use strict';
 
-var config = protoss.config.images;
+var config = protoss.config.spritesSvg;
 var packages = protoss.packages;
 var notifier = protoss.helpers.notifier;
 
@@ -9,9 +9,9 @@ var notifier = protoss.helpers.notifier;
  */
 
 module.exports = function() {
-  packages.gulp.task('protoss/images/make-svg-sprite', function(cb) {
+  packages.gulp.task('protoss/images/make-svg-sprites', function(cb) {
 
-    if(config.spritesSvg) {
+    if(config.enabled) {
 
       var sprites,
         queue,
@@ -22,11 +22,11 @@ module.exports = function() {
 
         var make = function() {
 
-          var imagesFilter = packages.filter(['*.svg'],{restore: true}),
-            stylesFilter = packages.filter(['*.scss']);
+          var imagesFilter = packages.filter(['*.svg'],{restore: true});
+          var stylesFilter = packages.filter(['*.scss']);
 
           stylesStream.add(
-            packages.gulp.src(config.src + 'sprites-svg/' + sprite + '/*.svg')
+            packages.gulp.src(config.src + sprite + '/*.svg')
 
               // Prevent pipe breaking
               .pipe(packages.plumber(function(error) {
@@ -49,12 +49,12 @@ module.exports = function() {
                     render: {
                       scss: {
                         dest: sprite + '.scss',
-                        template: protoss.config.styles.src + 'sprite-generator-templates/sprite-svg.mustache'
+                        template: config.template
                       }
                     },
                     variables: {
                       spritePadding: padding,
-                      spriteName: (config.spritePrefixPng && sprite != 'main') ? sprite + '-' : '',
+                      spriteName: config.prefix ? sprite + '-' : '',
                       spriteSvg: sprite + '.svg',
                       spriteFallback: sprite + '.fallback.png',
                       mixin: index == queue - 1 // Create mixin only for last sprite
@@ -67,7 +67,7 @@ module.exports = function() {
               .pipe(imagesFilter)
 
               // Save svg image
-              .pipe(packages.gulp.dest(config.dest + 'sprites-svg/'))
+              .pipe(packages.gulp.dest(config.dest))
 
               // Make fallback image
               .pipe(packages.svg2png())
@@ -78,7 +78,7 @@ module.exports = function() {
               }))
 
               // Save fallback image
-              .pipe(packages.gulp.dest(config.dest + 'sprites-svg/'))
+              .pipe(packages.gulp.dest(config.dest))
 
               // Filter scss files
               .pipe(imagesFilter.restore)
@@ -108,13 +108,13 @@ module.exports = function() {
                 }))
 
                 // Concat all scss to one
-                .pipe(packages.concat('_sprites-svg.scss'))
+                .pipe(packages.concat(config.stylesName))
 
                 // Save scss file
-                .pipe(packages.gulp.dest(protoss.config.styles.src + 'sprites/'))
+                .pipe(packages.gulp.dest(config.stylesDest))
 
                 .on('end', function () {
-                  notifier.success('Svg-sprites maked');
+                  notifier.success('Svg-sprites ready');
 
                   if(protoss.flags.isWatching)
                     packages.browserSync.reload();
@@ -129,7 +129,7 @@ module.exports = function() {
 
       };
 
-      sprites = protoss.helpers.listDir(config.src + 'sprites-svg', 'dirs', 'names'); // get folders with sprites
+      sprites = protoss.helpers.listDir(config.src, 'dirs', 'names'); // get folders with sprites
       queue = sprites.length;
 
       if(queue)

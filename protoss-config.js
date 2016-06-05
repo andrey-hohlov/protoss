@@ -9,6 +9,8 @@ var scriptsSrc = src + 'scripts/';
 var assetsDest = dest + 'static/';
 var assetsPath = 'static/';
 
+var protossRoot = __dirname;
+
 module.exports = {
 
   templates: {
@@ -126,25 +128,40 @@ module.exports = {
      * Paths to images source
      * @type {String|Array}
      */
-    src: imagesSrc,
+    src: [
+      imagesSrc + '**/*.{png,jpg,gif,svg}',
+      '!' + imagesSrc + 'sprites/**/*',
+      '!' + imagesSrc + 'svg-sprites/**/*',
+      '!' + imagesSrc + 'svg-icons/**/*'
+    ],
 
     /**
      * Paths to images in build
      * @type {String|Array}
      */
-    dest: assetsDest + 'images/',
+    dest: assetsDest + 'images/'
+
+  },
+
+  spritesPng: {
 
     /**
-     * Use svg sprites
+     * Generate png sprites
      * @type {Boolean}
      */
-    spritesSvg: true,
+    enabled: true,
 
     /**
-     * Use png sprites
-     * @type {Boolean}
+     * Paths to sprite source files
+     * @type {String|Array}
      */
-    spritesPng: true,
+    src: imagesSrc + 'sprites/',
+
+    /**
+     * Paths to generated sprites
+     * @type {String}
+     */
+    dest: assetsDest + 'images/sprites/',
 
     /**
      * Use *@2x.png images to generate retina sprites
@@ -153,20 +170,99 @@ module.exports = {
     retina: true,
 
     /**
-     * Add sprite name for icon variable name:
-     * $spritename_icon
-     * Not added for 'main' sprite
-     * @type {Boolean}
+     * Name of sprites styles file
+     * @type {String}
      */
-
-    spritePrefixPng: true,
-
-    spritePrefixSvg: false,
+    stylesName: '_sprites.scss',
 
     /**
-     * Make svg icons
+     * Paths to generated sprites styles
+     * @type {String}
      */
-    svgIcons: true
+    stylesDest: stylesSrc + 'sprites/',
+
+    /**
+     * Paths to sprite styles file template
+     * @type {String}
+     */
+    template: protossRoot + '/assets/sprite.mustache',
+
+    /**
+     * Add sprite name for icon variable name:
+     * $sprite-name_icon
+     * @type {Boolean}
+     */
+    prefix: true
+
+  },
+
+  spritesSvg: {
+
+    /**
+     * Generate svg sprites
+     * @type {Boolean}
+     */
+    enabled: true,
+
+    /**
+     * Paths to sprite source files
+     * @type {String|Array}
+     */
+    src: imagesSrc + 'svg-sprites/',
+
+    /**
+     * Paths to generated sprites
+     * @type {String}
+     */
+    dest: assetsDest + 'images/svg-sprites/',
+
+    /**
+     * Name of sprites styles file
+     * @type {String}
+     */
+    stylesName: '_sprites-svg.scss',
+
+    /**
+     * Paths to generated sprites styles
+     * @type {String}
+     */
+    stylesDest: stylesSrc + 'sprites/',
+
+    /**
+     * Paths to sprite styles file template
+     * @type {String}
+     */
+    template: protossRoot + '/assets/sprite-svg.mustache',
+
+    /**
+     * Add sprite name for icon variable name:
+     * $sprite-name_icon
+     * @type {Boolean}
+     */
+    prefix: true
+
+  },
+  
+  svgIcons: {
+
+    /**
+     * Generate svg icons
+     * @type {Boolean}
+     */
+    enabled: true,
+
+    /**
+     * Paths to icons source files
+     * @type {String|Array}
+     */
+    src: imagesSrc + 'icons/',
+
+    /**
+     * Paths to generated icons sets
+     * @type {String}
+     */
+    dest: assetsDest + 'images/icons/'
+
 
   },
 

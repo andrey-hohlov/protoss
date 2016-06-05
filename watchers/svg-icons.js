@@ -1,6 +1,6 @@
 'use strict';
 
-var config = protoss.config.images;
+var config = protoss.config.svgIcons;
 var packages = protoss.packages;
 
 /**
@@ -9,7 +9,7 @@ var packages = protoss.packages;
 
 module.exports = function () {
   return packages.chokidar.watch(
-      config.src + 'svg-icons/**/*.svg',
+      config.src + '**/*.svg',
     {
       ignoreInitial: true
     })

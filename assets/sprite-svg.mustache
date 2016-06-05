@@ -1,0 +1,19 @@
+{{#mixin}}
+// Generate by Protoss
+
+@mixin sprite-svg($filename) {
+  width: nth($filename, 5);
+  height: nth($filename, 6);
+  background-image: url('#{$pathToImages}sprites-svg/' +  nth($filename, 7));
+  background-size: nth($filename, 3) nth($filename, 4);
+  background-position: (nth($filename, 1) - {{spritePadding}}) (nth($filename, 2) - {{spritePadding}}) ; // sprite padding include
+  background-repeat: no-repeat;
+  .no-svg & {
+    background-image: url('#{$pathToImages}sprites-svg/' +  nth($filename, 8));
+  }
+}
+{{/mixin}}
+
+{{#shapes}}
+$sprite-{{spriteName}}{{base}}: {{position.absolute.x}}px {{position.absolute.y}}px {{spriteWidth}}px {{spriteHeight}}px {{width.inner}}px {{height.inner}}px '{{{spriteSvg}}}' '{{{spriteFallback}}}';
+{{/shapes}}

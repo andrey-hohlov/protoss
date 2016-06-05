@@ -13,7 +13,7 @@ module.exports = function() {
 
     if (!protoss.flags.isDev) {
 
-      packages.gulp.src(config.dest + '/**/*.{png,jpg,gif,svg}')
+      packages.gulp.src(config.dest + '**/*.{png,jpg,gif,svg}')
 
         // Prevent pipe breaking
         .pipe(packages.plumber(function(error) {
