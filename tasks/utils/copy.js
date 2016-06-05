@@ -1,6 +1,6 @@
 'use strict';
 
-var copy = protoss.config.utils.copy;
+var copy = protoss.config.copy;
 var packages = protoss.packages;
 
 /**

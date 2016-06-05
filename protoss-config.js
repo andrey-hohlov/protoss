@@ -266,6 +266,23 @@ module.exports = {
 
   },
 
+  /**
+   * Copy files from one directory to another
+   * [path, destination]
+   * @type {Array}
+   */
+  copy: [
+    [src + 'fonts/**/*', assetsDest + 'fonts/']
+  ],
+
+  /**
+   * Directories to clean on build
+   * @type {Array}
+   */
+  clean: [
+    dest
+  ],
+
   favicons: {
 
     /**
@@ -304,26 +321,6 @@ module.exports = {
      */
     background: '#fff'
 
-  },
-
-  utils: {
-
-    /**
-     * Path to clean when build
-     * @type {Array}
-     */
-    clean: [
-      dest
-    ],
-
-    /**
-     * What files copy from misc directory?
-     * [path, destination]
-     * @type {Array}
-     */
-    copy: [
-      [src + 'fonts/**/*', assetsDest + 'fonts/']
-    ]
   },
 
   browserSync: {
