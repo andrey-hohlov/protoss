@@ -88,7 +88,7 @@ module.exports = function(gulp, userConfig) {
     userConfig = {};
   }
 
-  protoss.config = protoss.helpers.merge(defaultConfig, userConfig);
+  protoss.config = protoss.helpers.merge.recursive(defaultConfig, userConfig);
 
 
   /**
