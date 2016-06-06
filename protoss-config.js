@@ -179,7 +179,7 @@ module.exports = {
      * Paths to generated sprites styles
      * @type {String}
      */
-    stylesDest: stylesSrc + 'sprites/',
+    stylesDest: stylesSrc + '_sprites/',
 
     /**
      * Paths to sprite styles file template
@@ -226,7 +226,7 @@ module.exports = {
      * Paths to generated sprites styles
      * @type {String}
      */
-    stylesDest: stylesSrc + 'sprites/',
+    stylesDest: stylesSrc + '_sprites/',
 
     /**
      * Paths to sprite styles file template
@@ -242,7 +242,7 @@ module.exports = {
     prefix: true
 
   },
-  
+
   svgIcons: {
 
     /**
