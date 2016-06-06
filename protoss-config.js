@@ -128,11 +128,16 @@ module.exports = {
      * Paths to images source
      * @type {String|Array}
      */
-    src: [
-      imagesSrc + '**/*.{png,jpg,gif,svg}',
-      '!' + imagesSrc + 'sprites/**/*',
-      '!' + imagesSrc + 'svg-sprites/**/*',
-      '!' + imagesSrc + 'svg-icons/**/*'
+    src: imagesSrc,
+
+    /**
+     * Ignore in images source
+     * @type {String|Array}
+     */
+    ignore: [
+      'sprites/**/*',
+      'svg-sprites/**/*',
+      'svg-icons/**/*'
     ],
 
     /**

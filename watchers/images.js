@@ -11,11 +11,7 @@ module.exports = function() {
   return packages.chokidar.watch(
     '**/*.{png,jpg,gif,svg}',
     {
-      ignored: [
-        'sprites',
-        'sprites-svg',
-        'svg-icons'
-      ],
+      ignored: config.ignore,
       ignoreInitial: true,
       cwd: config.src
     })
