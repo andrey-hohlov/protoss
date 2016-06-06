@@ -128,13 +128,29 @@ module.exports = {
      * Paths to images source
      * @type {String|Array}
      */
-    src: imagesSrc,
+    src: [
+      imagesSrc + '**/*.{png,jpg,gif,svg}',
+      '!' + imagesSrc + 'sprites/**/*',
+      '!' + imagesSrc + 'svg-sprites/**/*',
+      '!' + imagesSrc + 'svg-icons/**/*'
+    ],
 
     /**
-     * Ignore in images source
+     * The base directory from which watch paths
+     */
+    watchCwd: imagesSrc,
+
+    /**
+     * Paths watching by chokidar
      * @type {String|Array}
      */
-    ignore: [
+    watchPaths: '**/*.{png,jpg,gif,svg}',
+
+    /**
+     * Ignored from watching
+     * @type {String|Array}
+     */
+    watchIgnore: [
       'sprites/**/*',
       'svg-sprites/**/*',
       'svg-icons/**/*'

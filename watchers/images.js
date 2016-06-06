@@ -9,11 +9,11 @@ var packages = protoss.packages;
 
 module.exports = function() {
   return packages.chokidar.watch(
-    '**/*.{png,jpg,gif,svg}',
+    config.watchPaths,
     {
-      ignored: config.ignore,
+      ignored: config.watchIgnore,
       ignoreInitial: true,
-      cwd: config.src
+      cwd: config.watchCwd
     })
     .on('add', function(path) {
       protoss.helpers.watcherLog('Add', path);
