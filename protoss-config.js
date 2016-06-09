@@ -132,7 +132,7 @@ module.exports = {
       imagesSrc + '**/*.{png,jpg,gif,svg}',
       '!' + imagesSrc + 'sprites/**/*',
       '!' + imagesSrc + 'svg-sprites/**/*',
-      '!' + imagesSrc + 'svg-icons/**/*'
+      '!' + imagesSrc + 'icons/**/*'
     ],
 
     /**
