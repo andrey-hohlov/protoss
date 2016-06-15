@@ -7,7 +7,7 @@ var stylesSrc = src + 'styles/';
 var scriptsSrc = src + 'scripts/';
 
 var assetsDest = dest + 'static/';
-var assetsPath = 'static/';
+var assetsPath = '/static/';
 
 var protossRoot = __dirname;
 
