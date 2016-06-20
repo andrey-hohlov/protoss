@@ -209,6 +209,12 @@ module.exports = {
     template: protossRoot + '/assets/sprite.mustache',
 
     /**
+     * Paths to sprite in background url (styles mixin)
+     * @type {String}
+     */
+    spritePath: '#{$pathToImages}sprites/',
+
+    /**
      * Add sprite name for icon variable name:
      * $sprite-name_icon
      * @type {Boolean}
@@ -254,6 +260,12 @@ module.exports = {
      * @type {String}
      */
     template: protossRoot + '/assets/sprite-svg.mustache',
+
+    /**
+     * Paths to sprite in background url (styles mixin)
+     * @type {String}
+     */
+    spritePath: '#{$pathToImages}svg-sprites/',
 
     /**
      * Add sprite name for icon variable name:

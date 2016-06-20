@@ -28,7 +28,7 @@ module.exports = function() {
           stylesStream.add(
             packages.gulp.src(config.src + sprite + '/*.svg')
 
-              // Prevent pipe breaking
+            // Prevent pipe breaking
               .pipe(packages.plumber(function(error) {
                 notifier.error('An error occurred while making svg-sprite: ' + error);
                 this.emit('end');
@@ -55,6 +55,7 @@ module.exports = function() {
                     variables: {
                       spritePadding: padding,
                       spriteName: config.prefix ? sprite + '-' : '',
+                      spritePath: config.spritePath,
                       spriteSvg: sprite + '.svg',
                       spriteFallback: sprite + '.fallback.png',
                       mixin: index == queue - 1 // Create mixin only for last sprite

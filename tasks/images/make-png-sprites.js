@@ -37,6 +37,7 @@ module.exports = function () {
           options.padding = 2;
           options.cssOpts = {
             spriteName: config.prefix ? sprite + '-'  : '',
+            spritePath: config.spritePath,
             retina: config.retina,
             mixin: index == 0 // Create mixin only for first sprite
           };
