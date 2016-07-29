@@ -13,7 +13,7 @@ jadeData.getData = protoss.helpers.getData;
 
 module.exports = function () {
   packages.gulp.task('protoss/templates/compile', function(cb) {
-    packages.gulp.src(config.src+'**/*.jade')
+    packages.gulp.src(config.src)
 
       // Prevent pipe breaking
       .pipe(packages.plumber(function(error) {
@@ -36,7 +36,7 @@ module.exports = function () {
       ))
 
       // Filter out partials (folders and files starting with "_" )
-      .pipe(packages.filter(['*', '!**/_*']))
+      .pipe(packages.filter(['**/*', '!**/_*', '!_**/*',]))
 
       // Process jade templates
       .pipe(packages.jade({

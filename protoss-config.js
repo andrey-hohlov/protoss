@@ -1,7 +1,6 @@
 var src = './src/';
 var dest = './build/';
 
-var templatesSrc = src + 'templates/';
 var imagesSrc = src + 'images/';
 var stylesSrc = src + 'styles/';
 var scriptsSrc = src + 'scripts/';
@@ -19,7 +18,7 @@ module.exports = {
      * Path to templates source files
      * @type {String}
      */
-    src: templatesSrc,
+    src: src + 'templates/**/*.jade',
 
     /**
      * Path to data files, using by watcher
@@ -50,7 +49,13 @@ module.exports = {
       svgIconsPath: assetsPath + 'images/icons/',
       useFavicons: true,
       faviconsPath: assetsPath + 'favicons/'
-    }
+    },
+
+    /**
+     * Add hash to src (set false for disable)
+     * @type {Object|boolean}
+     */
+    hashes: dest + '**/*.html'
 
   },
 
@@ -72,7 +77,8 @@ module.exports = {
         src: [stylesSrc + 'vendor/normalize.css', stylesSrc + 'styles.scss', stylesSrc + 'vendor/*.css'],
         dest: assetsDest + 'css/',
         minify: true,
-        concat: true
+        concat: true,
+        hashes: true
       }
     ],
 

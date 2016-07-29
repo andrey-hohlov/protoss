@@ -16,9 +16,13 @@ module.exports = function() {
 
     var addHashes = function(bundle) {
 
+      if (!bundle.hashes) return function () {
+        handleQueue();
+      };
+
       var add = function() {
 
-        packages.gulp.src(bundle.dest + '**/*.css')
+        packages.gulp.src(bundle.dest + bundle.name + '.css')
 
           // Prevent pipe breaking
           .pipe(packages.plumber(function(error) {

@@ -11,7 +11,9 @@ module.exports = function () {
 
   packages.gulp.task('protoss/templates/add-hashes', function (cb) {
 
-    packages.gulp.src(config.dest + '**/*.html')
+    if (!config.hashes) return;
+
+    packages.gulp.src(config.hashes)
 
       // Prevent pipe breaking
       .pipe(packages.plumber(function(error) {
