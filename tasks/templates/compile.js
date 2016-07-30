@@ -4,8 +4,8 @@ const filter = require('gulp-filter');
 const changed = require('gulp-changed');
 const cached = require('gulp-cached');
 const gulpif = require('gulp-if');
-const jade = require('gulp-jade');
-const jadeInheritance = require('gulp-jade-inheritance');
+const pug = require('gulp-pug');
+const pugInheritance = require('gulp-pug-inheritance');
 const htmlmin = require('gulp-htmlmin');
 const prettify = require('gulp-jsbeautifier');
 
@@ -13,8 +13,8 @@ module.exports = function(options) {
 
   var noCache = options ? options.noCache || false : false;
 
-  var jadeData = config.data;
-  jadeData.getData = protoss.helpers.getData;
+  var pugData = config.data;
+  pugData.getData = protoss.helpers.getData;
 
   return function(cb) {
 
@@ -33,11 +33,11 @@ module.exports = function(options) {
       ))
       .pipe(gulpif(
         protoss.flags.isWatching && !noCache,
-        cached('jade')
+        cached('pug')
       ))
       .pipe(gulpif(
         protoss.flags.isWatching && !noCache,
-        jadeInheritance({basedir: config.inhBaseDir})
+        pugInheritance({basedir: config.inhBaseDir})
       ))
 
       // Filter out partials (folders and files starting with "_" )
@@ -45,10 +45,10 @@ module.exports = function(options) {
         return !/\/_/.test(file.path) && !/^_/.test(file.relative);
       }))
 
-      // Process jade templates
-      .pipe(jade({
+      // Process pug templates
+      .pipe(pug({
         pretty: false,
-        data: jadeData
+        data: pugData
       }))
 
       // Prettify HTML

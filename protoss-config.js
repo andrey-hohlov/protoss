@@ -19,7 +19,7 @@ module.exports = {
      * Path to templates source files
      * @type {String}
      */
-    src: templatesSrc + '**/*.jade',
+    src: templatesSrc + '**/*.pug',
 
 
     /**
