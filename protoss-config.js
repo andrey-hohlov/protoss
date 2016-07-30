@@ -51,7 +51,14 @@ module.exports = {
       imagesPath: assetsPath + 'images/',
       svgIconsPath: assetsPath + 'images/icons/',
       useFavicons: true,
-      faviconsPath: assetsPath + 'favicons/'
+      faviconsPath: assetsPath + 'favicons/',
+      getData: function (dataFile) {
+        var fs = require('fs');
+        var path = require('path');
+        dataFile = /\.json$/.test(dataFile) && dataFile || dataFile + '.json';
+        var resolvedPath = path.resolve(dataFile);
+        return JSON.parse(fs.readFileSync(resolvedPath));
+      }
     },
 
     /**

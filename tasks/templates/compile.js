@@ -13,9 +13,6 @@ module.exports = function(options) {
 
   var noCache = options ? options.noCache || false : false;
 
-  var pugData = config.data;
-  pugData.getData = protoss.helpers.getData;
-
   return function(cb) {
 
     protoss.gulp.src(config.src)
@@ -48,7 +45,7 @@ module.exports = function(options) {
       // Process pug templates
       .pipe(pug({
         pretty: false,
-        data: pugData
+        data: config.data
       }))
 
       // Prettify HTML
