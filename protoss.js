@@ -3,6 +3,8 @@
  * Front-end builder
  */
 
+const merge = require('merge');
+
 // Set ulimit to 4096 for *nix FS. It needs to work with big amount of files
 if (require('os').platform() !== 'win32') {
   require('./helpers/set-ulimit')();
@@ -11,9 +13,6 @@ if (require('os').platform() !== 'win32') {
 global.protoss = {};
 
 protoss.helpers = {
-  merge: require('merge'),
-  fileLoader: require('./helpers/file-loader'),
-  getData: require('./helpers/get-data'),
   listDir: require('./helpers/list-directory')
 };
 
@@ -49,7 +48,7 @@ module.exports = function(gulp, userConfig) {
     userConfig = {};
   }
 
-  protoss.config = protoss.helpers.merge.recursive(defaultConfig, userConfig);
+  protoss.config = merge.recursive(defaultConfig, userConfig);
 
   var runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 
