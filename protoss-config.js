@@ -3,6 +3,7 @@ var dest = './build/';
 
 var imagesSrc = src + 'images/';
 var stylesSrc = src + 'styles/';
+var templatesSrc = src + 'templates/';
 var scriptsSrc = src + 'scripts/';
 
 var assetsDest = dest + 'static/';
@@ -18,13 +19,15 @@ module.exports = {
      * Path to templates source files
      * @type {String}
      */
-    src: src + 'templates/**/*.jade',
+    src: templatesSrc + '**/*.jade',
+
 
     /**
-     * Path to data files, using by watcher
+     * Jade files base directory for inheritance
      * @type {String}
      */
-    dataSrc: src + 'data/',
+
+    inhBaseDir: templatesSrc,
 
     /**
      * Path to compiled HTML files
@@ -139,27 +142,6 @@ module.exports = {
       '!' + imagesSrc + 'sprites/**/*',
       '!' + imagesSrc + 'svg-sprites/**/*',
       '!' + imagesSrc + 'icons/**/*'
-    ],
-
-    /**
-     * The base directory from which watch paths
-     */
-    watchCwd: imagesSrc,
-
-    /**
-     * Paths watching by chokidar
-     * @type {String|Array}
-     */
-    watchPaths: '**/*.{png,jpg,gif,svg}',
-
-    /**
-     * Ignored from watching
-     * @type {String|Array}
-     */
-    watchIgnore: [
-      'sprites/**/*',
-      'svg-sprites/**/*',
-      'svg-icons/**/*'
     ],
 
     /**
@@ -304,6 +286,126 @@ module.exports = {
 
 
   },
+
+  /**
+   * Watch for files and run tasks
+   */
+
+  watch: [
+
+    // Templates
+    {
+      cwd: null,
+      path: templatesSrc + '**/*.jade',
+      ignore: null,
+      on: [
+        {
+          event: 'all',
+          task: 'protoss/templates/compile'
+        }
+      ]
+    },
+
+    // Templates data
+    {
+      cwd: null,
+      path: src + 'data/**/*',
+      ignore: null,
+      on: [
+        {
+          event: 'all',
+          task: 'protoss/templates/compile-all'
+        }
+      ]
+    },
+
+    // Styles
+    {
+      cwd: null,
+      path: stylesSrc +'**/*.{css,scss}',
+      ignore: null,
+      on: [
+        {
+          event: 'all',
+          //task: 'protoss/styles/make-bundles'
+        }
+      ]
+    },
+
+    // Scripts
+    {
+      cwd: null,
+      path: scriptsSrc + '**/*.js',
+      ignore: null,
+      on: [
+        {
+          event: 'all',
+          task: 'protoss/scripts/make-bundles'
+        }
+      ]
+    },
+
+    // Images
+    {
+      cwd: imagesSrc,
+      path: '**/*.{png,jpg,gif,svg}',
+      ignore: [
+        'sprites/**/*',
+        'svg-sprites/**/*',
+        'svg-icons/**/*'
+      ],
+      on: [
+        {
+          event: 'add',
+          task: 'protoss/images/move'
+        },
+        {
+          event: 'change',
+          task: 'protoss/images/move'
+        }
+      ]
+    },
+
+    // Png sprites
+    {
+      cwd: null,
+      path: imagesSrc + 'sprites/**/*.png',
+      ignore: null,
+      on: [
+        {
+          event: 'all',
+          task: 'protoss/images/make-png-sprites'
+        }
+      ]
+    },
+
+    // Svg sprites
+    {
+      cwd: null,
+      path: imagesSrc + 'svg-sprites/**/*.svg',
+      ignore: null,
+      on: [
+        {
+          event: 'all',
+          task: 'protoss/images/make-svg-sprites'
+        }
+      ]
+    },
+
+    // Svg icons
+    {
+      cwd: null,
+      path: imagesSrc + 'icons/**/*.svg',
+      ignore: null,
+      on: [
+        {
+          event: 'all',
+          task: 'protoss/images/make-svg-icons'
+        }
+      ]
+    }
+
+  ],
 
   /**
    * Copy files from one directory to another

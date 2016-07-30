@@ -161,19 +161,6 @@ module.exports = function(gulp, userConfig) {
     );
   });
 
-  protoss.packages.gulp.task('protoss/utils/run-watchers', function(cb) {
-    return (function (){
-      watchers.forEach(function (file) {
-        require(file)();
-      });
-
-      protoss.flags.isWatching = true;
-      cb();
-
-    })()
-
-  });
-
   protoss.packages.gulp.task('protoss/utils/browserSync', function() {
 
     var config = protoss.config.browserSync;
@@ -199,7 +186,7 @@ module.exports = function(gulp, userConfig) {
     runSequence(
       'protoss/_dev',
       'protoss/utils/browserSync',
-      'protoss/utils/run-watchers',
+      'protoss/run-watchers',
       cb
     );
   });
@@ -207,7 +194,7 @@ module.exports = function(gulp, userConfig) {
   protoss.packages.gulp.task('protoss/_watch', function(cb) {
     runSequence(
       'protoss/_dev',
-      'protoss/utils/run-watchers',
+      'protoss/run-watchers',
       cb
     );
   });

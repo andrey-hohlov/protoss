@@ -12,7 +12,7 @@ jadeData.getData = protoss.helpers.getData;
  */
 
 module.exports = function () {
-  packages.gulp.task('protoss/templates/compile', function(cb) {
+  packages.gulp.task('protoss/templates/compile-all', function(cb) {
     packages.gulp.src(config.src)
 
       // Prevent pipe breaking
@@ -20,20 +20,6 @@ module.exports = function () {
         notifier.error('An error occurred while compiling templates: ' + error.message + ' on line ' + error.line + ' in ' + error.file);
         this.emit('end');
       }))
-
-      // Only pass through changed main files and all the partials
-      .pipe(packages.gulpif(
-        protoss.flags.isWatching,
-        packages.changed(config.dest, {extension: '.html'})
-      ))
-      .pipe(packages.gulpif(
-        protoss.flags.isWatching,
-        packages.cached('jade')
-      ))
-      .pipe(packages.gulpif(
-        protoss.flags.isWatching,
-        packages.jadeInheritance({basedir: config.inhBaseDir})
-      ))
 
       // Filter out partials (folders and files starting with "_" )
       .pipe(packages.filter(function (file) {
