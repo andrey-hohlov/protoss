@@ -17,15 +17,18 @@ module.exports = function(options) {
       }))
 
       // Minify images
-      .pipe(imagemin({
-        svgoPlugins: [
-          { cleanupIDs: false },
-          { removeViewBox: false },
-          { convertPathData: false },
-          { mergePaths: false },
-          {removeXMLProcInst: false }
-        ]
-      }))
+      .pipe(imagemin([
+        imagemin.svgo({
+          plugins: [
+            { removeUselessDefs: false },
+            { cleanupIDs: false },
+            { removeViewBox: false },
+            { convertPathData: false },
+            { mergePaths: false },
+            { removeXMLProcInst: false }
+          ]
+        })
+      ]))
 
       // Save optimized images
       .pipe(protoss.gulp.dest(config.dest))
