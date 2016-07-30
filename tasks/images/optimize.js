@@ -1,56 +1,46 @@
-'use strict';
+const config = protoss.config.images;
+const plumber = require('gulp-plumber');
+const imagemin = require('gulp-imagemin');
 
-var config = protoss.config.images;
-var packages = protoss.packages;
-var notifier = protoss.helpers.notifier;
+module.exports = function(options) {
 
-/**
- * Optimize images to build folder
- */
+  return function(cb) {
 
-module.exports = function() {
-  packages.gulp.task('protoss/images/optimize', function(cb) {
+    if (!protoss.flags.isDev) return cb(null);
 
-    if (!protoss.flags.isDev) {
+    protoss.gulp.src(config.dest + '**/*.{png,jpg,gif,svg}')
 
-      packages.gulp.src(config.dest + '**/*.{png,jpg,gif,svg}')
+      // Prevent pipe breaking
+      .pipe(plumber(function(error) {
+        protoss.notifier.error('An error occurred while optimizing images: ' + error);
+        this.emit('end');
+      }))
 
-        // Prevent pipe breaking
-        .pipe(packages.plumber(function(error) {
-          notifier.error('An error occurred while optimizing images: ' + error);
-          this.emit('end');
-        }))
+      // Minify images
+      .pipe(imagemin({
+        svgoPlugins: [
+          { cleanupIDs: false },
+          { removeViewBox: false },
+          { convertPathData: false },
+          { mergePaths: false },
+          {removeXMLProcInst: false }
+        ]
+      }))
 
-        // Minify images
-        .pipe(packages.imagemin({
-          svgoPlugins: [
-            { cleanupIDs: false },
-            { removeViewBox: false },
-            { convertPathData: false },
-            { mergePaths: false },
-            {removeXMLProcInst: false }
-          ]
-        }))
+      // Save optimized images
+      .pipe(protoss.gulp.dest(config.dest))
 
-        // Save optimized images
-        .pipe(packages.gulp.dest(config.dest))
+      .on('end', function() {
 
-        .on('end', function() {
+        protoss.notifier.success('Images optimized');
 
-          notifier.success('Images optimized');
+        if (protoss.flags.isWatching)
+          protoss.browserSync.reload();
 
-          if (protoss.flags.isWatching)
-            packages.browserSync.reload();
+        cb(null); // End task
 
-          cb(null); // End task
+      });
 
-        });
+  };
 
-    } else {
-
-      cb(null); // End task
-
-    }
-
-  });
 };

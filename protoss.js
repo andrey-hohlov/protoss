@@ -1,82 +1,43 @@
-'use strict';
-
 /**
- * Load tasks
+ * Protoss
+ * Front-end builder
  */
-
-global.protoss = {};
-
-protoss.packages = {
-  autoprefixer: require('gulp-autoprefixer'),
-  browserSync: require('browser-sync').create(),
-  cached: require('gulp-cached'),
-  changed: require('gulp-changed'),
-  cheerio: require('gulp-cheerio'),
-  chokidar: require('chokidar'),
-  concat: require('gulp-concat'),
-  csscomb: require('gulp-csscomb'),
-  cssnano: require('gulp-cssnano'),
-  csso: require('gulp-csso'),
-  del: require('del'),
-  favicons: require('gulp-favicons'),
-  filter: require('gulp-filter'),
-  gmq: require('gulp-group-css-media-queries'),
-  gulpif: require('gulp-if'),
-  gutil: require('gulp-util'),
-  hashSrc: require('gulp-hash-src'),
-  htmlmin: require('gulp-htmlmin'),
-  imagemin: require('gulp-imagemin'),
-  jade: require('gulp-jade'),
-  jadeInheritance: require('gulp-jade-inheritance'),
-  prettify: require('gulp-jsbeautifier'),
-  mergeStream: require('merge-stream'),
-  plumber: require('gulp-plumber'),
-  postcss: require('gulp-postcss'),
-  rename: require('gulp-rename'),
-  sass: require('gulp-sass'),
-  spritesmithMulti: require('gulp.spritesmith-multi'),
-  stripDebug: require('gulp-strip-debug'),
-  svg2png: require('gulp-svg2png'),
-  svgSprite: require('gulp-svg-sprite'),
-  uglify: require('gulp-uglify')
-};
-
-protoss.helpers = {
-  merge: require('merge'),
-  fileLoader: require('./helpers/file-loader'),
-  getData: require('./helpers/get-data'),
-  listDir: require('./helpers/list-directory'),
-  notifier:  require('./helpers/notifier'),
-  watcherLog: require('./helpers/watcher-log')
-};
-
-protoss.flags = {
-  isWatching: false,
-  isDev: false,
-  isDataReload: false
-};
 
 // Set ulimit to 4096 for *nix FS. It needs to work with big amount of files
 if (require('os').platform() !== 'win32') {
   require('./helpers/set-ulimit')();
 }
 
-// Get all tasks and watchers
-var tasks = protoss.helpers.fileLoader(__dirname+ '/tasks') || [];
-var watchers = protoss.helpers.fileLoader(__dirname + '/watchers') || [];
+global.protoss = {};
+
+protoss.helpers = {
+  merge: require('merge'),
+  fileLoader: require('./helpers/file-loader'),
+  getData: require('./helpers/get-data'),
+  listDir: require('./helpers/list-directory')
+};
+
+protoss.notifier = require('./helpers/notifier');
+
+protoss.flags = {
+  isWatching: false,
+  isDev: true
+};
 
 module.exports = function(gulp, userConfig) {
 
+  // TODO: throw error if no gulp
   if (gulp) {
-    protoss.packages.gulp = gulp;
+    protoss.gulp = gulp;
   } else {
-    protoss.packages.gulp = require('gulp');
+    protoss.gulp = require('gulp');
   }
-
 
   /**
    * Load config
    */
+
+  // TODO: make config task
 
   var defaultConfig = require(__dirname + '/protoss-config.js');
 
@@ -90,150 +51,156 @@ module.exports = function(gulp, userConfig) {
 
   protoss.config = protoss.helpers.merge.recursive(defaultConfig, userConfig);
 
+  var runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 
   /**
-   * Load tasks
+   * Lazy load tasks
    */
 
-  tasks.forEach(function (file) {
-    require(file)();
+  function lazyRequireTask(path) {
+    var args = [].slice.call(arguments, 1);
+    return function(callback) {
+      var task = require(path).apply(this, args);
+
+      return task(callback);
+    };
+  }
+
+  gulp.task('protoss/watch-and-sync', function(cb) {
+    runSequence(
+      'protoss/dev',
+      'protoss/browserSync',
+      'protoss/run-watchers',
+      cb
+    );
   });
 
+  gulp.task('protoss/watch', function(cb) {
+    runSequence(
+      'protoss/dev',
+      'protoss/run-watchers',
+      cb
+    );
+  });
 
-  /**
-   * Main tasks
-   */
-
-  var runSequence = require('run-sequence').use(protoss.packages.gulp); // TODO: remove on Gulp 4
-
-  protoss.packages.gulp.task('protoss/_build', function(cb) {
+  gulp.task('protoss/build', function(cb) {
     protoss.flags.isDev = false;
     runSequence(
       'protoss/utils/clean',
       [
         'protoss/images/move',
-        'protoss/scripts/make-bundles',
+        'protoss/scripts/bundle',
         'protoss/utils/copy',
-        'protoss/utils/make-favicons'
+        'protoss/favicons'
       ],
       [
-        'protoss/images/make-svg-sprites',
-        'protoss/images/make-png-sprites',
-        'protoss/images/make-svg-icons'
+        'protoss/images/sprites',
+        'protoss/images/sprites-svg',
+        'protoss/images/icons'
       ],
       [
         'protoss/templates/compile',
-        'protoss/styles/make-bundles',
+        'protoss/styles/bundle',
         'protoss/images/optimize'
       ],
       [
-        'protoss/templates/add-hashes',
-        'protoss/styles/add-hashes'
+        'protoss/templates/hash-src',
+        'protoss/styles/hash-src'
       ],
       function () {
-        protoss.helpers.notifier.success('Production version have been builded successfully!');
+        protoss.notifier.success('Production version have been builded successfully!');
         cb();
       }
     );
-
   });
 
-  protoss.packages.gulp.task('protoss/_dev', function(cb) {
+  gulp.task('protoss/dev', function(cb) {
     protoss.flags.isDev = true;
     runSequence(
       [
         'protoss/images/move',
-        'protoss/images/make-svg-sprites',
-        'protoss/images/make-png-sprites',
-        'protoss/images/make-svg-icons',
+        'protoss/images/sprites',
+        'protoss/images/sprites-svg',
+        'protoss/images/icons',
         'protoss/utils/copy'
       ],
       [
         'protoss/templates/compile',
-        'protoss/scripts/make-bundles',
-        'protoss/styles/make-bundles',
-        'protoss/utils/make-favicons'
+        'protoss/styles/bundle',
+        'protoss/scripts/bundle',
+        'protoss/favicons'
       ],
       function () {
-        protoss.helpers.notifier.success('Development version have been builded successfully!');
-        cb()
+        protoss.notifier.success('Development version have been builded successfully!');
+        cb();
       }
     );
   });
 
-  protoss.packages.gulp.task('protoss/utils/browserSync', function() {
-
-    var config = protoss.config.browserSync;
-
-    return protoss.packages.browserSync.init({
-      open: true,
-      port: config.port,
-      server: {
-        directory: true,
-        baseDir: config.basedir
-      },
-      reloadDelay: 200,
-      logConnections: true,
-      debugInfo: true,
-      injectChanges: false,
-      browser: config.browser,
-      startPath:  config.startPath,
-      ghostMode:  config.ghostMode
-    });
-  });
-
-  protoss.packages.gulp.task('protoss/_watch-and-sync', function(cb) {
-    runSequence(
-      'protoss/_dev',
-      'protoss/utils/browserSync',
-      'protoss/run-watchers',
-      cb
-    );
-  });
-
-  protoss.packages.gulp.task('protoss/_watch', function(cb) {
-    runSequence(
-      'protoss/_dev',
-      'protoss/run-watchers',
-      cb
-    );
-  });
-
-
-  /**
-   * Separate tasks
-   */
-
-  protoss.packages.gulp.task('protoss/_dev-scripts', function(cb) {
+  gulp.task('protoss/dev/scripts', function(cb) {
     protoss.flags.isDev = true;
     runSequence(
-      'protoss/scripts/make-bundles',
+      'protoss/scripts/bundle',
       cb
     );
   });
 
-  protoss.packages.gulp.task('protoss/_dev-styles', function(cb) {
+  gulp.task('protoss/dev/styles', function(cb) {
     protoss.flags.isDev = true;
     runSequence(
-      'protoss/styles/make-bundles',
+      'protoss/styles/bundle',
       cb
     );
   });
 
-  protoss.packages.gulp.task('protoss/_build-scripts', function(cb) {
+  gulp.task('protoss/build/scripts', function(cb) {
     protoss.flags.isDev = false;
     runSequence(
-      'protoss/scripts/make-bundles',
+      'protoss/scripts/bundle',
       cb
     );
   });
 
-  protoss.packages.gulp.task('protoss/_build-styles', function(cb) {
+  gulp.task('protoss/build/styles', function(cb) {
     protoss.flags.isDev = false;
     runSequence(
-      'protoss/styles/make-bundles',
+      'protoss/styles/bundle',
       cb
     );
   });
+
+  // Separate tasks
+
+  gulp.task('protoss/scripts/bundle', lazyRequireTask(__dirname + '/tasks/scripts/bundle'));
+
+  gulp.task('protoss/styles/bundle', lazyRequireTask(__dirname + '/tasks/styles/bundle'));
+
+  gulp.task('protoss/templates/compile', lazyRequireTask(__dirname + '/tasks/templates/compile'));
+
+  gulp.task('protoss/images/move', lazyRequireTask(__dirname + '/tasks/images/move'));
+
+  gulp.task('protoss/images/sprites', lazyRequireTask(__dirname + '/tasks/images/sprites'));
+
+  gulp.task('protoss/images/sprites-svg', lazyRequireTask(__dirname + '/tasks/images/sprites-svg'));
+
+  gulp.task('protoss/images/icons', lazyRequireTask(__dirname + '/tasks/images/icons'));
+
+  gulp.task('protoss/images/optimize', lazyRequireTask(__dirname + '/tasks/images/optimize'));
+
+  gulp.task('protoss/templates/compile-all', lazyRequireTask(__dirname + '/tasks/templates/compile', {noCache: true}));
+
+  gulp.task('protoss/templates/hash-src', lazyRequireTask(__dirname + '/tasks/templates/hash-src'));
+
+  gulp.task('protoss/styles/hash-src', lazyRequireTask(__dirname + '/tasks/styles/hash-src'));
+
+  gulp.task('protoss/utils/clean', lazyRequireTask(__dirname + '/tasks/utils/clean'));
+
+  gulp.task('protoss/utils/copy', lazyRequireTask(__dirname + '/tasks/utils/copy'));
+
+  gulp.task('protoss/favicons', lazyRequireTask(__dirname + '/tasks/favicons'));
+
+  gulp.task('protoss/browserSync', lazyRequireTask(__dirname + '/tasks/browserSync'));
+
+  gulp.task('protoss/run-watchers', lazyRequireTask(__dirname + '/tasks/watchers', {logger: require('./helpers/watcher-log')}));
 
 };

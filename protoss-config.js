@@ -65,12 +65,6 @@ module.exports = {
   styles: {
 
     /**
-     * Paths to styles source
-     * @type {String}
-     */
-    src: stylesSrc,
-
-    /**
      * Styles bundles
      * @type {Array}
      */
@@ -94,12 +88,6 @@ module.exports = {
   },
 
   scripts: {
-
-    /**
-     * Paths to scripts source
-     * @type {String}
-     */
-    src: scriptsSrc,
 
     /**
      * Scripts bundles
@@ -327,7 +315,7 @@ module.exports = {
       on: [
         {
           event: 'all',
-          //task: 'protoss/styles/make-bundles'
+          task: 'protoss/styles/bundle'
         }
       ]
     },
@@ -340,7 +328,7 @@ module.exports = {
       on: [
         {
           event: 'all',
-          task: 'protoss/scripts/make-bundles'
+          task: 'protoss/scripts/bundle'
         }
       ]
     },
@@ -374,7 +362,7 @@ module.exports = {
       on: [
         {
           event: 'all',
-          task: 'protoss/images/make-png-sprites'
+          task: 'protoss/images/sprites'
         }
       ]
     },
@@ -387,7 +375,7 @@ module.exports = {
       on: [
         {
           event: 'all',
-          task: 'protoss/images/make-svg-sprites'
+          task: 'protoss/images/sprites-svg'
         }
       ]
     },
@@ -400,7 +388,7 @@ module.exports = {
       on: [
         {
           event: 'all',
-          task: 'protoss/images/make-svg-icons'
+          task: 'protoss/images/icons'
         }
       ]
     }
@@ -442,7 +430,7 @@ module.exports = {
      * Path to favicons source image
      * @type {String}
      */
-    source: src + 'misc/favicon-master.png',
+    source: src + 'resources/favicon-master.png',
 
     /**
      * Path to store generated favicons

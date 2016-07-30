@@ -1,20 +1,15 @@
-'use strict';
+const config = protoss.config.watch;
+const chokidar = require('chokidar');
 
-var config = protoss.config.watch;
-var packages = protoss.packages;
-var chokidar = packages.chokidar;
+module.exports = function(options) {
 
-/**
- * Create scripts bundles
- */
+  if (!config) return cb(null);
 
-module.exports = function() {
-
-  protoss.packages.gulp.task('protoss/run-watchers', function(cb) {
-
-    if (!config) return;
+  return function(cb) {
 
     var queue = config.length;
+
+    var watcherLog = options.logger;
 
     var runWatcher = function (watch) {
 
@@ -29,7 +24,7 @@ module.exports = function() {
           });
 
         watch.on.forEach(function (on) {
-          watcher.on(on.event, function(event, path) {
+          watcher.on(on.event, function (event, path) {
 
             // todo: two args path on 'all' event, one - on other events
             // https://github.com/paulmillr/chokidar#getting-started
@@ -38,8 +33,8 @@ module.exports = function() {
               event = on.event;
             }
 
-            protoss.helpers.watcherLog(event, path);
-            packages.gulp.start(on.task);
+            watcherLog(event, path);
+            protoss.gulp.start(on.task);
 
           })
         });
@@ -48,12 +43,12 @@ module.exports = function() {
 
       };
 
-      var handleQueue = function() {
-        if(queue) {
+      var handleQueue = function () {
+        if (queue) {
 
           queue--;
 
-          if(queue === 0) {
+          if (queue === 0) {
             protoss.flags.isWatching = true;
             cb(null); // End task
           }
@@ -67,6 +62,6 @@ module.exports = function() {
 
     config.forEach(runWatcher);
 
-  });
+  }
 
 };

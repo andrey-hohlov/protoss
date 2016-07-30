@@ -1,41 +1,40 @@
-'use strict';
+const config = protoss.config.images;
+const plumber = require('gulp-plumber');
+const gulpif = require('gulp-if');
+const changed = require('gulp-changed');
 
-var config = protoss.config.images;
-var packages = protoss.packages;
-var notifier = protoss.helpers.notifier;
+module.exports = function(options) {
 
-/**
- * Copy images to build folder
- */
+  return function(cb) {
 
-module.exports = function() {
-  packages.gulp.task('protoss/images/move', function(cb) {
-    packages.gulp.src(config.src)
+    protoss.gulp.src(config.src)
 
-      // Prevent pipe breaking
-      .pipe(packages.plumber(function(error) {
-        notifier.error('An error occurred while move images: ' + error);
+    // Prevent pipe breaking
+      .pipe(plumber(function(error) {
+        protoss.notifier.error('An error occurred while move images: ' + error);
         this.emit('end');
       }))
 
       // Only pass through changed files
-      .pipe(packages.gulpif(
+      .pipe(gulpif(
         protoss.flags.isWatching,
-        packages.changed(config.dest)
+        changed(config.dest)
       ))
 
       // Copy images
-      .pipe(packages.gulp.dest(config.dest))
+      .pipe(protoss.gulp.dest(config.dest))
 
       .on('end', function() {
 
-        notifier.success('Images moved');
+        protoss.notifier.success('Images moved');
 
         if(protoss.flags.isWatching)
-          packages.browserSync.reload();
+          protoss.browserSync.reload();
 
         cb(null); // End task
 
       });
-  });
+
+  };
+
 };

@@ -1,16 +1,10 @@
-'use strict';
+const config = protoss.config.styles;
+const plumber = require('gulp-plumber');
+const hashSrc = require('gulp-hash-src');
 
-var config = protoss.config.styles;
-var packages = protoss.packages;
-var notifier = protoss.helpers.notifier;
+module.exports = function(options) {
 
-/**
- * Add cache busting hashes to links
- */
-
-module.exports = function() {
-
-  packages.gulp.task('protoss/styles/add-hashes', function(cb) {
+  return function(cb) {
 
     var queue = config.bundles.length;
 
@@ -22,16 +16,16 @@ module.exports = function() {
 
       var add = function() {
 
-        packages.gulp.src(bundle.dest + bundle.name + '.css')
+        protoss.gulp.src(bundle.dest + bundle.name + '.css')
 
-          // Prevent pipe breaking
-          .pipe(packages.plumber(function(error) {
-            notifier.error('An error occurred while add hashes in css: ' + error);
+        // Prevent pipe breaking
+          .pipe(plumber(function(error) {
+            protoss.notifier.error('An error occurred while add hashes in css: ' + error);
             this.emit('end');
           }))
 
           // Add hashes
-          .pipe(packages.hashSrc({
+          .pipe(hashSrc({
             build_dir: './',
             src_path: './',
             query_name: '',
@@ -40,7 +34,7 @@ module.exports = function() {
           }))
 
           // Save
-          .pipe(packages.gulp.dest(bundle.dest))
+          .pipe(protoss.gulp.dest(bundle.dest))
 
           .on('end', handleQueue);
 
@@ -66,5 +60,7 @@ module.exports = function() {
 
     config.bundles.forEach(addHashes);
 
-  });
+
+  };
+
 };

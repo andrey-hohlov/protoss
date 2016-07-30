@@ -1,11 +1,9 @@
-'use strict';
+const del = require('del');
 
-/**
- * Clean build directory
- */
+module.exports = function(options) {
 
-module.exports = function () {
-  return protoss.packages.gulp.task('protoss/utils/clean', function() {
-    return protoss.packages.del(protoss.config.clean, {dot: true});
-  });
+  return function(cb) {
+    return del(protoss.config.clean, {dot: true});
+  };
+
 };

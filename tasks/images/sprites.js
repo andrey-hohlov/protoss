@@ -1,17 +1,14 @@
-'use strict';
+const config = protoss.config.spritesPng;
+const concat = require('gulp-concat');
+const plumber = require('gulp-plumber');
+const spritesmithMulti = require('gulp.spritesmith-multi');
+const mergeStream = require('merge-stream');
 
-var config = protoss.config.spritesPng;
-var packages = protoss.packages;
-var notifier = protoss.helpers.notifier;
+module.exports = function(options) {
 
-/**
- * Make sprites and mixins for this sprites
- */
+  return function(cb) {
 
-module.exports = function () {
-  return packages.gulp.task('protoss/images/make-png-sprites', function() {
-
-    if(!config.enabled) return;
+    if (!config.enabled) return cb(null);
 
     var src = [config.src + '**/*.png'];
     var index = 0;
@@ -20,16 +17,16 @@ module.exports = function () {
       src.push('!'+config.src + '**/*@2x.png');
 
     // Generate our spritesheet
-    var spriteData = packages.gulp.src(src)
+    var spriteData = protoss.gulp.src(src)
 
-      // Prevent pipe breaking
-      .pipe(packages.plumber(function(error) {
-        notifier.error('An error occurred while making png-sprite: ' + error);
+    // Prevent pipe breaking
+      .pipe(plumber(function(error) {
+        protoss.notifier.error('An error occurred while making png-sprite: ' + error);
         this.emit('end');
       }))
 
       // Make sprites
-      .pipe(packages.spritesmithMulti({
+      .pipe(spritesmithMulti({
         spritesmith: function(options, sprite) {
           options.imgName = sprite+'.png';
           options.cssName = 'sprite-' + sprite + '.scss';
@@ -48,18 +45,20 @@ module.exports = function () {
 
     // Save images
     var imgStream = spriteData.img
-      .pipe(packages.gulp.dest(config.dest));
+      .pipe(protoss.gulp.dest(config.dest));
 
     var cssStream = spriteData.css
-      // Concat all scss to one
-      .pipe(packages.concat(config.stylesName))
+    // Concat all scss to one
+      .pipe(concat(config.stylesName))
       // Save scss file
-      .pipe(packages.gulp.dest(config.stylesDest));
+      .pipe(protoss.gulp.dest(config.stylesDest));
 
     // End task
-    return packages.mergeStream(imgStream, cssStream).pipe(
-      notifier.success('Png-sprites maked')
+    return mergeStream(imgStream, cssStream).pipe(
+      protoss.notifier.success('Png-sprites maked')
     );
 
-  });
+
+  }
+
 };

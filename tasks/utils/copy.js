@@ -1,31 +1,28 @@
-'use strict';
+const config = protoss.config.copy;
+const plumber = require('gulp-plumber');
 
-var copy = protoss.config.copy;
-var packages = protoss.packages;
+module.exports = function(options) {
 
-/**
- * Copy files to build directory
- */
-
-module.exports = function() {
-  return packages.gulp.task('protoss/utils/copy', function() {
-
-    var files = copy || [];
+  return function(cb) {
+    var files = config || [];
 
     if (files.length != 0) {
-      for (var i = 0; i<files.length; i++) {
-        packages.gulp.src(copy[i][0])
 
+      for (var i = 0; i < files.length; i++) {
+        protoss.gulp.src(files[i][0])
           // Prevent pipe breaking
-          .pipe(packages.plumber(function(error) {
-            notifier.error('An error occurred while copying files: ' + error);
+          .pipe(plumber(function(error) {
+            protoss.notifier.error('An error occurred while copying files: ' + error);
             this.emit('end');
           }))
 
-          .pipe(packages.gulp.dest(copy[i][1]))
+          .pipe(protoss.gulp.dest(files[i][1]))
       }
+
+      cb(null); // End task
 
     }
 
-  });
+  };
+
 };

@@ -1,55 +1,60 @@
-'use strict';
+const config = protoss.config.templates;
+const plumber = require('gulp-plumber');
+const filter = require('gulp-filter');
+const changed = require('gulp-changed');
+const cached = require('gulp-cached');
+const gulpif = require('gulp-if');
+const jade = require('gulp-jade');
+const jadeInheritance = require('gulp-jade-inheritance');
+const htmlmin = require('gulp-htmlmin');
+const prettify = require('gulp-jsbeautifier');
 
-var config = protoss.config.templates;
-var packages = protoss.packages;
-var notifier = protoss.helpers.notifier;
+module.exports = function(options) {
 
-var jadeData = config.data;
-jadeData.getData = protoss.helpers.getData;
+  var noCache = options ? options.noCache || false : false;
 
-/**
- * Compile jade templates.
- */
+  var jadeData = config.data;
+  jadeData.getData = protoss.helpers.getData;
 
-module.exports = function () {
-  packages.gulp.task('protoss/templates/compile', function(cb) {
-    packages.gulp.src(config.src)
+  return function(cb) {
+
+    protoss.gulp.src(config.src)
 
       // Prevent pipe breaking
-      .pipe(packages.plumber(function(error) {
-        notifier.error('An error occurred while compiling templates: ' + error.message + ' on line ' + error.line + ' in ' + error.file);
+      .pipe(plumber(function(error) {
+        protoss.notifier.error('An error occurred while compiling templates: ' + error.message + ' on line ' + error.line + ' in ' + error.file);
         this.emit('end');
       }))
 
       // Only pass through changed main files and all the partials
-      .pipe(packages.gulpif(
-        protoss.flags.isWatching,
-        packages.changed(config.dest, {extension: '.html'})
+      .pipe(gulpif(
+        protoss.flags.isWatching && !noCache,
+        changed(config.dest, {extension: '.html'})
       ))
-      .pipe(packages.gulpif(
-        protoss.flags.isWatching,
-        packages.cached('jade')
+      .pipe(gulpif(
+        protoss.flags.isWatching && !noCache,
+        cached('jade')
       ))
-      .pipe(packages.gulpif(
-        protoss.flags.isWatching,
-        packages.jadeInheritance({basedir: config.inhBaseDir})
+      .pipe(gulpif(
+        protoss.flags.isWatching && !noCache,
+        jadeInheritance({basedir: config.inhBaseDir})
       ))
 
       // Filter out partials (folders and files starting with "_" )
-      .pipe(packages.filter(function (file) {
+      .pipe(filter(function (file) {
         return !/\/_/.test(file.path) && !/^_/.test(file.relative);
       }))
 
       // Process jade templates
-      .pipe(packages.jade({
+      .pipe(jade({
         pretty: false,
         data: jadeData
       }))
 
       // Prettify HTML
-      .pipe(packages.gulpif(
+      .pipe(gulpif(
         !protoss.flags.isDev && !config.minify,
-        packages.prettify({
+        prettify({
           braceStyle: "collapse",
           indentChar: " ",
           indentScripts: "normal",
@@ -62,9 +67,9 @@ module.exports = function () {
       ))
 
       // Minify HTML
-      .pipe(packages.gulpif(
+      .pipe(gulpif(
         !protoss.flags.isDev && config.minify,
-        packages.htmlmin({
+        htmlmin({
           collapseWhitespace: true,
           minifyJS: true,
           minifyCSS: true
@@ -72,17 +77,18 @@ module.exports = function () {
       ))
 
       // Save all the files
-      .pipe(packages.gulp.dest(config.dest))
+      .pipe(protoss.gulp.dest(config.dest))
 
       .on('end', function() {
-        notifier.success('Templates compiled');
+        protoss.notifier.success('Templates compiled');
 
         if(protoss.flags.isWatching)
-          packages.browserSync.reload();
+          protoss.browserSync.reload();
 
         cb(null); // End task
 
       });
 
-  });
+  };
+
 };

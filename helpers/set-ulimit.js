@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Set ulimit. Topical for Linux-family OS and OSX.
  */

@@ -18,7 +18,7 @@ module.exports = {
     }
 
     gutil.log(log);
-    return protoss.packages.gutil.noop();
+    return gutil.noop();
   },
 
   success: function(message, file) {
@@ -30,7 +30,7 @@ module.exports = {
     }
 
     gutil.log(log);
-    return protoss.packages.gutil.noop();
+    return gutil.noop();
   },
 
   info: function(message, file) {
@@ -42,13 +42,13 @@ module.exports = {
     }
 
     gutil.log(log);
-    return protoss.packages.gutil.noop();
+    return gutil.noop();
   },
 
   custom: function (func){
     var log = func();
     gutil.log(log);
-    return protoss.packages.gutil.noop();
+    return gutil.noop();
   }
 
 };
