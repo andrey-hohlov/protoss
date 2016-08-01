@@ -168,6 +168,14 @@ module.exports = function(gulp, userConfig) {
     );
   });
 
+  gulp.task('protoss/build/templates', function(cb) {
+    protoss.flags.isDev = false;
+    runSequence(
+      'protoss/templates/compile',
+      cb
+    );
+  });
+
   // Separate tasks
 
   gulp.task('protoss/scripts/bundle', lazyRequireTask(__dirname + '/tasks/scripts/bundle'));

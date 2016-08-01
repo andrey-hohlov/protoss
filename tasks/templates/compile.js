@@ -51,16 +51,7 @@ module.exports = function(options) {
       // Prettify HTML
       .pipe(gulpif(
         !protoss.flags.isDev && !config.minify,
-        prettify({
-          braceStyle: "collapse",
-          indentChar: " ",
-          indentScripts: "normal",
-          indentSize: 4,
-          maxPreserveNewlines: 0,
-          preserveNewlines: false,
-          unformatted: ["a", "sub", "sup", "b", "i", "u"],
-          wrapLineLength: 0
-        })
+        prettify()
       ))
 
       // Minify HTML
