@@ -4,8 +4,8 @@ const filter = require('gulp-filter');
 const changed = require('gulp-changed');
 const cached = require('gulp-cached');
 const gulpif = require('gulp-if');
-const pug = require('gulp-pug');
-const pugInheritance = require('gulp-pug-inheritance');
+const compile = require('gulp-jade');
+const inheritance = require('gulp-jade-inheritance');
 const htmlmin = require('gulp-htmlmin');
 const prettify = require('gulp-jsbeautifier');
 
@@ -30,11 +30,11 @@ module.exports = function(options) {
       ))
       .pipe(gulpif(
         protoss.flags.isWatching && !noCache,
-        cached('pug')
+        cached()
       ))
       .pipe(gulpif(
         protoss.flags.isWatching && !noCache,
-        pugInheritance({basedir: config.inhBaseDir})
+        inheritance({basedir: config.inhBaseDir})
       ))
 
       // Filter out partials (folders and files starting with "_" )
@@ -43,7 +43,7 @@ module.exports = function(options) {
       }))
 
       // Process pug templates
-      .pipe(pug({
+      .pipe(compile({
         pretty: false,
         data: config.data
       }))
