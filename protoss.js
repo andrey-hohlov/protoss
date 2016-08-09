@@ -89,7 +89,6 @@ module.exports = function(gulp, userConfig) {
       [
         'protoss/images/move',
         'protoss/scripts/bundle',
-        'protoss/utils/copy',
         'protoss/favicons'
       ],
       [
@@ -104,7 +103,8 @@ module.exports = function(gulp, userConfig) {
       ],
       [
         'protoss/templates/hash-src',
-        'protoss/styles/hash-src'
+        'protoss/styles/hash-src',
+        'protoss/utils/copy'
       ],
       function () {
         protoss.notifier.success('Production version have been builded successfully!');
@@ -121,13 +121,13 @@ module.exports = function(gulp, userConfig) {
         'protoss/images/sprites',
         'protoss/images/sprites-svg',
         'protoss/images/icons',
-        'protoss/utils/copy'
+        'protoss/favicons'
       ],
       [
         'protoss/templates/compile',
         'protoss/styles/bundle',
         'protoss/scripts/bundle',
-        'protoss/favicons'
+        'protoss/utils/copy'
       ],
       function () {
         protoss.notifier.success('Development version have been builded successfully!');

@@ -2,16 +2,12 @@ const config = protoss.config.favicons;
 
 const plumber = require('gulp-plumber');
 const favicons = require('gulp-favicons');
-const filter = require('gulp-filter');
 
 module.exports = function(options) {
 
   return function(cb) {
 
     if (!config.enabled) return cb(null);
-
-    var rootFilter = filter(['favicon.ico', 'browserconfig.xml']);
-    var nonRootFilter = filter(['*', '!favicon.ico', '!browserconfig.xml'], {restore: true});
 
     protoss.gulp.src(config.source)
 
@@ -28,7 +24,7 @@ module.exports = function(options) {
           path: config.path,
           display: 'standalone',
           orientation: 'portrait',
-          version: 1.0,
+          version: 2.0,
           logging: false,
           online: false,
           html: false,
@@ -48,13 +44,7 @@ module.exports = function(options) {
         }))
 
       // Save favicons excluded that saving in root
-      .pipe(nonRootFilter)
       .pipe(protoss.gulp.dest(config.dest))
-
-      // Save favicons in root
-      .pipe(nonRootFilter.restore)
-      .pipe(rootFilter)
-      .pipe(protoss.gulp.dest(config.rootDest))
 
       .on('end', function() {
         cb(null); // End task

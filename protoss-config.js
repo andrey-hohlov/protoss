@@ -446,10 +446,10 @@ module.exports = {
     dest: assetsDest + 'favicons/',
 
     /**
-     * Path to store generated favicons in site root (for .ico and browserconfig.xml)
+     * Path to icons folder
      * @type {String}
      */
-    rootDest: dest,
+    path: assetsPath + 'favicons/',
 
     /**
      * Background colour for flattened icons (apple-touch-icon)
