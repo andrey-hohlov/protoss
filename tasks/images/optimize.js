@@ -6,7 +6,7 @@ module.exports = function(options) {
 
   return function(cb) {
 
-    if (!protoss.flags.isDev) return cb(null);
+    if (protoss.flags.isDev) return cb(null);
 
     protoss.gulp.src(config.dest + '**/*.{png,jpg,gif,svg}')
 
