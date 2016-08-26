@@ -27,7 +27,10 @@ module.exports = function(options) {
             { mergePaths: false },
             { removeXMLProcInst: false }
           ]
-        })
+        }),
+        imagemin.gifsicle(),
+        imagemin.jpegtran(),
+        imagemin.optipng()
       ]))
 
       // Save optimized images
