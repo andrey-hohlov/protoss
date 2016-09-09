@@ -7,7 +7,7 @@ const concat = require('gulp-concat');
 const svgSprite =require('gulp-svg-sprite');
 const svg2png = require('gulp-svg2png');
 const mergeStream = require('merge-stream');
-const listDir = require('./helpers/list-directory');
+const listDir = require('../../helpers/list-directory');
 
 module.exports = function(options) {
 

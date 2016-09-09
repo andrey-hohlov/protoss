@@ -3,7 +3,7 @@ const config = protoss.config.svgIcons;
 const plumber = require('gulp-plumber');
 const cheerio = require('gulp-cheerio');
 const svgSprite =require('gulp-svg-sprite');
-const listDir = require('./helpers/list-directory');
+const listDir = require('../../helpers/list-directory');
 
 module.exports = function(options) {
 
