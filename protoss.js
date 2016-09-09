@@ -13,7 +13,7 @@ protoss.flags = {
   isBuild: false
 };
 
-module.exports = function(gulp, userConfig, test) {
+module.exports = function(gulp, userConfig) {
 
   if (!gulp) throw new Error('No gulp passed!'); // TODO: error text
 
@@ -21,7 +21,7 @@ module.exports = function(gulp, userConfig, test) {
 
   // Prepare config
   let defaultConfig = require(__dirname + '/protoss-config.js');
-  protoss.config = require('./helpers/notifier/merge-config')(defaultConfig, userConfig);
+  protoss.config = require('./helpers/merge-config')(defaultConfig, userConfig);
 
   // Load tasks
   require('require-dir')('tasks-new', {recurse: true});

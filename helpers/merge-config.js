@@ -1,19 +1,13 @@
 const merge = require('merge');
-const notifier = require('./helpers/notifier');
+const gutil = require('gulp-util');
 
 module.exports = function (defaultConfig, userConfig) {
+  if (!userConfig) {
+    gutil.log([
+      gutil.colors.bold.red('You don\'t create protoss-config file. Using default settings.')
+    ].join('\n'));
+    userConfig = {};
+  }
 
-  return function () {
-
-    if (!userConfig) {
-      notifier.error('You don\'t create protoss-config file. Using default settings.');
-      userConfig = {};
-    } else if (typeof userConfig !== 'object') {
-      notifier.error('Protoss config must be an object! Using default settings.');
-      userConfig = {};
-    }
-
-    protoss.config = merge.recursive(defaultConfig, userConfig);
-  };
-
+  return protoss.config = merge.recursive(defaultConfig, userConfig);
 };
