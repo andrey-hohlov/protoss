@@ -36,12 +36,6 @@ module.exports = {
     dest: dest,
 
     /**
-     * Minify final HTML or not
-     * @type {Boolean}
-     */
-    minify: false,
-
-    /**
      * Passed to jade compiler data
      * @type {Object}
      */

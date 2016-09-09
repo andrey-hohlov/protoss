@@ -6,7 +6,6 @@ const cached = require('gulp-cached');
 const gulpif = require('gulp-if');
 const compile = require('gulp-jade');
 const inheritance = require('gulp-jade-inheritance');
-const htmlmin = require('gulp-htmlmin');
 const prettify = require('gulp-jsbeautifier');
 
 module.exports = function(options) {
@@ -50,18 +49,8 @@ module.exports = function(options) {
 
       // Prettify HTML
       .pipe(gulpif(
-        !protoss.flags.isDev && !config.minify,
+        !protoss.flags.isDev,
         prettify()
-      ))
-
-      // Minify HTML
-      .pipe(gulpif(
-        !protoss.flags.isDev && config.minify,
-        htmlmin({
-          collapseWhitespace: true,
-          minifyJS: true,
-          minifyCSS: true
-        })
       ))
 
       // Save all the files
