@@ -26,7 +26,6 @@ protoss.gulp.task('protoss/templates', () => (
     })))
     .pipe(protoss.gulp.dest(config.dest))
     .on('end', function() {
-      console.log(protoss.flags.isBuild);
       protoss.notifier.success('Templates compiled');
     })
 ));

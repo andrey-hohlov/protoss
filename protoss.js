@@ -17,6 +17,7 @@ protoss.helpers = {
 };
 
 protoss.notifier = require('./helpers/notifier');
+protoss.errorHandler = require('./helpers/error-handler');
 
 protoss.flags = {
   isWatching: false,
@@ -52,6 +53,10 @@ module.exports = function(gulp, userConfig) {
 
   var runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 
+
+  // Load tasks
+  require('require-dir')('tasks-new', {recurse: true});
+
   /**
    * Lazy load tasks
    */
@@ -83,12 +88,12 @@ module.exports = function(gulp, userConfig) {
   });
 
   gulp.task('protoss/build', function(cb) {
-    protoss.flags.isDev = false;
+    protoss.flags.isBuild = true;
     runSequence(
       'protoss/utils/clean',
       [
         'protoss/images/move',
-        'protoss/scripts/bundle',
+        'protoss/scripts',
         'protoss/favicons'
       ],
       [
@@ -97,13 +102,11 @@ module.exports = function(gulp, userConfig) {
         'protoss/images/icons'
       ],
       [
-        'protoss/templates/compile',
-        'protoss/styles/bundle',
+        'protoss/templates',
+        'protoss/styles',
         'protoss/images/optimize'
       ],
       [
-        'protoss/templates/hash-src',
-        'protoss/styles/hash-src',
         'protoss/utils/copy'
       ],
       function () {
@@ -124,9 +127,9 @@ module.exports = function(gulp, userConfig) {
         'protoss/favicons'
       ],
       [
-        'protoss/templates/compile',
-        'protoss/styles/bundle',
-        'protoss/scripts/bundle',
+        'protoss/templates',
+        'protoss/styles',
+        'protoss/scripts',
         'protoss/utils/copy'
       ],
       function () {
@@ -136,53 +139,7 @@ module.exports = function(gulp, userConfig) {
     );
   });
 
-  gulp.task('protoss/dev/scripts', function(cb) {
-    protoss.flags.isDev = true;
-    runSequence(
-      'protoss/scripts/bundle',
-      cb
-    );
-  });
-
-  gulp.task('protoss/dev/styles', function(cb) {
-    protoss.flags.isDev = true;
-    runSequence(
-      'protoss/styles/bundle',
-      cb
-    );
-  });
-
-  gulp.task('protoss/build/scripts', function(cb) {
-    protoss.flags.isDev = false;
-    runSequence(
-      'protoss/scripts/bundle',
-      cb
-    );
-  });
-
-  gulp.task('protoss/build/styles', function(cb) {
-    protoss.flags.isDev = false;
-    runSequence(
-      'protoss/styles/bundle',
-      cb
-    );
-  });
-
-  gulp.task('protoss/build/templates', function(cb) {
-    protoss.flags.isDev = false;
-    runSequence(
-      'protoss/templates/compile',
-      cb
-    );
-  });
-
-  // Separate tasks
-
-  gulp.task('protoss/scripts/bundle', lazyRequireTask(__dirname + '/tasks/scripts/bundle'));
-
-  gulp.task('protoss/styles/bundle', lazyRequireTask(__dirname + '/tasks/styles/bundle'));
-
-  gulp.task('protoss/templates/compile', lazyRequireTask(__dirname + '/tasks/templates/compile'));
+  //Separate tasks
 
   gulp.task('protoss/images/move', lazyRequireTask(__dirname + '/tasks/images/move'));
 
@@ -193,12 +150,6 @@ module.exports = function(gulp, userConfig) {
   gulp.task('protoss/images/icons', lazyRequireTask(__dirname + '/tasks/images/icons'));
 
   gulp.task('protoss/images/optimize', lazyRequireTask(__dirname + '/tasks/images/optimize'));
-
-  gulp.task('protoss/templates/compile-all', lazyRequireTask(__dirname + '/tasks/templates/compile', {noCache: true}));
-
-  gulp.task('protoss/templates/hash-src', lazyRequireTask(__dirname + '/tasks/templates/hash-src'));
-
-  gulp.task('protoss/styles/hash-src', lazyRequireTask(__dirname + '/tasks/styles/hash-src'));
 
   gulp.task('protoss/utils/clean', lazyRequireTask(__dirname + '/tasks/utils/clean'));
 

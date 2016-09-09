@@ -54,9 +54,10 @@
     "gulp-uglify": "^1.5.4",
     "gulp-util": "^3.0.7",
     "gulp.spritesmith-multi": "^3.1.0",
-    "merge-stream": "^1.0.0",
     "merge": "^1.2.0",
+    "merge-stream": "^1.0.0",
     "postcss-pseudoelements": "^3.0.0",
+    "require-dir": "^0.3.0",
     "run-sequence": "^1.2.2"
   }
 }

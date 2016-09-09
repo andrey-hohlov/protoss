@@ -295,19 +295,6 @@ module.exports = {
       ]
     },
 
-    // Templates data
-    {
-      cwd: null,
-      path: src + 'data/**/*',
-      ignore: null,
-      on: [
-        {
-          event: 'all',
-          task: 'protoss/templates/compile-all'
-        }
-      ]
-    },
-
     // Styles
     {
       cwd: null,
