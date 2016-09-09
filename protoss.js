@@ -1,65 +1,36 @@
 /**
  * Protoss
- * Front-end builder
+ * Gulp tasks bundle for fast front-end development
  */
 
-const merge = require('merge');
-
-// Set ulimit to 4096 for *nix FS. It needs to work with big amount of files
-if (require('os').platform() !== 'win32') {
-  require('./helpers/set-ulimit')();
-}
+require('./helpers/set-ulimit')();
 
 global.protoss = {};
-
-protoss.helpers = {
-  listDir: require('./helpers/list-directory')
-};
-
 protoss.notifier = require('./helpers/notifier');
 protoss.errorHandler = require('./helpers/error-handler');
-
 protoss.flags = {
-  isWatching: false,
-  isDev: true
+  isWatch: false,
+  isBuild: false
 };
 
-module.exports = function(gulp, userConfig) {
+module.exports = function(gulp, userConfig, test) {
 
-  // TODO: throw error if no gulp
-  if (gulp) {
-    protoss.gulp = gulp;
-  } else {
-    protoss.gulp = require('gulp');
-  }
+  if (!gulp) throw new Error('No gulp passed!'); // TODO: error text
 
-  /**
-   * Load config
-   */
+  protoss.gulp = gulp;
 
-  // TODO: make config task
-
-  var defaultConfig = require(__dirname + '/protoss-config.js');
-
-  if (!userConfig) {
-    protoss.helpers.notifier.error('You don\'t create protoss-config file. Using deault settings.');
-    userConfig = {};
-  } else if (typeof userConfig !== 'object') {
-    protoss.helpers.notifier.error('Protoss config must be an object! Using deault settings.');
-    userConfig = {};
-  }
-
-  protoss.config = merge.recursive(defaultConfig, userConfig);
-
-  var runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
-
+  // Prepare config
+  let defaultConfig = require(__dirname + '/protoss-config.js');
+  protoss.config = require('./helpers/notifier/merge-config')(defaultConfig, userConfig);
 
   // Load tasks
   require('require-dir')('tasks-new', {recurse: true});
 
-  /**
-   * Lazy load tasks
-   */
+  // TODO: 'make config' task
+
+  // TODO: Remove that:
+
+  var runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 
   function lazyRequireTask(path) {
     var args = [].slice.call(arguments, 1);

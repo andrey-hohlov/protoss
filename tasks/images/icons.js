@@ -1,7 +1,9 @@
 const config = protoss.config.svgIcons;
+
 const plumber = require('gulp-plumber');
 const cheerio = require('gulp-cheerio');
 const svgSprite =require('gulp-svg-sprite');
+const listDir = require('./helpers/list-directory');
 
 module.exports = function(options) {
 
@@ -75,7 +77,7 @@ module.exports = function(options) {
 
     };
 
-    icons = protoss.helpers.listDir(config.src, 'dirs', 'names'); // get folders with icons
+    icons = listDir(config.src, 'dirs', 'names'); // get folders with icons
     queue = icons.length;
 
     if(queue) {

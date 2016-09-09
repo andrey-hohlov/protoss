@@ -3,6 +3,9 @@
  */
 
 module.exports = function () {
+
+  if (require('os').platform() !== 'win32') {
+
   var limit = 4096;
   var posix;
 
@@ -13,10 +16,13 @@ module.exports = function () {
 
   if (posix) {
     try {
-      posix.setrlimit('nofile', { soft: limit });
+      posix.setrlimit('nofile', {soft: limit});
       return true;
     } catch (ex) {
     }
   }
+
+  }
+
   return false;
 };

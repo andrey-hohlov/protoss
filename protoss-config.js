@@ -303,7 +303,7 @@ module.exports = {
       on: [
         {
           event: 'all',
-          task: 'protoss/styles/bundle'
+          task: 'protoss/styles'
         }
       ]
     },
@@ -316,7 +316,7 @@ module.exports = {
       on: [
         {
           event: 'all',
-          task: 'protoss/scripts/bundle'
+          task: 'protoss/scripts'
         }
       ]
     },

@@ -1,4 +1,5 @@
 const config = protoss.config.spritesSvg;
+
 const plumber = require('gulp-plumber');
 const filter = require('gulp-filter');
 const rename = require('gulp-rename');
@@ -6,6 +7,7 @@ const concat = require('gulp-concat');
 const svgSprite =require('gulp-svg-sprite');
 const svg2png = require('gulp-svg2png');
 const mergeStream = require('merge-stream');
+const listDir = require('./helpers/list-directory');
 
 module.exports = function(options) {
 
@@ -126,7 +128,7 @@ module.exports = function(options) {
 
     };
 
-    sprites = protoss.helpers.listDir(config.src, 'dirs', 'names'); // get folders with sprites
+    sprites = listDir(config.src, 'dirs', 'names'); // get folders with sprites
     queue = sprites.length;
 
     if(queue) {
