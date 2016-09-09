@@ -17,7 +17,7 @@ module.exports = function(options) {
 
       // Only pass through changed files
       .pipe(gulpif(
-        protoss.flags.isWatching,
+        protoss.flags.isWatch,
         changed(config.dest)
       ))
 
@@ -27,10 +27,6 @@ module.exports = function(options) {
       .on('end', function() {
 
         protoss.notifier.success('Images moved');
-
-        if(protoss.flags.isWatching)
-          protoss.browserSync.reload();
-
         cb(null); // End task
 
       });

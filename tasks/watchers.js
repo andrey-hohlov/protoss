@@ -1,5 +1,6 @@
 const config = protoss.config.watch;
 const chokidar = require('chokidar');
+const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 
 module.exports = function(options) {
 
@@ -34,7 +35,14 @@ module.exports = function(options) {
             }
 
             watcherLog(event, path);
-            protoss.gulp.start(on.task);
+            runSequence(
+              on.task,
+              function () {
+                if(protoss.flags.isWatch && protoss.browserSync) {
+                  protoss.browserSync.reload();
+                }
+              }
+            );
 
           })
         });
@@ -49,7 +57,7 @@ module.exports = function(options) {
           queue--;
 
           if (queue === 0) {
-            protoss.flags.isWatching = true;
+            protoss.flags.isWatch = true;
             cb(null); // End task
           }
 

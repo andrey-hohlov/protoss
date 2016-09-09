@@ -65,14 +65,8 @@ module.exports = function(options) {
           queue--;
 
           if(queue === 0) {
-
-            if(protoss.flags.isWatching)
-              protoss.browserSync.reload();
-
             protoss.notifier.success('Svg-icons maked');
-
             cb(null); // End task
-
           }
         }
       };

@@ -37,14 +37,8 @@ module.exports = function(options) {
       .pipe(protoss.gulp.dest(config.dest))
 
       .on('end', function() {
-
         protoss.notifier.success('Images optimized');
-
-        if (protoss.flags.isWatching)
-          protoss.browserSync.reload();
-
         cb(null); // End task
-
       });
 
   };

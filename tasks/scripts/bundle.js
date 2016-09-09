@@ -31,13 +31,13 @@ module.exports = function(options) {
 
           // Clean debug if needed
           .pipe(gulpif(
-            !protoss.flags.isDev,
+            protoss.flags.isBuild,
             stripDebug()
           ))
 
           // Compress if needed
           .pipe(gulpif(
-            !protoss.flags.isDev && bundle.minify,
+            protoss.flags.isBuild && bundle.minify,
             uglify({
               mangle: {
                 keep_fnames: false
@@ -61,10 +61,6 @@ module.exports = function(options) {
 
           if(queue === 0) {
             protoss.notifier.success('Scripts bundled');
-
-            if(protoss.flags.isWatching)
-              protoss.browserSync.reload();
-
             cb(null); // End task
 
           }

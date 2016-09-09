@@ -116,10 +116,6 @@ module.exports = function(options) {
 
               .on('end', function () {
                 protoss.notifier.success('Svg-sprites ready');
-
-                if(protoss.flags.isWatching)
-                  protoss.browserSync.reload();
-
                 cb(null); // End task
               });
           }
