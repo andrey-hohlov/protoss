@@ -1,75 +1,68 @@
 const config = protoss.config.watch;
 const chokidar = require('chokidar');
 const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
+const logger = require('../helpers/watcher-log');
 
-module.exports = function(options) {
+protoss.gulp.task('protoss/watchers', (cb) => {
 
   if (!config) return cb(null);
 
-  return function(cb) {
+  let queue = config.length;
 
-    var queue = config.length;
+  let runWatcher = function (watch) {
 
-    var watcherLog = options.logger;
+    let run = function () {
 
-    var runWatcher = function (watch) {
+      let watcher = chokidar.watch(
+        watch.path,
+        {
+          ignored: watch.ignore,
+          ignoreInitial: true,
+          cwd: watch.cwd
+        }
+      );
 
-      var run = function () {
+      watch.on.forEach(function (on) {
+        watcher.on(on.event, function (event, path) {
 
-        var watcher = chokidar.watch(
-          watch.path,
-          {
-            ignored: watch.ignore,
-            ignoreInitial: true,
-            cwd: watch.cwd
-          });
-
-        watch.on.forEach(function (on) {
-          watcher.on(on.event, function (event, path) {
-
-            // todo: two args path on 'all' event, one - on other events
-            // https://github.com/paulmillr/chokidar#getting-started
-            if (!path) {
-              path = event;
-              event = on.event;
-            }
-
-            watcherLog(event, path);
-            runSequence(
-              on.task,
-              function () {
-                if(protoss.flags.isWatch && protoss.browserSync) {
-                  protoss.browserSync.reload();
-                }
-              }
-            );
-
-          })
-        });
-
-        handleQueue();
-
-      };
-
-      var handleQueue = function () {
-        if (queue) {
-
-          queue--;
-
-          if (queue === 0) {
-            protoss.flags.isWatch = true;
-            cb(null); // End task
+          // todo: two args path on 'all' event, one - on other events
+          // https://github.com/paulmillr/chokidar#getting-started
+          if (!path) {
+            path = event;
+            event = on.event;
           }
 
-        }
-      };
+          logger(event, path);
+          runSequence(
+            on.task,
+            function () {
+              if(protoss.flags.isWatch && protoss.browserSync) {
+                protoss.browserSync.reload();
+              }
+            }
+          );
 
-      return run();
+        })
+      });
+
+      handleQueue();
 
     };
 
-    config.forEach(runWatcher);
+    let handleQueue = function () {
+      if (queue) {
+        queue--;
+        if (queue === 0) {
+          protoss.flags.isWatch = true;
+          cb(null);
+        }
+      }
+    };
 
-  }
+    return run();
 
-};
+  };
+
+  config.forEach(runWatcher);
+
+});

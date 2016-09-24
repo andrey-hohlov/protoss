@@ -8,15 +8,22 @@ const compile = require('gulp-jade');
 const inheritance = require('gulp-jade-inheritance');
 const prettify = require('gulp-jsbeautifier');
 const hashSrc = require('gulp-hash-src');
+const rename = require('gulp-rename');
 
-protoss.gulp.task('protoss/templates', () => (
+protoss.gulp.task('protoss/templates', (cb) => {
   protoss.gulp.src(config.src)
     .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'templates\' task`)}))
     .pipe(gulpif(protoss.flags.isWatch, cached()))
     .pipe(gulpif(protoss.flags.isWatch,inheritance({basedir: config.inhBaseDir})))
-    .pipe(filter(file => !/\/_/.test(file.path) && !/^_/.test(file.relative)))
+    .pipe(filter(
+      file =>
+      !/\/_/.test(file.path)
+      && !/^_/.test(file.relative)
+      && (config.filterReg ? config.filterReg.test(file.path) : true)
+    ))
     .pipe(compile({pretty: false, data: config.data}))
     .pipe(gulpif(protoss.flags.isBuild, prettify()))
+    .pipe(rename({dirname: '.'}))
     .pipe(gulpif(protoss.flags.isBuild, hashSrc({
       build_dir: './',
       src_path: './',
@@ -27,6 +34,7 @@ protoss.gulp.task('protoss/templates', () => (
     .pipe(protoss.gulp.dest(config.dest))
     .on('end', function() {
       protoss.notifier.success('Templates compiled');
-    })
-));
+      cb(null);
+    });
+});
 

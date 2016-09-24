@@ -1,44 +1,18 @@
-var src = './src/';
-var dest = './build/';
-
-var imagesSrc = src + 'images/';
-var stylesSrc = src + 'styles/';
-var templatesSrc = src + 'templates/';
-var scriptsSrc = src + 'scripts/';
-
-var assetsDest = dest + 'static/';
-var assetsPath = '/static/';
-
-var protossRoot = __dirname;
+const src = './src/';
+const dest = './build/';
+const stylesSrc = src + 'styles/';
+const scriptsSrc = src + 'scripts/';
+const assetsDest = dest + 'static/';
+const assetsPath = '/static/';
+const protossRoot = __dirname;
 
 module.exports = {
 
   templates: {
-
-    /**
-     * Path to templates source files
-     * @type {String}
-     */
-    src: templatesSrc + '**/*.jade',
-
-
-    /**
-     * Jade files base directory for inheritance
-     * @type {String}
-     */
-
-    inhBaseDir: templatesSrc,
-
-    /**
-     * Path to compiled HTML files
-     * @type {String}
-     */
+    src: src + '**/*.jade',
+    filterReg: /src[\\\/]pages/,
+    inhBaseDir: src,
     dest: dest,
-
-    /**
-     * Passed to jade compiler data
-     * @type {Object}
-     */
     data: {
       dataSrc: src + 'data/',
       assetsPath: assetsPath,
@@ -53,47 +27,28 @@ module.exports = {
         var resolvedPath = path.resolve(dataFile);
         return JSON.parse(fs.readFileSync(resolvedPath));
       }
-    },
-
-    /**
-     * Add hash to src (set false for disable)
-     * @type {Object|boolean}
-     */
-    hashes: dest + '**/*.html'
-
+    }
   },
 
   styles: {
-
-    /**
-     * Styles bundles
-     * @type {Array}
-     */
     bundles: [
       {
         name: 'styles',
-        src: [stylesSrc + 'vendor/normalize.css', stylesSrc + 'styles.scss', stylesSrc + 'vendor/*.css'],
+        src: [
+          stylesSrc + 'vendor/normalize.css',
+          stylesSrc + 'vendor/*.css',
+          stylesSrc + 'styles.scss'
+        ],
         dest: assetsDest + 'css/',
         minify: true,
         concat: true,
         hashes: true
       }
-    ],
-
-    /**
-     * Autoprefixer config
-     * @type {Array}
-     */
-    autoprefixer: ['last 12 versions']
+    ]
 
   },
 
   scripts: {
-
-    /**
-     * Scripts bundles
-     * @type {Array}
-     */
     bundles: [
       {
         name: 'libs',
@@ -111,194 +66,67 @@ module.exports = {
       },
       {
         name: 'app',
-        src: [scriptsSrc + 'app/utils.js', scriptsSrc + 'app/common.js', scriptsSrc + 'app/**/*.js'],
+        src: [
+          scriptsSrc + 'app/utils.js',
+          scriptsSrc + 'app/common.js',
+          scriptsSrc + 'app/**/*.js'
+        ],
         dest: assetsDest + 'js/',
         concat: true,
         minify: true
       }
     ]
-
   },
 
   images: {
-
-    /**
-     * Paths to images source
-     * @type {String|Array}
-     */
-    src: [
-      imagesSrc + '**/*.{png,jpg,gif,svg}',
-      '!' + imagesSrc + 'sprites/**/*',
-      '!' + imagesSrc + 'svg-sprites/**/*',
-      '!' + imagesSrc + 'icons/**/*'
-    ],
-
-    /**
-     * Paths to images in build
-     * @type {String|Array}
-     */
+    src: [src + 'resources/images/**/*.{png,jpg,gif,svg}'],
     dest: assetsDest + 'images/'
-
   },
 
   spritesPng: {
-
-    /**
-     * Generate png sprites
-     * @type {Boolean}
-     */
     enabled: true,
-
-    /**
-     * Paths to sprite source files
-     * @type {String|Array}
-     */
-    src: imagesSrc + 'sprites/',
-
-    /**
-     * Paths to generated sprites
-     * @type {String}
-     */
+    src: src + 'sprites/png/',
     dest: assetsDest + 'images/sprites/',
-
-    /**
-     * Use *@2x.png images to generate retina sprites
-     * @type {Boolean}
-     */
     retina: true,
-
-    /**
-     * Name of sprites styles file
-     * @type {String}
-     */
     stylesName: '_sprites.scss',
-
-    /**
-     * Paths to generated sprites styles
-     * @type {String}
-     */
-    stylesDest: stylesSrc + '_sprites/',
-
-    /**
-     * Paths to sprite styles file template
-     * @type {String}
-     */
-    template: protossRoot + '/assets/sprite.mustache',
-
-    /**
-     * Paths to sprite in background url (styles mixin)
-     * @type {String}
-     */
+    stylesDest: src + 'styles/_global/_sprites/',
     spritePath: '#{$pathToImages}sprites/',
-
-    /**
-     * Add sprite name for icon variable name:
-     * $sprite-name_icon
-     * @type {Boolean}
-     */
+    template: protossRoot + '/assets/sprite.mustache',
     prefix: true
-
   },
 
   spritesSvg: {
-
-    /**
-     * Generate svg sprites
-     * @type {Boolean}
-     */
     enabled: true,
-
-    /**
-     * Paths to sprite source files
-     * @type {String|Array}
-     */
-    src: imagesSrc + 'svg-sprites/',
-
-    /**
-     * Paths to generated sprites
-     * @type {String}
-     */
+    src: src + 'sprites/svg/',
     dest: assetsDest + 'images/svg-sprites/',
-
-    /**
-     * Name of sprites styles file
-     * @type {String}
-     */
     stylesName: '_sprites-svg.scss',
-
-    /**
-     * Paths to generated sprites styles
-     * @type {String}
-     */
-    stylesDest: stylesSrc + '_sprites/',
-
-    /**
-     * Paths to sprite styles file template
-     * @type {String}
-     */
-    template: protossRoot + '/assets/sprite-svg.mustache',
-
-    /**
-     * Paths to sprite in background url (styles mixin)
-     * @type {String}
-     */
+    stylesDest: src + 'styles/_global/_sprites/',
     spritePath: '#{$pathToImages}svg-sprites/',
-
-    /**
-     * Add sprite name for icon variable name:
-     * $sprite-name_icon
-     * @type {Boolean}
-     */
+    template: protossRoot + '/assets/sprite-svg.mustache',
     prefix: true
-
   },
 
   svgIcons: {
-
-    /**
-     * Generate svg icons
-     * @type {Boolean}
-     */
     enabled: true,
-
-    /**
-     * Paths to icons source files
-     * @type {String|Array}
-     */
-    src: imagesSrc + 'icons/',
-
-    /**
-     * Paths to generated icons sets
-     * @type {String}
-     */
+    src: src + 'icons/',
     dest: assetsDest + 'images/icons/'
-
-
   },
 
-  /**
-   * Watch for files and run tasks
-   */
-
   watch: [
-
-    // Templates
     {
       cwd: null,
-      path: templatesSrc + '**/*.jade',
+      path: src + '{blocks,pages}/**/*.jade',
       ignore: null,
       on: [
         {
           event: 'all',
-          task: 'protoss/templates/compile'
+          task: 'protoss/templates'
         }
       ]
     },
-
-    // Styles
     {
       cwd: null,
-      path: stylesSrc +'**/*.{css,scss}',
+      path: src + '{blocks,styles}/**/*.{css,scss}',
       ignore: null,
       on: [
         {
@@ -307,8 +135,6 @@ module.exports = {
         }
       ]
     },
-
-    // Scripts
     {
       cwd: null,
       path: scriptsSrc + '**/*.js',
@@ -320,164 +146,84 @@ module.exports = {
         }
       ]
     },
-
-    // Images
     {
-      cwd: imagesSrc,
+      cwd: src + 'resources/images/',
       path: '**/*.{png,jpg,gif,svg}',
-      ignore: [
-        'sprites/**/*',
-        'svg-sprites/**/*',
-        'svg-icons/**/*'
-      ],
+      ignore: [],
       on: [
         {
           event: 'add',
-          task: 'protoss/images/move'
+          task: 'protoss/images'
         },
         {
           event: 'change',
-          task: 'protoss/images/move'
+          task: 'protoss/images'
         }
       ]
     },
-
-    // Png sprites
     {
       cwd: null,
-      path: imagesSrc + 'sprites/**/*.png',
+      path: src + 'sprites/png/**/*.png',
       ignore: null,
       on: [
         {
           event: 'all',
-          task: 'protoss/images/sprites'
+          task: 'protoss/sprites'
         }
       ]
     },
-
-    // Svg sprites
     {
       cwd: null,
-      path: imagesSrc + 'svg-sprites/**/*.svg',
+      path: src + 'sprites/svg/**/*.svg',
       ignore: null,
       on: [
         {
           event: 'all',
-          task: 'protoss/images/sprites-svg'
+          task: 'protoss/sprites-svg'
         }
       ]
     },
-
-    // Svg icons
     {
       cwd: null,
-      path: imagesSrc + 'icons/**/*.svg',
+      path: src + 'icons/**/*.svg',
       ignore: null,
       on: [
         {
           event: 'all',
-          task: 'protoss/images/icons'
+          task: 'protoss/icons'
         }
       ]
     }
-
   ],
 
-  /**
-   * Copy files from one directory to another
-   * [path, destination]
-   * @type {Array}
-   */
   copy: [
-    [src + 'fonts/**/*', assetsDest + 'fonts/']
+    [src + 'resources/fonts/**/*', assetsDest + 'fonts/'],
+    [assetsDest + 'favicons/favicon.ico', dest]
   ],
 
-  /**
-   * Directories to clean on build
-   * @type {Array}
-   */
-  clean: [
+  del: [
     dest
   ],
 
   favicons: {
-
-    /**
-     * Generate favicons
-     * @type {Boolean}
-     */
     enabled: true,
-
-    /**
-     * Application name for manifest.json
-     * @type {Boolean}
-     */
     appName: 'Protoss',
-
-    /**
-     * Path to favicons source image
-     * @type {String}
-     */
-    source: src + 'resources/favicon-master.png',
-
-    /**
-     * Path to store generated favicons
-     * @type {String}
-     */
+    src: src + 'resources/favicon-master.png',
     dest: assetsDest + 'favicons/',
-
-    /**
-     * Path to icons folder
-     * @type {String}
-     */
     path: assetsPath + 'favicons/',
-
-    /**
-     * Background colour for flattened icons (apple-touch-icon)
-     * @type {String}
-     */
     background: '#fff'
-
   },
 
   browserSync: {
-
-    /**
-     * Port of local server for browser-sync
-     * @type {Number}
-     */
     port: 9001,
-
-    /**
-     * Root directory to web server
-     * @type {String}
-     */
     basedir: dest,
-
-    /**
-     * Choose the page to open in browser at first opening
-     * @type {String}
-     */
     startPath: '/',
-
-    /**
-     * Browser to open
-     * Example: ['google chrome', 'firefox']
-     * Avalible: default, safari, internet explorer, google chrome, firefox, opera
-     * @type {String|Array}
-     */
     browser: 'default',
-
-    /**
-     * Clicks, Scrolls & Form inputs on any device will be mirrored to all others or not
-     * https://www.browsersync.io/docs/options/#option-ghostMode
-     */
     ghostMode: {
       clicks: false,
       forms: false,
       scroll: false
     }
-
   }
 
 };

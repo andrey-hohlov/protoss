@@ -8,8 +8,6 @@ module.exports = function (title) {
       error.message,
       ''
     ].join('\n'));
-
-    // Keep gulp from hanging on this task
     this.emit('end');
   };
 };

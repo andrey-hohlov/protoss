@@ -1,54 +1,32 @@
-'use strict';
-
-var gutil = require('gulp-util');
-
 /**
  * Notify helper
  * @param  {String|Array} data
  */
 
+const gutil = require('gulp-util');
+
+const writeLog = function(message, file, color) {
+  color = color || 'yellow';
+  let log = 'Protoss: ' + message;
+  if (file) {
+    log += ' ' + file;
+  }
+  gutil.log(gutil.colors[color](log));
+  return gutil.noop();
+};
+
 module.exports = {
 
   error: function(message, file) {
-    var log = '';
-    log += gutil.colors['red'](message);
-
-    if (file){
-      log += ' ' + gutil.colors['red'](file);
-    }
-
-    gutil.log(log);
-    return gutil.noop();
+    return writeLog(message, file, 'red');
   },
 
   success: function(message, file) {
-    var log = '';
-    log += gutil.colors['yellow'](message);
-
-    if (file){
-      log += ' ' + gutil.colors['blue'](file);
-    }
-
-    gutil.log(log);
-    return gutil.noop();
+    return writeLog(message, file, 'green');
   },
 
   info: function(message, file) {
-    var log = '';
-    log += message;
-
-    if (file){
-      log += ' ' + gutil.colors['blue'](file);
-    }
-
-    gutil.log(log);
-    return gutil.noop();
-  },
-
-  custom: function (func){
-    var log = func();
-    gutil.log(log);
-    return gutil.noop();
+    return writeLog(message, file, 'blue');
   }
 
 };

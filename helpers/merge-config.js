@@ -8,6 +8,5 @@ module.exports = function (defaultConfig, userConfig) {
     ].join('\n'));
     userConfig = {};
   }
-
   return protoss.config = merge.recursive(defaultConfig, userConfig);
 };

@@ -17,14 +17,14 @@ const hashSrc = require('gulp-hash-src');
 
 protoss.gulp.task('protoss/styles', function(cb) {
 
-  var queue = config.bundles.length;
+  let queue = config.bundles.length;
 
-  var buildBundle = function(bundle) {
+  let buildBundle = function(bundle) {
 
-    var build = function() {
+    let build = function() {
 
-      var scssFilter = filter(['*.scss'], {restore: true});
-      var processors = [
+      let scssFilter = filter(['*.scss'], {restore: true});
+      let processors = [
         postcssPe
       ];
 
@@ -35,7 +35,7 @@ protoss.gulp.task('protoss/styles', function(cb) {
         .pipe(scssFilter.restore)
         .pipe(gulpif(bundle.concat, concat(bundle.name+'.css')))
         .pipe(gulpif(protoss.flags.isBuild, postcss(processors)))
-        .pipe(gulpif(protoss.flags.isBuild, autoprefixer({browsers: config.autoprefixer})))
+        .pipe(gulpif(protoss.flags.isBuild, autoprefixer()))
         .pipe(gulpif(protoss.flags.isBuild, gmq()))
         .pipe(gulpif(protoss.flags.isBuild, cssnano({
           autoprefixer: false,
@@ -63,7 +63,7 @@ protoss.gulp.task('protoss/styles', function(cb) {
         .on('end', handleQueue);
     };
 
-    var handleQueue = function() {
+    let handleQueue = function() {
       protoss.notifier.info('Bundled styles:', bundle.name);
       if (queue) {
         queue--;
