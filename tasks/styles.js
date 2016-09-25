@@ -11,7 +11,6 @@ const csso = require('gulp-csso');
 const autoprefixer = require('gulp-autoprefixer');
 const gmq = require('gulp-group-css-media-queries');
 const postcss = require('gulp-postcss');
-const postcssPe = require('postcss-pseudoelements');
 const prettify = require('gulp-jsbeautifier');
 const hashSrc = require('gulp-hash-src');
 
@@ -23,18 +22,18 @@ protoss.gulp.task('protoss/styles', function(cb) {
 
     let build = function() {
 
-      let scssFilter = filter(['*.scss'], {restore: true});
-      let processors = [
-        postcssPe
-      ];
+      let postProcessors = [];
+
+      if (bundle.postcss && bundle.postcss.length) {
+        bundle.postcss.forEach(postProcessor => {
+          postProcessors.push(postProcessor.processor(postProcessor.options));
+        });
+      }
 
       protoss.gulp.src(bundle.src)
         .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'styles\' task`)}))
-        .pipe(scssFilter)
         .pipe(sass())
-        .pipe(scssFilter.restore)
-        .pipe(gulpif(bundle.concat, concat(bundle.name+'.css')))
-        .pipe(gulpif(protoss.flags.isBuild, postcss(processors)))
+        .pipe(postcss(postProcessors))
         .pipe(gulpif(protoss.flags.isBuild, autoprefixer()))
         .pipe(gulpif(protoss.flags.isBuild, gmq()))
         .pipe(gulpif(protoss.flags.isBuild, cssnano({
