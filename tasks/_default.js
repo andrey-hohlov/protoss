@@ -9,11 +9,13 @@ protoss.gulp.task('protoss/watch-and-sync', function(cb) {
 });
 
 protoss.gulp.task('protoss/watch', function(cb) {
-  protoss.flags.isWatch = true;
   runSequence(
     'protoss/dev',
     'protoss/watchers',
-    cb
+    function () {
+      protoss.flags.isWatch = true;
+      cb();
+    }
   );
 });
 
