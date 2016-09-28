@@ -27,6 +27,9 @@ module.exports = {
         var resolvedPath = path.resolve(dataFile);
         return JSON.parse(fs.readFileSync(resolvedPath));
       }
+    },
+    w3c: {
+      src: dest + '*.html'
     }
   },
 

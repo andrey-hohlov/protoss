@@ -9,6 +9,7 @@ const inheritance = require('gulp-jade-inheritance');
 const prettify = require('gulp-jsbeautifier');
 const hashSrc = require('gulp-hash-src');
 const rename = require('gulp-rename');
+const w3cjs = require('gulp-w3cjs');
 
 protoss.gulp.task('protoss/templates', (cb) => {
   protoss.gulp.src(config.src)
@@ -38,3 +39,11 @@ protoss.gulp.task('protoss/templates', (cb) => {
     });
 });
 
+protoss.gulp.task('protoss/w3c-test', (cb) => {
+  protoss.gulp.src(config.w3c.src)
+    .pipe(w3cjs())
+    .pipe(w3cjs.reporter())
+    .on('end', function() {
+      cb(null);
+    });
+});
