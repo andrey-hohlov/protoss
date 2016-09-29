@@ -39,7 +39,7 @@ protoss.gulp.task('protoss/templates', (cb) => {
     });
 });
 
-protoss.gulp.task('protoss/w3c-test', (cb) => {
+protoss.gulp.task('protoss/templates:w3c-test', (cb) => {
   protoss.gulp.src(config.w3c.src)
     .pipe(w3cjs())
     .pipe(w3cjs.reporter())
