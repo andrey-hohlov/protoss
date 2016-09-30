@@ -84,7 +84,6 @@ require('protoss')(gulp, config);
 
 Определите в конфиге только необходимые параметры, для остальных будут использованы значения по умолчанию.
 
-/// TODO: описание параметров конфигурации
 
 ### Шаблоны
 
@@ -143,7 +142,7 @@ postcss: [
 ]
 ```
 
-Разместите в корневой директории проекта файл `browserslist` с настройкой поддерживаемых браузеров для автопрефиксера. [Пример настроек]()
+Разместите в корневой директории проекта файл `browserslist` с настройкой поддерживаемых браузеров для автопрефиксера. [Параметры](https://github.com/ai/browserslist)
 
 Разместите в корневой директории проекта файл `.csscomb.json` с настройкой форматирования финального CSS, если не собираетесь минифицировать финальный файл. [Пример настроек]()
 
@@ -160,7 +159,7 @@ scripts: {
     minify: true // минифицировтаь ли финальный JS
     }
   ]
-  }
+}
 ```
 
 
@@ -171,7 +170,7 @@ images: {
   src: ['./src/resources/images/**/*.{png,jpg,gif,svg}'], // откуда копировать изображения
   dest: './build/images/', // и куда
   minPath: './build/images/' // путь для оптимизации изображений
-},
+}
 ```
 
 
@@ -188,7 +187,7 @@ spritesPng: {
   spritePath: '#{$pathToImages}sprites/', // путь до спрайта в CSS
   template: __dirname + '/assets/sprite.mustache', // шаблон для генерации файла стилей
   fallback: false // генерировать png-fallback спрайта
-},
+}
 ```
 
 В папке с иконками необходимо создать отдельные папки для каждого набора иконок, например `src/sprites/png/ui` и `src/sprites/png/social`. 
@@ -209,7 +208,7 @@ spritesSvg: {
   stylesDest: './src/styles/_global/_sprites/', // папка для сгенерированного файла стилей
   spritePath: '#{$pathToImages}sprites-svg/', // путь до спрайта в CSS
   template: __dirname + '/assets/sprite-svg.mustache' // шаблон для генерации файла стилей
-},
+}
 ```
 
 В папке с иконками необходимо создать отдельные папки для каждого набора иконок, например `src/sprites/svg/ui` и `src/sprites/svg/social`. 
@@ -224,7 +223,7 @@ svgIcons: {
   enabled: true, // генерировать наборы иконок
   src: './src/icons/', // папка с исходными иконками
   dest: './build/static/images/icons/' // папка для финального файла с иконками
-},
+}
 ```
 
 В папке с иконками необходимо создать отдельные папки для каждого набора иконок, например `src/icons/ui` и `src/icons/social`. 
@@ -253,7 +252,7 @@ watch: [
 
 [Доступная конфигурация Chokidar](https://github.com/paulmillr/chokidar)
 
-[Полный список watchers по умолчанию]()
+[Полный список watchers по умолчанию](https://github.com/andrey-hohlov/protoss/blob/master/protoss-config.js#L74)
 
 
 ### Копирование
@@ -261,7 +260,7 @@ watch: [
 ```javascript
 copy: [
   ['./src/resources/fonts/**/*', './build/fonts/'] // [откуда, куда]
-],
+]
 ```
 
 
@@ -270,7 +269,7 @@ copy: [
 ```javascript
 del: [
   './build'
-],
+]
 ```
 
 
