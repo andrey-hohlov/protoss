@@ -5,7 +5,7 @@ const imagemin = require('gulp-imagemin');
 protoss.gulp.task('protoss/imagemin', (cb) => {
   if (protoss.flags.isDev) return;
 
-  protoss.gulp.src(config.dest + '**/*.{png,jpg,gif,svg}')
+  protoss.gulp.src(config.minPath + '**/*.{png,jpg,gif,svg}')
     .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'imagemin\' task`)}))
     .pipe(imagemin([
       imagemin.svgo({

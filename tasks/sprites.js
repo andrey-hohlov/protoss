@@ -24,7 +24,7 @@ protoss.gulp.task('protoss/sprites', () => {
         options.Algorithms = 'diagonal';
         options.padding = 2;
         options.cssOpts = {
-          spriteName: config.prefix ? sprite + '-'  : '',
+          spriteName: sprite,
           spritePath: config.spritePath,
           retina: config.retina,
           mixin: index == 0 // Create mixin only for first sprite

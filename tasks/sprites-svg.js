@@ -7,6 +7,7 @@ const concat = require('gulp-concat');
 const svgSprite =require('gulp-svg-sprite');
 const svg2png = require('gulp-svg2png');
 const mergeStream = require('merge-stream');
+const gulpif = require('gulp-if');
 const listDir = require('../helpers/list-directory');
 
 protoss.gulp.task('protoss/sprites-svg', (cb) => {
@@ -16,7 +17,7 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
   let sprites = listDir(config.src, 'dirs', 'names');
   let queue = sprites.length;
   let stylesStream = mergeStream();
-  let padding = 2;
+  let padding = 4;
 
   let makeSprite = function(sprite, index) {
 
@@ -47,10 +48,10 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
                 },
                 variables: {
                   spritePadding: padding,
-                  spriteName: config.prefix ? sprite + '-' : '',
+                  spriteName: sprite,
                   spritePath: config.spritePath,
                   spriteSvg: sprite + '.svg',
-                  spriteFallback: sprite + '.fallback.png',
+                  spriteFallback: config.fallback ? sprite + '.fallback.png' : false,
                   mixin: index == queue - 1 // Create mixin only for last sprite
                 }
               }
@@ -58,11 +59,11 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
           }))
           .pipe(imagesFilter)
           .pipe(protoss.gulp.dest(config.dest))
-          .pipe(svg2png())
-          .pipe(rename({
+          .pipe(gulpif(config.fallback, svg2png()))
+          .pipe(gulpif(config.fallback, rename({
             suffix:'.fallback'
-          }))
-          .pipe(protoss.gulp.dest(config.dest))
+          })))
+          .pipe(gulpif(config.fallback, protoss.gulp.dest(config.dest)))
           .pipe(imagesFilter.restore)
           .pipe(stylesFilter)
           .on('end', handleQueue)

@@ -16,16 +16,20 @@ protoss.gulp.task('protoss/templates', (cb) => {
     .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'templates\' task`)}))
     .pipe(gulpif(protoss.flags.isWatch, cached()))
     .pipe(gulpif(protoss.flags.isWatch,inheritance({basedir: config.inhBaseDir})))
-    .pipe(filter(
-      file =>
-      !/\/_/.test(file.path)
-      && !/^_/.test(file.relative)
-      && (config.filterReg ? config.filterReg.test(file.path) : true)
+    .pipe(filter(file => {
+        if (/\/_/.test(file.path) || /^_/.test(file.relative)) return false;
+
+        if (config.filterFunc && typeof config.filterFunc === 'function') {
+          return config.filterFunc(file);
+        }
+
+        return true;
+      }
     ))
     .pipe(compile({pretty: false, data: config.data}))
     .pipe(gulpif(protoss.flags.isBuild, prettify()))
     .pipe(rename({dirname: '.'}))
-    .pipe(gulpif(protoss.flags.isBuild, hashSrc({
+    .pipe(gulpif(protoss.flags.isBuild && config.hashes, hashSrc({
       build_dir: './',
       src_path: './',
       query_name: 'v',

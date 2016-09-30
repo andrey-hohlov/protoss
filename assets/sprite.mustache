@@ -24,11 +24,11 @@
 {{/if}}
 {{#if options.retina}}
 {{#each retina_groups}}
-$sprite-{{../options.spriteName}}{{name}}: {{normal.px.width}} {{normal.px.height}} {{normal.px.offset_x}} {{normal.px.offset_y}} {{normal.px.total_width}} {{normal.px.total_height}} '{{normal.image}}' '{{retina.image}}';
+$sprite-{{../options.spriteName}}-{{name}}: {{normal.px.width}} {{normal.px.height}} {{normal.px.offset_x}} {{normal.px.offset_y}} {{normal.px.total_width}} {{normal.px.total_height}} '{{normal.image}}' '{{retina.image}}';
 {{/each}}
 {{else}}
 {{#each sprites}}
-$sprite-{{../options.spriteName}}{{name}}: {{px.width}} {{px.height}} {{px.offset_x}} {{px.offset_y}} {{px.total_width}} {{px.total_height}} '{{image}}';
+$sprite-{{../options.spriteName}}-{{name}}: {{px.width}} {{px.height}} {{px.offset_x}} {{px.offset_y}} {{px.total_width}} {{px.total_height}} '{{image}}';
 {{/each}}
 {{/if}}
 {{/options.functions}}

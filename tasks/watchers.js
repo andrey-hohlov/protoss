@@ -15,11 +15,7 @@ protoss.gulp.task('protoss/watchers', (cb) => {
 
       let watcher = chokidar.watch(
         watch.path,
-        {
-          ignored: watch.ignore,
-          ignoreInitial: true,
-          cwd: watch.cwd
-        }
+        watch.config
       );
 
       watch.on.forEach(function (on) {

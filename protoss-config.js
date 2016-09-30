@@ -1,80 +1,36 @@
-const src = './src/';
-const dest = './build/';
-const stylesSrc = src + 'styles/';
-const scriptsSrc = src + 'scripts/';
-const assetsDest = dest + 'static/';
-const assetsPath = '/static/';
-const protossRoot = __dirname;
-
 module.exports = {
 
   templates: {
-    src: src + '**/*.jade',
-    filterReg: /src[\\\/]pages/,
-    inhBaseDir: src,
-    dest: dest,
-    data: {
-      dataSrc: src + 'data/',
-      assetsPath: assetsPath,
-      imagesPath: assetsPath + 'images/',
-      svgIconsPath: assetsPath + 'images/icons/',
-      useFavicons: true,
-      faviconsPath: assetsPath + 'favicons/',
-      getData: function (dataFile) {
-        var fs = require('fs');
-        var path = require('path');
-        dataFile = /\.json$/.test(dataFile) && dataFile || dataFile + '.json';
-        var resolvedPath = path.resolve(dataFile);
-        return JSON.parse(fs.readFileSync(resolvedPath));
-      }
-    },
+    src: './src/**/*.jade',
+    filterFunc: false,
+    inhBaseDir: './src/',
+    dest: './build/',
+    data: {},
+    hashes: true,
     w3c: {
-      src: dest + '*.html'
+      src: './build/*.html'
     }
   },
 
   styles: {
     bundles: [
       {
-        name: 'styles',
-        src: [
-          stylesSrc + 'vendor/normalize.css',
-          stylesSrc + 'vendor/*.css',
-          stylesSrc + 'styles.scss'
-        ],
-        dest: assetsDest + 'css/',
+        name: 'app',
+        src: ['./src/styles/app.scss'],
+        dest: './build/static/css/',
         minify: true,
-        concat: true,
-        hashes: true
+        hashes: true,
+        postcss: false
       }
     ]
-
   },
 
   scripts: {
     bundles: [
       {
-        name: 'libs',
-        src: scriptsSrc + 'libs/**/*.js',
-        dest: assetsDest + 'js/libs/',
-        concat: false,
-        minify: true
-      },
-      {
-        name: 'plugins',
-        src: scriptsSrc + 'plugins/**/*.js',
-        dest: assetsDest + 'js/',
-        concat: true,
-        minify: true
-      },
-      {
         name: 'app',
-        src: [
-          scriptsSrc + 'app/utils.js',
-          scriptsSrc + 'app/common.js',
-          scriptsSrc + 'app/**/*.js'
-        ],
-        dest: assetsDest + 'js/',
+        src: ['./src/scripts/**/*.js'],
+        dest: './build/static/js/',
         concat: true,
         minify: true
       }
@@ -82,44 +38,45 @@ module.exports = {
   },
 
   images: {
-    src: [src + 'resources/images/**/*.{png,jpg,gif,svg}'],
-    dest: assetsDest + 'images/'
+    src: ['./src/resources/images/**/*.{png,jpg,gif,svg}'],
+    dest: './build/images/',
+    minPath: './build/images/'
   },
 
   spritesPng: {
     enabled: true,
-    src: src + 'sprites/png/',
-    dest: assetsDest + 'images/sprites/',
+    src: './src/sprites/png/',
+    dest: './build/static/images/sprites/',
     retina: true,
     stylesName: '_sprites.scss',
-    stylesDest: src + 'styles/_global/_sprites/',
+    stylesDest: './src/styles/_global/_sprites/',
     spritePath: '#{$pathToImages}sprites/',
-    template: protossRoot + '/assets/sprite.mustache',
-    prefix: true
+    template: __dirname + '/assets/sprite.mustache'
   },
 
   spritesSvg: {
     enabled: true,
-    src: src + 'sprites/svg/',
-    dest: assetsDest + 'images/svg-sprites/',
+    src: './src/sprites/svg/',
+    dest: './build/static/images/sprites-svg/',
     stylesName: '_sprites-svg.scss',
-    stylesDest: src + 'styles/_global/_sprites/',
+    stylesDest: './src/styles/_global/_sprites/',
     spritePath: '#{$pathToImages}svg-sprites/',
-    template: protossRoot + '/assets/sprite-svg.mustache',
-    prefix: true
+    template: __dirname + '/assets/sprite-svg.mustache',
+    fallback: false
   },
 
   svgIcons: {
     enabled: true,
-    src: src + 'icons/',
-    dest: assetsDest + 'images/icons/'
+    src: './src/icons/',
+    dest: './build/static/images/icons/'
   },
 
   watch: [
     {
-      cwd: null,
-      path: src + '{blocks,pages}/**/*.jade',
-      ignore: null,
+      path: './src/{blocks,pages}/**/*.jade',
+      config: {
+        ignoreInitial: true
+      },
       on: [
         {
           event: 'all',
@@ -128,9 +85,10 @@ module.exports = {
       ]
     },
     {
-      cwd: null,
-      path: src + '{blocks,styles}/**/*.{css,scss}',
-      ignore: null,
+      path: './src/{blocks,styles}/**/*.scss',
+      config: {
+        ignoreInitial: true,
+      },
       on: [
         {
           event: 'all',
@@ -139,9 +97,10 @@ module.exports = {
       ]
     },
     {
-      cwd: null,
-      path: scriptsSrc + '**/*.js',
-      ignore: null,
+      path: './src/scripts/**/*.js',
+      config: {
+        ignoreInitial: true,
+      },
       on: [
         {
           event: 'all',
@@ -150,9 +109,11 @@ module.exports = {
       ]
     },
     {
-      cwd: src + 'resources/images/',
       path: '**/*.{png,jpg,gif,svg}',
-      ignore: [],
+      config: {
+        cwd: './src/resources/images/',
+        ignoreInitial: true
+      },
       on: [
         {
           event: 'add',
@@ -165,9 +126,10 @@ module.exports = {
       ]
     },
     {
-      cwd: null,
-      path: src + 'sprites/png/**/*.png',
-      ignore: null,
+      path: './src/sprites/png/**/*.png',
+      config: {
+        ignoreInitial: true
+      },
       on: [
         {
           event: 'all',
@@ -176,9 +138,10 @@ module.exports = {
       ]
     },
     {
-      cwd: null,
-      path: src + 'sprites/svg/**/*.svg',
-      ignore: null,
+      path: './src/sprites/svg/**/*.svg',
+      config: {
+        ignoreInitial: true
+      },
       on: [
         {
           event: 'all',
@@ -187,9 +150,10 @@ module.exports = {
       ]
     },
     {
-      cwd: null,
-      path: src + 'icons/**/*.svg',
-      ignore: null,
+      path: './src/icons/**/*.svg',
+      config: {
+        ignoreInitial: true
+      },
       on: [
         {
           event: 'all',
@@ -200,28 +164,56 @@ module.exports = {
   ],
 
   copy: [
-    [src + 'resources/fonts/**/*', assetsDest + 'fonts/'],
-    [assetsDest + 'favicons/favicon.ico', dest]
+    ['./src/resources/fonts/**/*', './build/fonts/']
   ],
 
   del: [
-    dest
+    './build'
   ],
 
   favicons: {
     enabled: true,
-    appName: 'Protoss',
-    src: src + 'resources/favicon-master.png',
-    dest: assetsDest + 'favicons/',
-    path: assetsPath + 'favicons/',
-    background: '#fff'
+    src: '.src/resources/favicon-master.png',
+    dest: './build/static/favicons/',
+    config: {
+      appName: 'Protoss',
+      background: '#ffffff',
+      path: '/static/favicons/',
+      display: 'standalone',
+      orientation: 'portrait',
+      version: 2.0,
+      logging: false,
+      online: false,
+      html: false,
+      replace: true,
+      icons: {
+        favicons: true,
+        android: true,
+        appleIcon: true,
+        windows: true,
+        appleStartup: false,
+        coast: false,
+        firefox: false,
+        opengraph: false,
+        twitter: false,
+        yandex: false
+      }
+    }
   },
 
   browserSync: {
+    open: true,
     port: 9001,
-    basedir: dest,
-    startPath: '/',
+    server: {
+      directory: true,
+      baseDir: './build/'
+    },
+    reloadDelay: 200,
+    logConnections: true,
+    debugInfo: true,
+    injectChanges: false,
     browser: 'default',
+    startPath: '/',
     ghostMode: {
       clicks: false,
       forms: false,

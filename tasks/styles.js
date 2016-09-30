@@ -2,7 +2,6 @@ const config = protoss.config.styles;
 
 const plumber = require('gulp-plumber');
 const filter = require('gulp-filter');
-const concat = require('gulp-concat');
 const gulpif = require('gulp-if');
 const sass = require('gulp-sass');
 const cssnano = require('gulp-cssnano');
@@ -51,7 +50,7 @@ protoss.gulp.task('protoss/styles', function(cb) {
         })))
         .pipe(gulpif(protoss.flags.isBuild && !bundle.minify, csscomb()))
         .pipe(protoss.gulp.dest(bundle.dest)) //TODO: why hashes added only after save files?
-        .pipe(gulpif(protoss.flags.isBuild, hashSrc({
+        .pipe(gulpif(protoss.flags.isBuild && bundle.hashes, hashSrc({
           build_dir: './',
           src_path: './',
           query_name: 'v',
