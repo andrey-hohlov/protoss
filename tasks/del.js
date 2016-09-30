@@ -1,6 +1,7 @@
 const del = require('del');
 
 protoss.gulp.task('protoss/del', function(cb) {
-  del(protoss.config.del, {dot: true});
-  cb(null);
+  del(protoss.config.del, {dot: true}).then(() => {
+    cb(null);
+  });
 });

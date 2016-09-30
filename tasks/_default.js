@@ -38,16 +38,14 @@ protoss.gulp.task('protoss/dev', function(cb) {
       'protoss/images',
       'protoss/sprites',
       'protoss/sprites-svg',
-      'protoss/icons'
+      'protoss/icons',
+      'protoss/favicons'
     ],
     [
       'protoss/copy',
       'protoss/scripts',
       'protoss/templates',
       'protoss/styles'
-    ],
-    [
-      'protoss/favicons'
     ],
     function () {
       protoss.notifier.success('Development version was built successfully!');
