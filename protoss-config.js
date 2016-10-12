@@ -87,7 +87,7 @@ module.exports = {
     {
       path: './src/{blocks,styles}/**/*.scss',
       config: {
-        ignoreInitial: true,
+        ignoreInitial: true
       },
       on: [
         {
@@ -99,7 +99,7 @@ module.exports = {
     {
       path: './src/scripts/**/*.js',
       config: {
-        ignoreInitial: true,
+        ignoreInitial: true
       },
       on: [
         {

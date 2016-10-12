@@ -20,7 +20,7 @@ module.exports = function(gulp, userConfig) {
   protoss.gulp = gulp;
 
   // Prepare config
-  let defaultConfig = require(__dirname + '/protoss-config.js');
+  let defaultConfig = require('../protoss-config.js');
   protoss.config = require('./helpers/merge-config')(defaultConfig, userConfig);
 
   // Load tasks
