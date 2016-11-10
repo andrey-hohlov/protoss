@@ -56,6 +56,8 @@ require('protoss')(gulp, config);
 
 `protoss/scripts` - собрать JS-бандлы
 
+`protoss/scripts:lint` - проверить JS с помощью [ESLint](http://eslint.org/)
+
 `protoss/templates` - собрать HTML
 
 `protoss/icons` - собрать наборы svg-иконок
@@ -160,7 +162,10 @@ scripts: {
     concat: true, // объединить в один или скопировать как есть
     minify: true // минифицировтаь ли финальный JS
     }
-  ]
+  ],
+  lint: {
+    src: ['./src/scripts/**/*.js']
+  }
 }
 ```
 

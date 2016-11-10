@@ -34,7 +34,10 @@ module.exports = {
         concat: true,
         minify: true
       }
-    ]
+    ],
+    lint: {
+      src: ['./src/scripts/**/*.js']
+    }
   },
 
   images: {
