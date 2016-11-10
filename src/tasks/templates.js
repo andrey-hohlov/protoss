@@ -28,7 +28,7 @@ protoss.gulp.task('protoss/templates', (cb) => {
       return true;
     }))
     .pipe(compile({pretty: false, data: config.data}))
-    .pipe(gulpif(protoss.flags.isBuild, prettify()))
+    .pipe(gulpif(protoss.flags.isBuild && config.prettify, prettify()))
     .pipe(rename({dirname: '.'}))
     .pipe(gulpif(protoss.flags.isBuild && config.hashes, hashSrc({
       build_dir: './',

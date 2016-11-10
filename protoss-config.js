@@ -6,6 +6,7 @@ module.exports = {
     inhBaseDir: './src/',
     dest: './build/',
     data: {},
+    prettify: true,
     hashes: true,
     w3c: {
       src: './build/*.html'
