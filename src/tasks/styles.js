@@ -4,6 +4,7 @@ const plumber = require('gulp-plumber');
 const filter = require('gulp-filter');
 const gulpif = require('gulp-if');
 const sass = require('gulp-sass');
+const sassGlob = require('gulp-sass-glob');
 const cssnano = require('gulp-cssnano');
 const csscomb = require('gulp-csscomb');
 const csso = require('gulp-csso');
@@ -31,6 +32,7 @@ protoss.gulp.task('protoss/styles', function(cb) {
 
       protoss.gulp.src(bundle.src)
         .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'styles\' task`)}))
+        .pipe(sassGlob())
         .pipe(sass())
         .pipe(postcss(postProcessors))
         .pipe(gulpif(protoss.flags.isBuild, autoprefixer()))
