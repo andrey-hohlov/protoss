@@ -13,6 +13,7 @@ const gmq = require('gulp-group-css-media-queries');
 const postcss = require('gulp-postcss');
 const prettify = require('gulp-jsbeautifier');
 const hashSrc = require('gulp-hash-src');
+const stylelint = require('gulp-stylelint');
 
 protoss.gulp.task('protoss/styles', function(cb) {
 
@@ -80,4 +81,16 @@ protoss.gulp.task('protoss/styles', function(cb) {
 
   config.bundles.forEach(buildBundle);
 
+});
+
+protoss.gulp.task('protoss/styles:lint', () => {
+  return protoss.gulp.src(config.lint.src)
+    .pipe(stylelint({
+      reporters: [
+        {
+          formatter: 'string',
+          console: true
+        }
+      ]
+    }));
 });

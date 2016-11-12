@@ -23,7 +23,10 @@ module.exports = {
         hashes: true,
         postcss: false
       }
-    ]
+    ],
+    lint: {
+      src: ['./src/styles/**/*.scss']
+    }
   },
 
   scripts: {
