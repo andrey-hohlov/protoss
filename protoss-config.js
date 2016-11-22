@@ -7,7 +7,11 @@ module.exports = {
     dest: './build/',
     data: {},
     prettify: true,
-    hashes: true,
+    hashes: {
+      enabled: true,
+      build_dir: './',
+      src_path: './'
+    },
     w3c: {
       src: './build/*.html'
     }

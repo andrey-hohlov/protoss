@@ -30,9 +30,10 @@ protoss.gulp.task('protoss/templates', (cb) => {
     .pipe(compile({pretty: false, data: config.data}))
     .pipe(gulpif(protoss.flags.isBuild && config.prettify, prettify()))
     .pipe(rename({dirname: '.'}))
-    .pipe(gulpif(protoss.flags.isBuild && config.hashes, hashSrc({
-      build_dir: './',
-      src_path: './',
+    .pipe(protoss.gulp.dest(config.dest))
+    .pipe(gulpif(protoss.flags.isBuild && config.hashes.enabled, hashSrc({
+      build_dir: config.hashes.build_dir,
+      src_path: config.hashes.src_path,
       query_name: 'v',
       hash_len: 10,
       exts: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.pdf', '.ico']
