@@ -16,13 +16,10 @@ const hashSrc = require('gulp-hash-src');
 const stylelint = require('gulp-stylelint');
 
 protoss.gulp.task('protoss/styles', function(cb) {
-
   let queue = config.bundles.length;
 
   let buildBundle = function(bundle) {
-
     let build = function() {
-
       let postProcessors = [];
 
       if (bundle.postcss && bundle.postcss.length) {
@@ -70,13 +67,12 @@ protoss.gulp.task('protoss/styles', function(cb) {
         queue--;
         if (queue === 0) {
           protoss.notifier.success('Styles bundled');
-          cb(null); // End task
+          cb(null);
         }
       }
     };
 
     return build();
-
   };
 
   config.bundles.forEach(buildBundle);

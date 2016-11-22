@@ -1,5 +1,4 @@
 module.exports = {
-
   templates: {
     src: './src/**/*.jade',
     filterFunc: false,
@@ -231,5 +230,4 @@ module.exports = {
       scroll: false
     }
   }
-
 };

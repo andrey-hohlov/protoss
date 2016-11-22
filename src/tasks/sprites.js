@@ -5,7 +5,6 @@ const spritesmithMulti = require('gulp.spritesmith-multi');
 const mergeStream = require('merge-stream');
 
 protoss.gulp.task('protoss/sprites', () => {
-
   if (!config.enabled) return;
 
   const src = [config.src + '**/*.png'];
@@ -45,5 +44,4 @@ protoss.gulp.task('protoss/sprites', () => {
   return mergeStream(imgStream, cssStream).pipe(
     protoss.notifier.success('Png-sprites ready')
   );
-
 });

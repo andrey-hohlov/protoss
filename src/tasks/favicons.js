@@ -1,5 +1,4 @@
 const config = protoss.config.favicons;
-
 const plumber = require('gulp-plumber');
 const favicons = require('gulp-favicons');
 

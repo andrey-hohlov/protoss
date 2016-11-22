@@ -1,5 +1,4 @@
 const config = protoss.config.spritesSvg;
-
 const plumber = require('gulp-plumber');
 const filter = require('gulp-filter');
 const rename = require('gulp-rename');
@@ -11,7 +10,6 @@ const gulpif = require('gulp-if');
 const listDir = require('../helpers/list-directory');
 
 protoss.gulp.task('protoss/sprites-svg', (cb) => {
-
   if (!config.enabled) return cb(null);
 
   let sprites = listDir(config.src, 'dirs', 'names');
@@ -20,7 +18,6 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
   let padding = 4;
 
   let makeSprite = function(sprite, index) {
-
     let make = function() {
 
       let imagesFilter = filter(['*.svg'], {restore: true});
@@ -88,7 +85,6 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
     };
 
     return make();
-
   };
 
   if(queue) {
@@ -96,5 +92,4 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
   } else {
     cb(null);
   }
-
 });

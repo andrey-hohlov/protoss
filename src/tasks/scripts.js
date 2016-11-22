@@ -1,5 +1,4 @@
 const config = protoss.config.scripts;
-
 const plumber = require('gulp-plumber');
 const concat = require('gulp-concat');
 const gulpif = require('gulp-if');

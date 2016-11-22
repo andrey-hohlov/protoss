@@ -14,7 +14,6 @@ protoss.flags = {
 require('./helpers/set-ulimit')();
 
 module.exports = function(gulp, userConfig) {
-
   if (!gulp) throw new Error('No gulp passed!'); // TODO: error text
 
   protoss.gulp = gulp;
@@ -25,7 +24,5 @@ module.exports = function(gulp, userConfig) {
 
   // Load tasks
   require('require-dir')('tasks', {recurse: true});
-
   // TODO: 'make config' task
-
 };

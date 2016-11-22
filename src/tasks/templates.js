@@ -1,5 +1,4 @@
 const config = protoss.config.templates;
-
 const plumber = require('gulp-plumber');
 const filter = require('gulp-filter');
 const cached = require('gulp-cached');
@@ -30,7 +29,7 @@ protoss.gulp.task('protoss/templates', (cb) => {
     .pipe(compile({pretty: false, data: config.data}))
     .pipe(gulpif(protoss.flags.isBuild && config.prettify, prettify()))
     .pipe(rename({dirname: '.'}))
-    .pipe(protoss.gulp.dest(config.dest))
+    .pipe(protoss.gulp.dest(config.dest)) // TODO: remove double saving
     .pipe(gulpif(protoss.flags.isBuild && config.hashes.enabled, hashSrc({
       build_dir: config.hashes.build_dir,
       src_path: config.hashes.src_path,

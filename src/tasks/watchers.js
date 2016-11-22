@@ -4,15 +4,12 @@ const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove o
 const logger = require('../helpers/watcher-log');
 
 protoss.gulp.task('protoss/watchers', (cb) => {
-
   if (!config) return cb(null);
 
   let queue = config.length;
 
   let runWatcher = function (watch) {
-
     let run = function () {
-
       let watcher = chokidar.watch(
         watch.path,
         watch.config
@@ -37,12 +34,10 @@ protoss.gulp.task('protoss/watchers', (cb) => {
               }
             }
           );
-
         })
       });
 
       handleQueue();
-
     };
 
     let handleQueue = function () {
@@ -56,9 +51,7 @@ protoss.gulp.task('protoss/watchers', (cb) => {
     };
 
     return run();
-
   };
 
   config.forEach(runWatcher);
-
 });

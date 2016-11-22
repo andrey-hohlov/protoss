@@ -55,7 +55,6 @@ var listDir = function(path, target, format) {
   }
 
   return results;
-
 };
 
 module.exports = listDir;

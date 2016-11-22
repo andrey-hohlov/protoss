@@ -1,5 +1,4 @@
 const config = protoss.config.svgIcons;
-
 const plumber = require('gulp-plumber');
 const cheerio = require('gulp-cheerio');
 const svgSprite =require('gulp-svg-sprite');
@@ -12,7 +11,6 @@ protoss.gulp.task('protoss/icons', (cb) => {
   let queue = icons.length;
 
   let makeSprite = function(iconSet) {
-
     let make = function() {
       protoss.gulp.src(config.src + iconSet + '/*.svg')
         .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'icons\' task`)}))
@@ -54,7 +52,6 @@ protoss.gulp.task('protoss/icons', (cb) => {
     };
 
     return make();
-
   };
 
   if(queue) {
@@ -62,6 +59,5 @@ protoss.gulp.task('protoss/icons', (cb) => {
   } else {
     cb(null);
   }
-
 });
 

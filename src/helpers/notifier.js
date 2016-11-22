@@ -28,5 +28,4 @@ module.exports = {
   info: function(message, file) {
     return writeLog(message, file, 'blue');
   }
-
 };
