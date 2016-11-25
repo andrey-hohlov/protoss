@@ -20,7 +20,7 @@ protoss.gulp.task('protoss/watch', function(cb) {
 });
 
 protoss.gulp.task('protoss/build', function(cb) {
-  protoss.flags.isBuild = true;
+  process.env.NODE_ENV = 'production';
   runSequence(
     'protoss/del',
     'protoss/dev',
@@ -55,7 +55,7 @@ protoss.gulp.task('protoss/dev', function(cb) {
 });
 
 protoss.gulp.task('protoss/styles:build', function(cb) {
-  protoss.flags.isBuild = true;
+  process.env.NODE_ENV = 'production';
   runSequence(
     [
       'protoss/sprites',
@@ -67,7 +67,7 @@ protoss.gulp.task('protoss/styles:build', function(cb) {
 });
 
 protoss.gulp.task('protoss/scripts:build', function(cb) {
-  protoss.flags.isBuild = true;
+  process.env.NODE_ENV = 'production';
   runSequence(
     'protoss/scripts',
     cb
@@ -75,7 +75,7 @@ protoss.gulp.task('protoss/scripts:build', function(cb) {
 });
 
 protoss.gulp.task('protoss/templates:build', function(cb) {
-  protoss.flags.isBuild = true;
+  process.env.NODE_ENV = 'production';
   runSequence(
     'protoss/templates',
     cb

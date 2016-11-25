@@ -15,6 +15,7 @@ import stylelint from 'gulp-stylelint';
 const config = protoss.config.styles;
 
 protoss.gulp.task('protoss/styles', function(cb) {
+  const isProduction = process.env.NODE_ENV === 'production';
   let queue = config.bundles.length;
 
   let buildBundle = function(bundle) {
@@ -32,9 +33,9 @@ protoss.gulp.task('protoss/styles', function(cb) {
         .pipe(sassGlob())
         .pipe(sass())
         .pipe(postcss(postProcessors))
-        .pipe(gulpif(protoss.flags.isBuild, autoprefixer()))
-        .pipe(gulpif(protoss.flags.isBuild, gmq()))
-        .pipe(gulpif(protoss.flags.isBuild, cssnano({
+        .pipe(gulpif(isProduction, autoprefixer()))
+        .pipe(gulpif(isProduction, gmq()))
+        .pipe(gulpif(isProduction, cssnano({
           autoprefixer: false,
           discardComments: {
             removeAll: bundle.minify
@@ -43,13 +44,13 @@ protoss.gulp.task('protoss/styles', function(cb) {
           convertValues: false,
           zindex: false
         })))
-        .pipe(gulpif(protoss.flags.isBuild, csso())) // TODO: remove when cssnano get 'remove overridden rules' feature
-        .pipe(gulpif(protoss.flags.isBuild && !bundle.minify, prettify({
+        .pipe(gulpif(isProduction, csso())) // TODO: remove when cssnano get 'remove overridden rules' feature
+        .pipe(gulpif(isProduction && !bundle.minify, prettify({
           indentSize: 2
         })))
-        .pipe(gulpif(protoss.flags.isBuild && !bundle.minify, csscomb()))
+        .pipe(gulpif(isProduction && !bundle.minify, csscomb()))
         .pipe(protoss.gulp.dest(bundle.dest)) //TODO: why hashes added only after save files?
-        .pipe(gulpif(protoss.flags.isBuild && bundle.hashes, hashSrc({
+        .pipe(gulpif(isProduction && bundle.hashes, hashSrc({
           build_dir: './',
           src_path: './',
           query_name: 'v',

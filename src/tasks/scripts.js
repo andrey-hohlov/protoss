@@ -8,6 +8,8 @@ const config = protoss.config.scripts;
 
 protoss.gulp.task('protoss/scripts', (cb) => {
   if (!config.bundles || !config.bundles.length) return cb(null);
+
+  const isProduction = process.env.NODE_ENV === 'production';
   let queue = config.bundles.length;
 
   let buildBundle = function (bundle) {
@@ -15,7 +17,7 @@ protoss.gulp.task('protoss/scripts', (cb) => {
       protoss.gulp.src(bundle.src)
         .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'scripts\' task`)}))
         .pipe(gulpif(bundle.concat, concat(bundle.name+'.js')))
-        .pipe(gulpif(protoss.flags.isBuild && bundle.minify, uglify({
+        .pipe(gulpif(isProduction && bundle.minify, uglify({
           mangle: {
             keep_fnames: false
           },

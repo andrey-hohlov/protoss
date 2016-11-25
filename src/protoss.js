@@ -2,15 +2,12 @@
  * Protoss
  * Gulp tasks bundle for fast front-end development
  */
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 global.protoss = {};
 protoss.notifier = require('./helpers/notifier');
 protoss.errorHandler = require('./helpers/error-handler');
 protoss.isWatch = false;
-
-protoss.flags = {
-  isBuild: false
-};
 
 require('./helpers/set-ulimit')();
 

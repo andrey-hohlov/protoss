@@ -10,9 +10,11 @@ import rename from 'gulp-rename';
 import w3cjs from 'gulp-w3cjs';
 
 const config = protoss.config.templates;
-const isWatch = protoss.isWatch;
 
 protoss.gulp.task('protoss/templates', (cb) => {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const isWatch = protoss.isWatch;
+
   protoss.gulp.src(config.src)
     .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'templates\' task`)}))
     .pipe(gulpif(isWatch, cached()))
@@ -29,10 +31,10 @@ protoss.gulp.task('protoss/templates', (cb) => {
       return true;
     }))
     .pipe(compile({pretty: false, data: config.data}))
-    .pipe(gulpif(protoss.flags.isBuild && config.prettify, prettify()))
+    .pipe(gulpif(isProduction && config.prettify, prettify()))
     .pipe(rename({dirname: '.'}))
     .pipe(protoss.gulp.dest(config.dest)) // TODO: remove double saving
-    .pipe(gulpif(protoss.flags.isBuild && config.hashes.enabled, hashSrc({
+    .pipe(gulpif(isProduction && config.hashes.enabled, hashSrc({
       build_dir: config.hashes.build_dir,
       src_path: config.hashes.src_path,
       query_name: 'v',
