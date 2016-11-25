@@ -2,7 +2,10 @@ import plumber from 'gulp-plumber';
 import cheerio from 'gulp-cheerio';
 import svgSprite from 'gulp-svg-sprite';
 import listDir from '../helpers/list-directory';
+import chokidar from 'chokidar';
+import logger from '../helpers/watcher-log';
 
+const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 const config = protoss.config.icons;
 
 protoss.gulp.task('protoss/icons', (cb) => {
@@ -62,3 +65,19 @@ protoss.gulp.task('protoss/icons', (cb) => {
   }
 });
 
+protoss.gulp.task('protoss/icons:watch', () => {
+  if (!config.enabled) return;
+
+  let watcher = chokidar.watch(
+    config.src,
+    {
+      ignoreInitial: true
+    }
+  );
+  watcher.on('all', function (event, path) {
+    logger(event, path);
+    runSequence(
+      'protoss/icons'
+    );
+  });
+});

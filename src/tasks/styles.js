@@ -11,10 +11,13 @@ import postcss from 'gulp-postcss';
 import prettify from 'gulp-jsbeautifier';
 import hashSrc from 'gulp-hash-src';
 import stylelint from 'gulp-stylelint';
+import chokidar from 'chokidar';
+import logger from '../helpers/watcher-log';
 
 const config = protoss.config.styles;
 
-protoss.gulp.task('protoss/styles', function(cb) {
+function bundleStyles(bundle) {
+  if (!config.bundles || !config.bundles.length) return;
   const isProduction = process.env.NODE_ENV === 'production';
   let queue = config.bundles.length;
 
@@ -67,7 +70,7 @@ protoss.gulp.task('protoss/styles', function(cb) {
         queue--;
         if (queue === 0) {
           protoss.notifier.success('Styles bundled');
-          cb(null);
+          return true;
         }
       }
     };
@@ -75,8 +78,15 @@ protoss.gulp.task('protoss/styles', function(cb) {
     return build();
   };
 
-  config.bundles.forEach(buildBundle);
+  if (bundle) {
+    buildBundle(bundle);
+  } else {
+    config.bundles.forEach(buildBundle);
+  }
+}
 
+protoss.gulp.task('protoss/styles', () => {
+  return bundleStyles();
 });
 
 protoss.gulp.task('protoss/styles:lint', () => {
@@ -89,4 +99,22 @@ protoss.gulp.task('protoss/styles:lint', () => {
         }
       ]
     }));
+});
+
+protoss.gulp.task('protoss/styles:watch', () => {
+  if (!config.bundles || !config.bundles.length) return;
+
+  let runWatcher = function (bundle) {
+    let watcher = chokidar.watch(
+      bundle.watch ? bundle.watch : bundle.src,
+      {
+        ignoreInitial: true
+      }
+    );
+    watcher.on('all', function (event, path) {
+      logger(event, path);
+      bundleStyles(bundle);
+    });
+  };
+  config.bundles.forEach(runWatcher);
 });

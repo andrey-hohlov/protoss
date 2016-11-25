@@ -7,7 +7,10 @@ import svg2png from 'gulp-svg2png';
 import gulpif from 'gulp-if';
 import mergeStream from 'merge-stream';
 import listDir from '../helpers/list-directory';
+import chokidar from 'chokidar';
+import logger from '../helpers/watcher-log';
 
+const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 const config = protoss.config.spritesSvg;
 
 protoss.gulp.task('protoss/sprites-svg', (cb) => {
@@ -92,4 +95,21 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
   } else {
     cb(null);
   }
+});
+
+protoss.gulp.task('protoss/sprites-svg:watch', () => {
+  if (!config.enabled) return;
+
+  let watcher = chokidar.watch(
+    config.src,
+    {
+      ignoreInitial: true
+    }
+  );
+  watcher.on('all', function (event, path) {
+    logger(event, path);
+    runSequence(
+      'protoss/sprites-svg'
+    );
+  });
 });

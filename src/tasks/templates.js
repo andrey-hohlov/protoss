@@ -8,7 +8,10 @@ import prettify from 'gulp-jsbeautifier';
 import hashSrc from 'gulp-hash-src';
 import rename from 'gulp-rename';
 import w3cjs from 'gulp-w3cjs';
+import chokidar from 'chokidar';
+import logger from '../helpers/watcher-log';
 
+const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 const config = protoss.config.templates;
 
 protoss.gulp.task('protoss/templates', (cb) => {
@@ -55,4 +58,20 @@ protoss.gulp.task('protoss/templates:w3c-test', (cb) => {
     .on('end', function() {
       cb(null);
     });
+});
+
+protoss.gulp.task('protoss/templates:watch', () => {
+  let watcher = chokidar.watch(
+    config.watch ? config.watch : config.src,
+    {
+      ignoreInitial: true
+    }
+  );
+
+  watcher.on('all', function (event, path) {
+    logger(event, path);
+    runSequence(
+      'protoss/templates'
+    );
+  });
 });

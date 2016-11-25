@@ -1,6 +1,6 @@
 module.exports = {
   templates: {
-    src: './src/**/*.jade',
+    src: './src/templates/**/*.jade',
     filterFunc: false,
     inhBaseDir: './src/',
     dest: './build/',
@@ -49,13 +49,13 @@ module.exports = {
 
   images: {
     src: ['./src/resources/images/**/*.{png,jpg,gif,svg}'],
-    dest: './build/images/',
-    minPath: './build/images/'
+    dest: './build/static/images/',
+    minPath: './build/static/images/**/*.{png,jpg,gif,svg}'
   },
 
-  spritesPng: {
+  sprites: {
     enabled: true,
-    src: './src/sprites/png/',
+    src: './src/sprites/png/**/*.png',
     dest: './build/static/images/sprites/',
     retina: true,
     stylesName: '_sprites.scss',
@@ -70,7 +70,7 @@ module.exports = {
     dest: './build/static/images/sprites-svg/',
     stylesName: '_sprites-svg.scss',
     stylesDest: './src/styles/_global/_sprites/',
-    spritePath: '#{$pathToImages}svg-sprites/',
+    spritePath: '#{$pathToImages}sprites-svg/',
     template: __dirname + '/assets/sprite-svg.mustache',
     fallback: false
   },
@@ -183,7 +183,7 @@ module.exports = {
 
   favicons: {
     enabled: true,
-    src: '.src/resources/favicon-master.png',
+    src: './src/resources/favicon-master.png',
     dest: './build/static/favicons/',
     config: {
       appName: 'Protoss',
@@ -211,23 +211,26 @@ module.exports = {
     }
   },
 
-  browserSync: {
-    open: true,
-    port: 9001,
-    server: {
-      directory: true,
-      baseDir: './build/'
+  serve: {
+    browsersync: {
+      open: true,
+      port: 9001,
+      server: {
+        directory: true,
+        baseDir: './build/'
+      },
+      reloadDelay: 200,
+      logConnections: true,
+      debugInfo: true,
+      injectChanges: false,
+      browser: 'default',
+      startPath: '/',
+      ghostMode: {
+        clicks: false,
+        forms: false,
+        scroll: false
+      }
     },
-    reloadDelay: 200,
-    logConnections: true,
-    debugInfo: true,
-    injectChanges: false,
-    browser: 'default',
-    startPath: '/',
-    ghostMode: {
-      clicks: false,
-      forms: false,
-      scroll: false
-    }
+    watch: './build/**/*.*'
   }
 };

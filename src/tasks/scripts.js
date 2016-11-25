@@ -3,11 +3,13 @@ import uglify from 'gulp-uglify';
 import gulpif from 'gulp-if';
 import concat from 'gulp-concat';
 import plumber from 'gulp-plumber';
+import chokidar from 'chokidar';
+import logger from '../helpers/watcher-log';
 
 const config = protoss.config.scripts;
 
-protoss.gulp.task('protoss/scripts', (cb) => {
-  if (!config.bundles || !config.bundles.length) return cb(null);
+function bundleScripts(bundle) {
+  if (!config.bundles || !config.bundles.length) return;
 
   const isProduction = process.env.NODE_ENV === 'production';
   let queue = config.bundles.length;
@@ -36,7 +38,6 @@ protoss.gulp.task('protoss/scripts', (cb) => {
         queue--;
         if(queue === 0) {
           protoss.notifier.success('Scripts bundled');
-          cb(null);
         }
       }
     };
@@ -44,7 +45,15 @@ protoss.gulp.task('protoss/scripts', (cb) => {
     return build();
   };
 
-  config.bundles.forEach(buildBundle);
+  if (bundle) {
+    buildBundle(bundle);
+  } else {
+    config.bundles.forEach(buildBundle);
+  }
+}
+
+protoss.gulp.task('protoss/scripts', () => {
+  return bundleScripts();
 });
 
 protoss.gulp.task('protoss/scripts:lint', () => {
@@ -52,4 +61,22 @@ protoss.gulp.task('protoss/scripts:lint', () => {
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
+});
+
+protoss.gulp.task('protoss/scripts:watch', () => {
+  if (!config.bundles || !config.bundles.length) return;
+
+  let runWatcher = function (bundle) {
+    let watcher = chokidar.watch(
+      bundle.watch ? bundle.watch : bundle.src,
+      {
+        ignoreInitial: true
+      }
+    );
+    watcher.on('all', function (event, path) {
+      logger(event, path);
+      bundleScripts(bundle);
+    });
+  };
+  config.bundles.forEach(runWatcher);
 });
