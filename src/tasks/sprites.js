@@ -1,8 +1,9 @@
+import concat from 'gulp-concat';
+import plumber from 'gulp-plumber';
+import spritesmithMulti from 'gulp.spritesmith-multi';
+import mergeStream from 'merge-stream';
+
 const config = protoss.config.spritesPng;
-const concat = require('gulp-concat');
-const plumber = require('gulp-plumber');
-const spritesmithMulti = require('gulp.spritesmith-multi');
-const mergeStream = require('merge-stream');
 
 protoss.gulp.task('protoss/sprites', () => {
   if (!config.enabled) return;

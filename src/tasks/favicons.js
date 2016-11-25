@@ -1,6 +1,7 @@
+import plumber from 'gulp-plumber';
+import favicons from 'gulp-favicons';
+
 const config = protoss.config.favicons;
-const plumber = require('gulp-plumber');
-const favicons = require('gulp-favicons');
 
 protoss.gulp.task('protoss/favicons', (cb) => {
   if (!config.enabled) return;

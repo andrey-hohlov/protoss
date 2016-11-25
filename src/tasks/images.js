@@ -1,7 +1,8 @@
+import plumber from 'gulp-plumber';
+import gulpif from 'gulp-if';
+import changed from 'gulp-changed';
+
 const config = protoss.config.images;
-const plumber = require('gulp-plumber');
-const gulpif = require('gulp-if');
-const changed = require('gulp-changed');
 
 protoss.gulp.task('protoss/images', () => (
   protoss.gulp.src(config.src)

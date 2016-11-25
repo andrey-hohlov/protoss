@@ -1,4 +1,4 @@
-const del = require('del');
+import del from 'del';
 
 protoss.gulp.task('protoss/del', function(cb) {
   del(protoss.config.del, {dot: true}).then(() => {

@@ -1,13 +1,14 @@
+import plumber from 'gulp-plumber';
+import filter from 'gulp-filter';
+import rename from 'gulp-rename';
+import concat from 'gulp-concat';
+import svgSprite from 'gulp-svg-sprite';
+import svg2png from 'gulp-svg2png';
+import gulpif from 'gulp-if';
+import mergeStream from 'merge-stream';
+import listDir from '../helpers/list-directory';
+
 const config = protoss.config.spritesSvg;
-const plumber = require('gulp-plumber');
-const filter = require('gulp-filter');
-const rename = require('gulp-rename');
-const concat = require('gulp-concat');
-const svgSprite =require('gulp-svg-sprite');
-const svg2png = require('gulp-svg2png');
-const mergeStream = require('merge-stream');
-const gulpif = require('gulp-if');
-const listDir = require('../helpers/list-directory');
 
 protoss.gulp.task('protoss/sprites-svg', (cb) => {
   if (!config.enabled) return cb(null);
@@ -19,7 +20,6 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
 
   let makeSprite = function(sprite, index) {
     let make = function() {
-
       let imagesFilter = filter(['*.svg'], {restore: true});
       let stylesFilter = filter(['*.scss']);
 

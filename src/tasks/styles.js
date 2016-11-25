@@ -1,19 +1,18 @@
-const config = protoss.config.styles;
+import plumber from 'gulp-plumber';
+import gulpif from 'gulp-if';
+import sass from 'gulp-sass';
+import sassGlob from 'gulp-sass-glob';
+import cssnano from 'gulp-cssnano';
+import csscomb from 'gulp-csscomb';
+import csso from 'gulp-csso';
+import autoprefixer from 'gulp-autoprefixer';
+import gmq from 'gulp-group-css-media-queries';
+import postcss from 'gulp-postcss';
+import prettify from 'gulp-jsbeautifier';
+import hashSrc from 'gulp-hash-src';
+import stylelint from 'gulp-stylelint';
 
-const plumber = require('gulp-plumber');
-const filter = require('gulp-filter');
-const gulpif = require('gulp-if');
-const sass = require('gulp-sass');
-const sassGlob = require('gulp-sass-glob');
-const cssnano = require('gulp-cssnano');
-const csscomb = require('gulp-csscomb');
-const csso = require('gulp-csso');
-const autoprefixer = require('gulp-autoprefixer');
-const gmq = require('gulp-group-css-media-queries');
-const postcss = require('gulp-postcss');
-const prettify = require('gulp-jsbeautifier');
-const hashSrc = require('gulp-hash-src');
-const stylelint = require('gulp-stylelint');
+const config = protoss.config.styles;
 
 protoss.gulp.task('protoss/styles', function(cb) {
   let queue = config.bundles.length;

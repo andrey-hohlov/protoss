@@ -1,6 +1,7 @@
+import plumber from 'gulp-plumber';
+import imagemin from 'gulp-imagemin';
+
 const config = protoss.config.images;
-const plumber = require('gulp-plumber');
-const imagemin = require('gulp-imagemin');
 
 protoss.gulp.task('protoss/imagemin', (cb) => {
   if (protoss.flags.isDev) return;

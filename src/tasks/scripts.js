@@ -1,11 +1,13 @@
-const config = protoss.config.scripts;
-const plumber = require('gulp-plumber');
-const concat = require('gulp-concat');
-const gulpif = require('gulp-if');
-const uglify = require('gulp-uglify');
-const eslint = require('gulp-eslint');
+import eslint from 'gulp-eslint';
+import uglify from 'gulp-uglify';
+import gulpif from 'gulp-if';
+import concat from 'gulp-concat';
+import plumber from 'gulp-plumber';
 
-protoss.gulp.task('protoss/scripts', function(cb) {
+const config = protoss.config.scripts;
+
+protoss.gulp.task('protoss/scripts', (cb) => {
+  if (!config.bundles || !config.bundles.length) return cb(null);
   let queue = config.bundles.length;
 
   let buildBundle = function (bundle) {

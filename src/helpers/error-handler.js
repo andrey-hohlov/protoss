@@ -1,4 +1,4 @@
-const gutil = require('gulp-util');
+import gutil from 'gulp-util';
 
 module.exports = function (title) {
   return function (error) {

@@ -1,14 +1,15 @@
+import plumber from 'gulp-plumber';
+import filter from 'gulp-filter';
+import cached from 'gulp-cached';
+import gulpif from 'gulp-if';
+import compile from 'gulp-jade';
+import inheritance from 'gulp-jade-inheritance';
+import prettify from 'gulp-jsbeautifier';
+import hashSrc from 'gulp-hash-src';
+import rename from 'gulp-rename';
+import w3cjs from 'gulp-w3cjs';
+
 const config = protoss.config.templates;
-const plumber = require('gulp-plumber');
-const filter = require('gulp-filter');
-const cached = require('gulp-cached');
-const gulpif = require('gulp-if');
-const compile = require('gulp-jade');
-const inheritance = require('gulp-jade-inheritance');
-const prettify = require('gulp-jsbeautifier');
-const hashSrc = require('gulp-hash-src');
-const rename = require('gulp-rename');
-const w3cjs = require('gulp-w3cjs');
 
 protoss.gulp.task('protoss/templates', (cb) => {
   protoss.gulp.src(config.src)

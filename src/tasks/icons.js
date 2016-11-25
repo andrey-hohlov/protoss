@@ -1,8 +1,9 @@
-const config = protoss.config.svgIcons;
-const plumber = require('gulp-plumber');
-const cheerio = require('gulp-cheerio');
-const svgSprite =require('gulp-svg-sprite');
-const listDir = require('../helpers/list-directory');
+import plumber from 'gulp-plumber';
+import cheerio from 'gulp-cheerio';
+import svgSprite from 'gulp-svg-sprite';
+import listDir from '../helpers/list-directory';
+
+const config = protoss.config.icons;
 
 protoss.gulp.task('protoss/icons', (cb) => {
   if (!config.enabled) return cb(null);

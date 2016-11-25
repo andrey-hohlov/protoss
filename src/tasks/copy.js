@@ -1,5 +1,6 @@
+import plumber from 'gulp-plumber';
+
 const config = protoss.config.copy;
-const plumber = require('gulp-plumber');
 
 protoss.gulp.task('protoss/copy', function(cb) {
   var files = config || [];
