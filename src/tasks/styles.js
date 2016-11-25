@@ -13,6 +13,7 @@ import hashSrc from 'gulp-hash-src';
 import stylelint from 'gulp-stylelint';
 import chokidar from 'chokidar';
 import logger from '../helpers/watcher-log';
+import sourcemaps from 'gulp-sourcemaps';
 
 const config = protoss.config.styles;
 
@@ -34,6 +35,7 @@ function bundleStyles(bundle) {
       protoss.gulp.src(bundle.src)
         .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'styles\' task`)}))
         .pipe(sassGlob())
+        .pipe(gulpif(!isProduction, sourcemaps.init()))
         .pipe(sass())
         .pipe(postcss(postProcessors))
         .pipe(gulpif(isProduction, autoprefixer()))
@@ -60,6 +62,7 @@ function bundleStyles(bundle) {
           hash_len: 10,
           exts: ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']
         })))
+        .pipe(gulpif(!isProduction, sourcemaps.write()))
         .pipe(protoss.gulp.dest(bundle.dest))
         .on('end', handleQueue);
     };
