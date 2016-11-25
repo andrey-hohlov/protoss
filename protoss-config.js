@@ -75,7 +75,7 @@ module.exports = {
     fallback: false
   },
 
-  svgIcons: {
+  icons: {
     enabled: true,
     src: './src/icons/',
     dest: './build/static/images/icons/'
