@@ -13,7 +13,7 @@ protoss.gulp.task('protoss/watch', function(cb) {
     'protoss/dev',
     'protoss/watchers',
     function () {
-      protoss.flags.isWatch = true;
+      protoss.isWatch = true;
       cb();
     }
   );
