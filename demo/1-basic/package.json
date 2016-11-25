@@ -1,0 +1,28 @@
+{
+  "name": "demo-for-protoss",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Andrey Hohlov",
+  "engines": {
+    "node": ">=4.0.0",
+    "npm": ">=2.0.0"
+  },
+  "license": "MIT",
+  "main": "gulpfile.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh@github.com/user/repository.git"
+  },
+  "scripts": {},
+  "dependencies": {
+    "normalize.css": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-plugin-import": "^2.2.0",
+    "gulp": "^3.9.1",
+    "postcss-easy-import": "^1.0.1",
+    "protoss": "^2.0.0",
+    "stylelint-scss": "^1.3.4"
+  }
+}

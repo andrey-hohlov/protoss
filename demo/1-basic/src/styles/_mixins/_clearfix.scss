@@ -1,0 +1,13 @@
+@mixin clearfix() {
+  &::before,
+  &::after {
+    content: " ";
+    display: table;
+    height: 0;
+    visibility: hidden;
+  }
+
+  &::after {
+    clear: both;
+  }
+}

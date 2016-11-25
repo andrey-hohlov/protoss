@@ -1,0 +1,12 @@
+extends _layouts/_default
+block content
+  h1 Hello!
+  p: img(src= assetsPath + "images/cat.png" width="256" height="256" alt="")
+  p
+    i.social.social--fb
+    i.social.social--twitter
+  p
+    i.folder
+  p
+    svg.svg-icon
+      use(xlink:href= svgIconsPath + 'ui.svg#ok')

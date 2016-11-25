@@ -1,0 +1,16 @@
+// Generate by Protoss
+
+@mixin sprite($filename) {
+  width: nth($filename, 1);
+  height: nth($filename, 2);
+  background-image: url('#{$pathToImages}sprites/' + nth($filename, 7));
+  background-size: nth($filename, 5) nth($filename, 6);
+  background-position: nth($filename, 3) nth($filename, 4);
+  background-repeat: no-repeat;
+  @media screen and (-webkit-min-device-pixel-ratio: 2), only screen and ( min-resolution: 192dpi), only screen and ( min-resolution: 2dppx), only screen and (min-device-pixel-ratio: 2) {
+  background-image: url('#{$pathToImages}sprites/' + nth($filename, 8));
+  }
+}
+
+$sprite-social-fb: 24px 24px 0px 0px 50px 24px 'social.png' 'social@2x.png';
+$sprite-social-twitter: 24px 24px -26px 0px 50px 24px 'social.png' 'social@2x.png';
