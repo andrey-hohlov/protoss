@@ -6,8 +6,9 @@
 global.protoss = {};
 protoss.notifier = require('./helpers/notifier');
 protoss.errorHandler = require('./helpers/error-handler');
+protoss.isWatch = false;
+
 protoss.flags = {
-  isWatch: false,
   isBuild: false
 };
 

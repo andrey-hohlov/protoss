@@ -29,7 +29,7 @@ protoss.gulp.task('protoss/watchers', (cb) => {
           runSequence(
             on.task,
             function () {
-              if(protoss.flags.isWatch && protoss.browserSync) {
+              if(protoss.isWatch && protoss.browserSync) {
                 protoss.browserSync.reload();
               }
             }
@@ -44,7 +44,7 @@ protoss.gulp.task('protoss/watchers', (cb) => {
       if (queue) {
         queue--;
         if (queue === 0) {
-          protoss.flags.isWatch = true;
+          protoss.isWatch = true;
           cb(null);
         }
       }

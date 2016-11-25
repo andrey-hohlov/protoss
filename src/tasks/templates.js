@@ -10,12 +10,13 @@ import rename from 'gulp-rename';
 import w3cjs from 'gulp-w3cjs';
 
 const config = protoss.config.templates;
+const isWatch = protoss.isWatch;
 
 protoss.gulp.task('protoss/templates', (cb) => {
   protoss.gulp.src(config.src)
     .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'templates\' task`)}))
-    .pipe(gulpif(protoss.flags.isWatch, cached()))
-    .pipe(gulpif(protoss.flags.isWatch,inheritance({basedir: config.inhBaseDir})))
+    .pipe(gulpif(isWatch, cached()))
+    .pipe(gulpif(isWatch,inheritance({basedir: config.inhBaseDir})))
     .pipe(filter(file => {
       let path = file.path.replace(/\\/g, '/');
       let relative = file.relative.replace(/\\/g, '/');
