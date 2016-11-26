@@ -1,4 +1,5 @@
 var easyImport = require('postcss-easy-import');
+var posthtmlAttrsSorter = require('posthtml-attrs-sorter');
 
 module.exports = {
   templates: {
@@ -13,6 +14,29 @@ module.exports = {
       faviconsPath: 'assetsPath + favicons/',
     },
     prettify: true,
+    posthtml: 	{
+      plugins: [
+        posthtmlAttrsSorter({
+          order: [
+            'class',
+            'id',
+            'name',
+            'data',
+            'ng',
+            'src',
+            'for',
+            'type',
+            'href',
+            'values',
+            'title',
+            'alt',
+            'role',
+            'aria'
+          ]
+        })
+      ],
+      options: {}
+    },
     hashes: {
       enabled: true,
       build_dir: './',

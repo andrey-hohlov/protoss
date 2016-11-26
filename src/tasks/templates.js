@@ -7,6 +7,7 @@ import inheritance from 'gulp-jade-inheritance';
 import prettify from 'gulp-jsbeautifier';
 import hashSrc from 'gulp-hash-src';
 import rename from 'gulp-rename';
+import posthtml from 'gulp-posthtml';
 import w3cjs from 'gulp-w3cjs';
 import chokidar from 'chokidar';
 import logger from '../helpers/watcher-log';
@@ -35,6 +36,7 @@ protoss.gulp.task('protoss/templates', (cb) => {
     }))
     .pipe(compile({pretty: false, data: config.data}))
     .pipe(gulpif(isProduction && config.prettify, prettify()))
+    .pipe(gulpif(isProduction && config.posthtml, posthtml(config.posthtml.plugins, config.posthtml.options)))
     .pipe(rename({dirname: '.'}))
     .pipe(protoss.gulp.dest(config.dest)) // TODO: remove double saving
     .pipe(gulpif(isProduction && config.hashes.enabled, hashSrc({
