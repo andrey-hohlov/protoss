@@ -35,8 +35,8 @@ protoss.gulp.task('protoss/templates', (cb) => {
       return true;
     }))
     .pipe(compile({pretty: false, data: config.data}))
+    .pipe(gulpif(config.posthtml, posthtml(config.posthtml.plugins, config.posthtml.options)))
     .pipe(gulpif(isProduction && config.prettify, prettify()))
-    .pipe(gulpif(isProduction && config.posthtml, posthtml(config.posthtml.plugins, config.posthtml.options)))
     .pipe(rename({dirname: '.'}))
     .pipe(protoss.gulp.dest(config.dest)) // TODO: remove double saving
     .pipe(gulpif(isProduction && config.hashes.enabled, hashSrc({

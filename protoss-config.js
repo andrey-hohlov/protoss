@@ -6,6 +6,7 @@ module.exports = {
     dest: './build/',
     data: {},
     prettify: true,
+    posthtml: false,
     hashes: {
       enabled: true,
       build_dir: './',
