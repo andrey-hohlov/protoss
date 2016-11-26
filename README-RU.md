@@ -2,18 +2,19 @@
 Набор [Gulp](http://gulpjs.com/)-тасков для сборки frontend.
 
 ## Возможности
-0. Компиляция [Jade](https://pugjs.org/api/getting-started.html) шаблонов, тестирование валидности HTML.
-0. Компиляция [SCSS](http://sass-lang.com/), добавление вендорных префиксов, оптимизация и минификация. Опциональное использование Postcss плагинов. Разделение по бандлам с разными настройками. Можно использовать glob импорты.
-0. Объединение и минификация Javascript с разделением на бандлы. `Webpack coming soon...`
-0. Генерация любого количества png-спрайтов (с поддержкой retina)
-0. Генерация любого количества svg-спрайтов
-0. Генерация любого количества наборотв svg-иконок
-0. Оптимизация изображений
-0. Конфигурируемый watcher + [BrowserSync](https://www.browsersync.io/)
+0. Компиляция [Jade](https://pugjs.org/api/getting-started.html) шаблонов, тестирование валидности HTML. Опциональное использование PostHTML плагинов.
+0. Компиляция [SCSS](http://sass-lang.com/), добавление вендорных префиксов, оптимизация и минификация. Опциональное использование PostCSS плагинов. Разделение по бандлам с разными настройками. Можно использовать `glob` импорты.
+0. Объединение и минификация JavaScript с разделением на бандлы.
+0. Генерация любого количества png-спрайтов (с поддержкой retina).
+0. Генерация любого количества svg-спрайтов (опциональный fallback на png спрайт для старых браузеров).
+0. Генерация любого количества наборотв svg-иконок.
+0. Оптимизация изображений.
+0. [BrowserSync](https://www.browsersync.io/).
 0. Генерация favicons.  
 0. Добавление постфиксов для сброса кэша в HTML и CSS файлах.  
-0. Утилиты для копирования/удаления файлов
-0. Гибкий конфиг
+0. Утилиты для копирования/удаления файлов.
+0. Sourcemaps для SCSS и JavaScript.
+0. Гибкий конфиг.
 
 ## Установка
 
@@ -32,7 +33,9 @@ require('protoss')(gulp, config);
 ``
 И файл `protoss-config.js` с [конфигурацией](#Конфигурация).
 
-Тепреь вы можете использовать таски Protoss и добавлять по необходимости свои.
+Теперь вы можете использовать таски Protoss и добавлять по необходимости свои.
+
+[Демо-проект]()
 
 ## Таски
 
@@ -54,7 +57,7 @@ require('protoss')(gulp, config);
 
 `protoss/styles` - собрать CSS-бандлы
 
-`protoss/styles` - проверить SCSS с помощью [stylelint](http://stylelint.io/)
+`protoss/styles:lint` - проверить SCSS с помощью [stylelint](http://stylelint.io/)
 
 `protoss/scripts` - собрать JS-бандлы
 
@@ -72,7 +75,7 @@ require('protoss')(gulp, config);
 
 `protoss/favicons` - сгенерировать favicons
 
-`protoss/copy` - скопировать необходимые файлы build-директорию
+`protoss/copy` - скопировать необходимые файлы в build-директорию
 
 `protoss/del` - очистить build-директорию
 
@@ -82,8 +85,6 @@ require('protoss')(gulp, config);
 
 Конфигурация по умолчанию находится в файле [protoss/protoss-config.js](https://github.com/andrey-hohlov/protoss/blob/master/protoss-config.js) и рассчитана на следующую структуру проекта.
 
-// TODO: ветка с демо-структурой проекта
-
 Создайте в корне проекта файл `protoss-config.js` с вашей конфигурацией и передайте его вторым параметром при [инициализации Protoss](Установка). Можно не создавать отдельный файл и разместить конфиг непосредственно в `gulpfile.js`.
 
 Определите в конфиге только необходимые параметры, для остальных будут использованы значения по умолчанию.
@@ -91,26 +92,30 @@ require('protoss')(gulp, config);
 
 ### Шаблоны
 
-```javascript
+```
 templates: {
   src: './src/**/*.jade', // шаблоны
-  filterFunc: false, // функция-фильтр, используемая при компиляции шаблонов
+  filterFunc: false, // функция-фильтр, используемая при компиляции шаблонов. По умолчанию не компилируются файлы начинающиеся с `_` либо лежащие в папках, начинающихся с `_`. 
   inhBaseDir: './src/', // параметр для jade-inheritance, корневая директория для шаблонов
   dest: './build/', // папка для собранных HTML
   data: {}, // данные для передачи в шаблонизатор (переменные, функции)
   prettify: true, // "причесать" финальный HTML (только при production сборке)
-  hashes: true, // добавлять ли хэши для подключаемых файлов (только при production сборке)
+  posthtml: false, // Плагины и опции для PostHTML
+  hashes: {
+        enabled: true, // добавлять ли хэши для подключаемых файлов (только при production сборке)
+        build_dir: './', // https://www.npmjs.com/package/gulp-hash-src#options
+        src_path: './'
+      },
   w3c: {
     src: './build/*.html' // HTML файлы для тестирования валидности
   }
 }
 ```
 
-`filterRegExp` - функция, для фильтрации подлежащих компиляции файлов. По умолчани не компилируются файлы начинающиеся с `_` либо лежащие в папках, начинающихся с `_`. 
 
-Например, можно указать, чтобы их всех файлов компилировались в HTML только те, что лежат в папке './src/pages': 
+Можно указать, чтобы их всех файлов компилировались в HTML только те, что лежат в папке './src/pages': 
 
-```javascript
+```
 filterFunc: function (file) {
   return /src[\\\/]pages/.test(file.path);
 }
@@ -120,13 +125,14 @@ filterFunc: function (file) {
 
 ### Стили
 
-```javascript
+```
 styles: {
   bundles: [ // css-бандлы, каждый с отдельными настройками
     {
     name: 'app', // название бандла
     src: ['./src/styles/app.scss'], // файл для компиляции
     dest: './build/static/css/', // папка для скомпилированного CSS
+    watch: './src/styles/**/*.scss', // путь для вотчера изменений
     minify: true, // минифицировтаь ли финальный CSS
     hashes: true, // добавлять ли хэши для подключаемых файлов (только при production сборке)
     postcss: false // применяемые postcss-плагины
@@ -137,10 +143,10 @@ styles: {
 
 `postcss` - массив объектов, содержащих информацию о применяемых postcss-плагинах. Плагины нужно устанавливать отдельно.
 
-```javascript
+```
 const easyImport = require('postcss-easy-import');
 ```
-```javascript
+```
 postcss: [
   {
     processor: easyImport,
@@ -155,13 +161,14 @@ postcss: [
 
 ### Скрипты
 
-```javascript
+```
 scripts: {
   bundles: [ // js-бандлы, каждый с отдельными настройками
     {
     name: 'app', // название бандла
     src: ['./src/styles/**/*.js'], // файл для компиляции
     dest: './build/static/js/', // папка для собранного JS
+    watch: './src/scripts/**/*.scss', // путь для вотчера изменений
     concat: true, // объединить в один или скопировать как есть
     minify: true // минифицировтаь ли финальный JS
     }
@@ -175,7 +182,7 @@ scripts: {
 
 ### Изображения
 
-```javascript
+```
 images: {
   src: ['./src/resources/images/**/*.{png,jpg,gif,svg}'], // откуда копировать изображения
   dest: './build/images/', // и куда
@@ -186,8 +193,8 @@ images: {
 
 ### Png-спрайты
 
-```javascript
-spritesPng: {
+```
+sprites: {
   enabled: true, // генерировать png-спрайты
   src: './src/sprites/png/', // папка с исходными иконками
   dest: './build/static/images/sprites/', // папка для сгенерированного спрайта
@@ -195,8 +202,7 @@ spritesPng: {
   stylesName: '_sprites.scss', // имя генерируемого файла стилей
   stylesDest: './src/styles/_global/_sprites/', // папка для сгенерированного файла стилей
   spritePath: '#{$pathToImages}sprites/', // путь до спрайта в CSS
-  template: __dirname + '/assets/sprite.mustache', // шаблон для генерации файла стилей
-  fallback: false // генерировать png-fallback спрайта
+  template: __dirname + '/assets/sprite.mustache' // шаблон для генерации файла стилей
 }
 ```
 
@@ -209,7 +215,7 @@ spritesPng: {
 
 ### Svg-спрайты
 
-```javascript
+```
 spritesSvg: {
   enabled: true, // генерировать svg-спрайты
   src: './src/sprites/svg/', // папка с исходными иконками
@@ -217,7 +223,8 @@ spritesSvg: {
   stylesName: '_sprites-svg.scss', // имя генерируемого файла стилей
   stylesDest: './src/styles/_global/_sprites/', // папка для сгенерированного файла стилей
   spritePath: '#{$pathToImages}sprites-svg/', // путь до спрайта в CSS
-  template: __dirname + '/assets/sprite-svg.mustache' // шаблон для генерации файла стилей
+  template: __dirname + '/assets/sprite-svg.mustache'б // шаблон для генерации файла стилей
+  fallback: false // генерировать png-fallback спрайта
 }
 ```
 
@@ -228,8 +235,8 @@ spritesSvg: {
 
 ### Svg-иконки (svg symbols)
 
-```javascript
-svgIcons: {
+```
+icons: {
   enabled: true, // генерировать наборы иконок
   src: './src/icons/', // папка с исходными иконками
   dest: './build/static/images/icons/' // папка для финального файла с иконками
@@ -241,33 +248,9 @@ svgIcons: {
 [Про подключение svg-иконок](https://css-tricks.com/svg-symbol-good-choice-icons/).
 
 
-### Watchers
-
-```javascript
-watch: [
-  {
-    path: './src/{blocks,pages}/**/*.jade', // файл(ы) для наблюдения
-    config: { // параметры для chokidar
-      ignoreInitial: true,
-    },
-    on: [ // список событий и запускаемых при их наступлении задач
-      {
-        event: 'all', 
-        task: 'protoss/templates'
-      }
-    ]
-  }
-]
-```
-
-[Доступная конфигурация Chokidar](https://github.com/paulmillr/chokidar)
-
-[Полный список watchers по умолчанию](https://github.com/andrey-hohlov/protoss/blob/master/protoss-config.js#L74)
-
-
 ### Копирование
 
-```javascript
+```
 copy: [
   ['./src/resources/fonts/**/*', './build/fonts/'] // [откуда, куда]
 ]
@@ -276,7 +259,7 @@ copy: [
 
 ### Удаление
 
-```javascript
+```
 del: [
   './build'
 ]
@@ -285,13 +268,36 @@ del: [
 
 ### Favicons
 
-```javascript
+```
 favicons: {
   enabled: true, // генерировать favicons
-  src: '.src/resources/favicon-master.png', // исходное изображение
-  dest: './build/static/favicons/', // папка для сгенерированных  
-  config: {} // favicons конфигурация
-}
+  src: './src/resources/favicon-master.png', // исходное изображение
+  dest: './build/static/favicons/', / папка для сгенерированных изображений
+  config: { // favicons конфигурация
+    appName: 'Protoss',
+    background: '#ffffff',
+    path: '/static/favicons/',
+    display: 'standalone',
+    orientation: 'portrait',
+    version: 2.0,
+    logging: false,
+    online: false,
+    html: false,
+    replace: true,
+    icons: {
+      favicons: true,
+      android: true,
+      appleIcon: true,
+      windows: true,
+      appleStartup: false,
+      coast: false,
+      firefox: false,
+      opengraph: false,
+      twitter: false,
+      yandex: false
+    }
+  }
+},
 ```
 
 [Favicons](https://github.com/haydenbleasel/favicons)
@@ -301,24 +307,27 @@ favicons: {
 
 Конфигурация [BrowserSync](https://www.browsersync.io/docs/options)
 
-```javascript
-browserSync: {
-  open: true,
-  port: 9001,
-  server: {
-    directory: true,
-    basedir: './build',
+```
+serve: {
+  browsersync: { // Конфигурация BrowserSync
+    open: true,
+    port: 9001,
+    server: {
+      directory: true,
+      baseDir: './build/'
+    },
+    reloadDelay: 200,
+    logConnections: true,
+    debugInfo: true,
+    injectChanges: false,
+    browser: 'default',
+    startPath: '/',
+    ghostMode: {
+      clicks: false,
+      forms: false,
+      scroll: false
+    }
   },
-  reloadDelay: 200,
-  logConnections: true,
-  debugInfo: true,
-  injectChanges: false,
-  browser: 'default',
-  startPath: '/',
-  ghostMode: {
-    clicks: false,
-    forms: false,
-    scroll: false
-  }
+  watch: './build/**/*.*' // Перезагружать браузер при изменении файлов
 }
 ```

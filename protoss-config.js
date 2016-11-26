@@ -23,6 +23,7 @@ module.exports = {
         name: 'app',
         src: ['./src/styles/app.scss'],
         dest: './build/static/css/',
+        watch: './src/styles/**/*.scss',
         minify: true,
         hashes: true,
         postcss: false
@@ -39,6 +40,7 @@ module.exports = {
         name: 'app',
         src: ['./src/scripts/**/*.js'],
         dest: './build/static/js/',
+        watch: './src/scripts/**/*.scss',
         concat: true,
         minify: true
       }
@@ -81,98 +83,6 @@ module.exports = {
     src: './src/icons/',
     dest: './build/static/images/icons/'
   },
-
-  watch: [
-    {
-      path: './src/{blocks,pages}/**/*.jade',
-      config: {
-        ignoreInitial: true
-      },
-      on: [
-        {
-          event: 'all',
-          task: 'protoss/templates'
-        }
-      ]
-    },
-    {
-      path: './src/{blocks,styles}/**/*.scss',
-      config: {
-        ignoreInitial: true
-      },
-      on: [
-        {
-          event: 'all',
-          task: 'protoss/styles'
-        }
-      ]
-    },
-    {
-      path: './src/scripts/**/*.js',
-      config: {
-        ignoreInitial: true
-      },
-      on: [
-        {
-          event: 'all',
-          task: 'protoss/scripts'
-        }
-      ]
-    },
-    {
-      path: '**/*.{png,jpg,gif,svg}',
-      config: {
-        cwd: './src/resources/images/',
-        ignoreInitial: true
-      },
-      on: [
-        {
-          event: 'add',
-          task: 'protoss/images'
-        },
-        {
-          event: 'change',
-          task: 'protoss/images'
-        }
-      ]
-    },
-    {
-      path: './src/sprites/png/**/*.png',
-      config: {
-        ignoreInitial: true
-      },
-      on: [
-        {
-          event: 'all',
-          task: 'protoss/sprites'
-        }
-      ]
-    },
-    {
-      path: './src/sprites/svg/**/*.svg',
-      config: {
-        ignoreInitial: true
-      },
-      on: [
-        {
-          event: 'all',
-          task: 'protoss/sprites-svg'
-        }
-      ]
-    },
-    {
-      path: './src/icons/**/*.svg',
-      config: {
-        ignoreInitial: true
-      },
-      on: [
-        {
-          event: 'all',
-          task: 'protoss/icons'
-        }
-      ]
-    }
-  ],
 
   copy: [
     ['./src/resources/fonts/**/*', './build/fonts/']
