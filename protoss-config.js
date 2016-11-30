@@ -40,7 +40,7 @@ module.exports = {
         name: 'app',
         src: ['./src/scripts/**/*.js'],
         dest: './build/static/js/',
-        watch: './src/scripts/**/*.scss',
+        watch: './src/scripts/**/*.js',
         concat: true,
         minify: true
       }
