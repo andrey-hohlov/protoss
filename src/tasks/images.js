@@ -7,9 +7,9 @@ import logger from '../helpers/watcher-log';
 
 const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 const config = protoss.config.images;
-const isWatch = protoss.isWatch;
 
 protoss.gulp.task('protoss/images', () => {
+  const isWatch = protoss.isWatch;
   protoss.gulp.src(config.src)
     .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'images\' task`)}))
     .pipe(gulpif(isWatch, changed(config.dest)))

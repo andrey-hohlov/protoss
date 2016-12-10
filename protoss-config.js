@@ -142,6 +142,6 @@ module.exports = {
         scroll: false
       }
     },
-    watch: './build/**/*.*'
+    watch: './build/'
   }
 };
