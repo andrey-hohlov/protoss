@@ -1,4 +1,5 @@
 const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
+const isWebpack = protoss.config.scripts.workflow === 'webpack';
 
 protoss.gulp.task('protoss/watch-and-sync', (cb) => {
   runSequence(
@@ -8,21 +9,29 @@ protoss.gulp.task('protoss/watch-and-sync', (cb) => {
   );
 });
 
+let watchTasks = [
+  'protoss/dev',
+  'protoss/styles:watch',
+  'protoss/images:watch',
+  'protoss/templates:watch',
+  'protoss/sprites:watch',
+  'protoss/sprites-svg:watch',
+  'protoss/icons:watch'
+];
+
+if (!isWebpack ) {
+  watchTasks.push('protoss/scripts:watch');
+}
+
 protoss.gulp.task('protoss/watch', (cb) => {
-  runSequence(
-    'protoss/dev',
-    'protoss/scripts:watch',
-    'protoss/styles:watch',
-    'protoss/images:watch',
-    'protoss/templates:watch',
-    'protoss/sprites:watch',
-    'protoss/sprites-svg:watch',
-    'protoss/icons:watch',
-    function () {
-      protoss.isWatch = true;
-      cb();
+  watchTasks.push(function () {
+    protoss.isWatch = true;
+    if (isWebpack) {
+      protoss.notifier.warning('Run `protoss/webpack:watch` for start webpack!');
     }
-  );
+    cb();
+  });
+  runSequence.apply(null, watchTasks);
 });
 
 protoss.gulp.task('protoss/build', (cb) => {
@@ -49,7 +58,7 @@ protoss.gulp.task('protoss/dev', (cb) => {
     ],
     [
       'protoss/copy',
-      'protoss/scripts',
+      isWebpack ? 'protoss/webpack' : 'protoss/scripts',
       'protoss/templates',
       'protoss/styles'
     ],
@@ -72,13 +81,23 @@ protoss.gulp.task('protoss/styles:build', (cb) => {
   );
 });
 
-protoss.gulp.task('protoss/scripts:build', (cb) => {
-  process.env.NODE_ENV = 'production';
-  runSequence(
-    'protoss/scripts',
-    cb
-  );
-});
+if (isWebpack) {
+  protoss.gulp.task('protoss/webpack:build', (cb) => {
+    process.env.NODE_ENV = 'production';
+    runSequence(
+      'protoss/webpack',
+      cb
+    );
+  });
+} else {
+  protoss.gulp.task('protoss/scripts:build', (cb) => {
+    process.env.NODE_ENV = 'production';
+    runSequence(
+      'protoss/scripts',
+      cb
+    );
+  });
+}
 
 protoss.gulp.task('protoss/templates:build', (cb) => {
   process.env.NODE_ENV = 'production';
