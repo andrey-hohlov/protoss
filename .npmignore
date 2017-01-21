@@ -1,6 +1,2 @@
-src/
-demo
-.babelrc
-.editorconfig
-.gitignore
-.idea
+*
+!lib/*
