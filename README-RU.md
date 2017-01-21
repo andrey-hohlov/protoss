@@ -135,6 +135,7 @@ styles: {
     watch: './src/styles/**/*.scss', // путь для вотчера изменений
     minify: true, // минифицировтаь ли финальный CSS
     hashes: true, // добавлять ли хэши для подключаемых файлов (только при production сборке)
+    sourceMaps: true, // генерировать source maps (dev сборка)
     postcss: false // применяемые postcss-плагины
     }
   ]
@@ -170,7 +171,8 @@ scripts: {
     dest: './build/static/js/', // папка для собранного JS
     watch: './src/scripts/**/*.scss', // путь для вотчера изменений
     concat: true, // объединить в один или скопировать как есть
-    minify: true // минифицировтаь ли финальный JS
+    minify: true, // минифицировтаь ли финальный JS
+    sourceMaps: true // генерировать source maps (dev сборка)
     }
   ],
   lint: {
