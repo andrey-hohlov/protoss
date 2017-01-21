@@ -36,6 +36,8 @@ module.exports = {
   },
 
   scripts: {
+    workflow: 'webpack', // 'webpack' or 'concat'
+    webpackConfig: null, // by default will be required webpack.config.js in root directory
     bundles: [
       {
         name: 'app',
