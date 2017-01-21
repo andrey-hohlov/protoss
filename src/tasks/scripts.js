@@ -19,7 +19,7 @@ function bundleScripts(bundle) {
     let build = function () {
       protoss.gulp.src(bundle.src)
         .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'scripts\' task`)}))
-        .pipe(gulpif(!isProduction, sourcemaps.init()))
+        .pipe(gulpif(!isProduction && bundle.sourceMaps, sourcemaps.init()))
         .pipe(gulpif(bundle.concat, concat(bundle.name+'.js')))
         .pipe(gulpif(isProduction && bundle.minify, uglify({
           mangle: {
@@ -30,7 +30,7 @@ function bundleScripts(bundle) {
             drop_debugger: false
           }
         })))
-        .pipe(gulpif(!isProduction, sourcemaps.write()))
+        .pipe(gulpif(!isProduction && bundle.sourceMaps, sourcemaps.write()))
         .pipe(protoss.gulp.dest(bundle.dest))
         .on('end', handleQueue);
     };

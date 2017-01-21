@@ -26,7 +26,8 @@ module.exports = {
         watch: './src/styles/**/*.scss',
         minify: true,
         hashes: true,
-        postcss: false
+        postcss: false,
+        sourceMaps: true
       }
     ],
     lint: {
@@ -42,7 +43,8 @@ module.exports = {
         dest: './build/static/js/',
         watch: './src/scripts/**/*.js',
         concat: true,
-        minify: true
+        minify: true,
+        sourceMaps: true
       }
     ],
     lint: {
