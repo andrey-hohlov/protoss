@@ -1,7 +1,7 @@
 import plumber from 'gulp-plumber';
 import cheerio from 'gulp-cheerio';
 import svgSprite from 'gulp-svg-sprite';
-import listDir from '../helpers/list-directory';
+import listDir from '../helpers/list-child-dirs';
 import chokidar from 'chokidar';
 import logger from '../helpers/watcher-log';
 
@@ -11,7 +11,7 @@ const config = protoss.config.icons;
 protoss.gulp.task('protoss/icons', (cb) => {
   if (!config.enabled) return cb(null);
 
-  let icons = listDir(config.src, 'dirs', 'names');
+  let icons = listDir(config.src);
   let queue = icons.length;
 
   let makeSprite = function(iconSet) {

@@ -7,7 +7,7 @@ const gutil = require('gulp-util');
 
 const writeLog = function(message, file, color) {
   color = color || 'yellow';
-  let log = 'Protoss: ' + message;
+  let log = '[Protoss]: ' + message;
   if (file) {
     log += ' ' + file;
   }
@@ -27,5 +27,9 @@ module.exports = {
 
   info: function(message, file) {
     return writeLog(message, file, 'blue');
+  },
+
+  warning: function(message, file) {
+    return writeLog(message, file, 'yellow');
   }
 };

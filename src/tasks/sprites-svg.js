@@ -6,7 +6,7 @@ import svgSprite from 'gulp-svg-sprite';
 import svg2png from 'gulp-svg2png';
 import gulpif from 'gulp-if';
 import mergeStream from 'merge-stream';
-import listDir from '../helpers/list-directory';
+import listDir from '../helpers/list-child-dirs';
 import chokidar from 'chokidar';
 import logger from '../helpers/watcher-log';
 
@@ -16,7 +16,7 @@ const config = protoss.config.spritesSvg;
 protoss.gulp.task('protoss/sprites-svg', (cb) => {
   if (!config.enabled) return cb(null);
 
-  let sprites = listDir(config.src, 'dirs', 'names');
+  let sprites = listDir(config.src);
   let queue = sprites.length;
   let stylesStream = mergeStream();
   let padding = 4;

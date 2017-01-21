@@ -4,8 +4,8 @@
 
 module.exports = function () {
   if (require('os').platform() !== 'win32') {
-    var limit = 4096;
-    var posix;
+    const limit = 4096;
+    let posix;
     try {
       posix = require('posix');
     } catch (ex) {}
