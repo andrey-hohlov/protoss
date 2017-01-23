@@ -6,28 +6,34 @@ const config = protoss.config.scripts;
 if (config.workflow === 'webpack') {
   const webpackErrorHandler = protoss.errorHandler('Error in \'webpack\' task');
 
-  function runWebpack(watch = false) {
-    return function (callback) {
-      const webpackConfig = config.webpackConfig || require(process.cwd() + '/webpack.config.js');
+  const runWebpack = function runWebpack(watch = false) {
+    return (callback) => {
+      let webpackConfig;
+      if (typeof config.webpackConfig === 'function') {
+        webpackConfig = config.webpackConfig();
+      } else {
+        webpackConfig = config.webpackConfig;
+      }
       webpackConfig.watch = watch;
       return webpack(webpackConfig, (error, stats) => {
         const jsonStats = stats.toJson();
+
         if (jsonStats.errors.length) {
-          jsonStats.errors.forEach(message => {
+          jsonStats.errors.forEach((message) => {
             webpackErrorHandler.call({
-              emit() {/* noop */
-              }
-            }, {message});
+              emit() { /* noop */ },
+            }, { message });
           });
         }
-        gutil.log(stats.toString({colors: true}));
+
+        gutil.log(stats.toString({ colors: true }));
 
         if (webpackConfig.watch === false) {
           callback();
         }
       });
     };
-  }
+  };
 
   protoss.gulp.task('protoss/webpack', runWebpack(false));
 

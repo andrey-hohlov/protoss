@@ -37,7 +37,7 @@ module.exports = {
 
   scripts: {
     workflow: 'webpack', // 'webpack' or 'concat'
-    webpackConfig: null, // by default will be required webpack.config.js in root directory
+    webpackConfig: require(`${process.cwd()}/webpack.config.js`),
     bundles: [
       {
         name: 'app',
@@ -89,7 +89,10 @@ module.exports = {
   },
 
   copy: [
-    ['./src/resources/fonts/**/*', './build/fonts/']
+    {
+      src: './src/resources/fonts/**/*',
+      dest: './build/fonts/'
+    }
   ],
 
   del: [

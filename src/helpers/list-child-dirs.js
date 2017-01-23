@@ -8,19 +8,18 @@ const notifier = require('./notifier');
  */
 
 function listChildDirs(path) {
-  let results = [];
+  const results = [];
 
   try {
-    let list = fs.readdirSync(path);
-    list.forEach(function (file) {
-      let filePath = path + '/' + file;
+    const list = fs.readdirSync(path);
+    list.forEach((file) => {
+      const filePath = `${path}/${file}`;
       if (fs.statSync(filePath).isDirectory()) {
         results.push(file);
       }
     });
-
-  } catch(err) {
-    notifier.error('Error when check directory ' + path + '\n' + err);
+  } catch (err) {
+    notifier.error(`Error when check directory ${path}\n ${err}`);
   }
 
   return results;

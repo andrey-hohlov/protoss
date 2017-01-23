@@ -1,12 +1,13 @@
 const merge = require('merge');
 const gutil = require('gulp-util');
 
-module.exports = function (defaultConfig, userConfig) {
+function mergeConfig(defaultConfig, userConfig) {
   if (!userConfig) {
     gutil.log([
-      gutil.colors.bold.red('You don\'t create protoss-config file. Using default settings.')
+      gutil.colors.bold.red('You don\'t create protoss-config file. Using default settings.'),
     ].join('\n'));
-    userConfig = {};
   }
-  return protoss.config = merge.recursive(defaultConfig, userConfig);
-};
+  return merge.recursive(defaultConfig, userConfig || {});
+}
+
+module.exports = mergeConfig;

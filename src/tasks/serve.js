@@ -1,4 +1,5 @@
 const browserSync = require('browser-sync').create();
+
 const config = protoss.config.serve;
 
 protoss.gulp.task('protoss/serve', (cb) => {

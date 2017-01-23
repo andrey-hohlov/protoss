@@ -6,48 +6,54 @@ import chokidar from 'chokidar';
 import logger from '../helpers/watcher-log';
 
 const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
+
 const config = protoss.config.images;
 
-protoss.gulp.task('protoss/images', () => {
+protoss.gulp.task('protoss/images', (cb) => {
   const isWatch = protoss.isWatch;
   protoss.gulp.src(config.src)
-    .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'images\' task`)}))
+    .pipe(plumber({
+      errorHandler: protoss.errorHandler('Error in images task'),
+    }))
     .pipe(gulpif(isWatch, changed(config.dest)))
     .pipe(protoss.gulp.dest(config.dest))
-    .on('end', function() {
+    .on('end', () => {
       protoss.notifier.success('Images moved');
-    })
+      cb(null);
+    });
 });
 
 protoss.gulp.task('protoss/images:watch', () => {
-  let watcher = chokidar.watch(
+  const watcher = chokidar.watch(
     config.src,
     {
-      ignoreInitial: true
-    }
+      ignoreInitial: true,
+    },
   );
 
-  watcher.on('add', function (path, stats) {
+  watcher.on('add', (path) => {
     logger('add', path);
     runSequence(
-      'protoss/images'
+      'protoss/images',
     );
   });
 
-  watcher.on('change', function (path, stats) {
+  watcher.on('change', (path) => {
     logger('change', path);
     runSequence(
-      'protoss/images'
+      'protoss/images',
     );
   });
 });
 
 protoss.gulp.task('protoss/images:optimize', (cb) => {
-  let isProduction = process.env.NODE_ENV === 'production';
+  const isProduction = process.env.NODE_ENV === 'production';
   if (!isProduction) return;
 
   protoss.gulp.src(config.minPath)
-    .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'imagemin\' task`)}))
+    .pipe(plumber({
+      errorHandler: protoss.errorHandler('Error in imagemin task'),
+    }))
     .pipe(imagemin([
       imagemin.svgo({
         plugins: [
@@ -56,15 +62,15 @@ protoss.gulp.task('protoss/images:optimize', (cb) => {
           { removeViewBox: false },
           { convertPathData: false },
           { mergePaths: false },
-          { removeXMLProcInst: false }
-        ]
+          { removeXMLProcInst: false },
+        ],
       }),
       imagemin.gifsicle(),
       imagemin.jpegtran(),
-      imagemin.optipng()
+      imagemin.optipng(),
     ]))
     .pipe(protoss.gulp.dest(config.dest))
-    .on('end', function() {
+    .on('end', () => {
       protoss.notifier.success('Images optimized');
       cb(null);
     });

@@ -4,12 +4,17 @@ import favicons from 'gulp-favicons';
 const config = protoss.config.favicons;
 
 protoss.gulp.task('protoss/favicons', (cb) => {
-  if (!config.enabled) return cb(null);
-  protoss.gulp.src(config.src)
-    .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'favicons\' task`)}))
-    .pipe(favicons(config.config))
-    .pipe(protoss.gulp.dest(config.dest))
-    .on('end', function() {
-      cb(null);
-    });
+  if (config.enabled) {
+    protoss.gulp.src(config.src)
+      .pipe(plumber({
+        errorHandler: protoss.errorHandler('Error in favicons task'),
+      }))
+      .pipe(favicons(config.config))
+      .pipe(protoss.gulp.dest(config.dest))
+      .on('end', () => {
+        cb(null);
+      });
+  } else {
+    cb(null);
+  }
 });

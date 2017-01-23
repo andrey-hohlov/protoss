@@ -6,6 +6,8 @@ import gutil from 'gulp-util';
  * @param  {String} path  Path of changed file
  */
 
-module.exports = function (event, path) {
-  gutil.log('File: ' + gutil.colors.green.bold(path) + ' Event: ' + gutil.colors.green.bold(event));
-};
+function watcherLog(event, path) {
+  gutil.log(`File: ${gutil.colors.green.bold(path)}  Event: ${gutil.colors.green.bold(event)}`);
+}
+
+module.exports = watcherLog;

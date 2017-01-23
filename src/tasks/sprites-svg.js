@@ -6,80 +6,33 @@ import svgSprite from 'gulp-svg-sprite';
 import svg2png from 'gulp-svg2png';
 import gulpif from 'gulp-if';
 import mergeStream from 'merge-stream';
-import listDir from '../helpers/list-child-dirs';
 import chokidar from 'chokidar';
+import listDir from '../helpers/list-child-dirs';
 import logger from '../helpers/watcher-log';
 
 const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
+
 const config = protoss.config.spritesSvg;
 
 protoss.gulp.task('protoss/sprites-svg', (cb) => {
-  if (!config.enabled) return cb(null);
-
-  let sprites = listDir(config.src);
+  const sprites = listDir(config.src);
   let queue = sprites.length;
-  let stylesStream = mergeStream();
-  let padding = 4;
+  const stylesStream = mergeStream();
+  const padding = 4;
 
-  let makeSprite = function(sprite, index) {
-    let make = function() {
-      let imagesFilter = filter(['*.svg'], {restore: true});
-      let stylesFilter = filter(['*.scss']);
-
-      stylesStream.add(
-        protoss.gulp.src(config.src + sprite + '/*.svg')
-          .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'sprites-svg\' task`)}))
-          .pipe(svgSprite({
-            shape: {
-              spacing: {
-                padding: padding
-              }
-            },
-            mode: {
-              css: {
-                dest: './',
-                sprite: sprite + '.svg',
-                bust: false,
-                render: {
-                  scss: {
-                    dest: sprite + '.scss',
-                    template: config.template
-                  }
-                },
-                variables: {
-                  spritePadding: padding,
-                  spriteName: sprite,
-                  spritePath: config.spritePath,
-                  spriteSvg: sprite + '.svg',
-                  spriteFallback: config.fallback ? sprite + '.fallback.png' : false,
-                  mixin: index == queue - 1 // Create mixin only for last sprite
-                }
-              }
-            }
-          }))
-          .pipe(imagesFilter)
-          .pipe(protoss.gulp.dest(config.dest))
-          .pipe(gulpif(config.fallback, svg2png()))
-          .pipe(gulpif(config.fallback, rename({
-            suffix:'.fallback'
-          })))
-          .pipe(gulpif(config.fallback, protoss.gulp.dest(config.dest)))
-          .pipe(imagesFilter.restore)
-          .pipe(stylesFilter)
-          .on('end', handleQueue)
-      );
-    };
-
-    let handleQueue = function() {
+  const makeSprite = function makeSprite(sprite, index) {
+    const handleQueue = function handleQueue() {
       protoss.notifier.info('Svg-sprite processed:', sprite);
-      if(queue) {
-        queue--;
-        if(queue === 0) {
+      if (queue) {
+        queue -= 1;
+        if (queue === 0) {
           stylesStream
-            .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'sprites-svg\' task`)}))
+            .pipe(plumber({
+              errorHandler: protoss.errorHandler('Error in sprites-svg task'),
+            }))
             .pipe(concat(config.stylesName))
             .pipe(protoss.gulp.dest(config.stylesDest))
-            .on('end', function () {
+            .on('end', () => {
               protoss.notifier.success('Svg-sprites ready');
               cb(null);
             });
@@ -87,10 +40,59 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
       }
     };
 
+    const make = function make() {
+      const imagesFilter = filter(['*.svg'], { restore: true });
+      const stylesFilter = filter(['*.scss']);
+
+      stylesStream.add(
+        protoss.gulp.src(`${config.src + sprite}/*.svg`)
+          .pipe(plumber({
+            errorHandler: protoss.errorHandler('Error in sprites-svg task'),
+          }))
+          .pipe(svgSprite({
+            shape: {
+              spacing: {
+                padding,
+              },
+            },
+            mode: {
+              css: {
+                dest: './',
+                sprite: `${sprite}.svg`,
+                bust: false,
+                render: {
+                  scss: {
+                    dest: `${sprite}.scss`,
+                    template: config.template,
+                  },
+                },
+                variables: {
+                  spritePadding: padding,
+                  spriteName: sprite,
+                  spritePath: config.spritePath,
+                  spriteSvg: `${sprite}.svg`,
+                  spriteFallback: config.fallback ? `${sprite}.fallback.png` : false,
+                  mixin: index === queue - 1, // Create mixin only for last sprite
+                },
+              },
+            },
+          }))
+          .pipe(imagesFilter)
+          .pipe(protoss.gulp.dest(config.dest))
+          .pipe(gulpif(config.fallback, svg2png()))
+          .pipe(gulpif(config.fallback, rename({
+            suffix: '.fallback',
+          })))
+          .pipe(gulpif(config.fallback, protoss.gulp.dest(config.dest)))
+          .pipe(imagesFilter.restore)
+          .pipe(stylesFilter)
+          .on('end', handleQueue));
+    };
+
     return make();
   };
 
-  if(queue) {
+  if (queue && config.enabled) {
     sprites.forEach(makeSprite);
   } else {
     cb(null);
@@ -100,16 +102,17 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
 protoss.gulp.task('protoss/sprites-svg:watch', () => {
   if (!config.enabled) return;
 
-  let watcher = chokidar.watch(
+  const watcher = chokidar.watch(
     config.src,
     {
-      ignoreInitial: true
-    }
+      ignoreInitial: true,
+    },
   );
-  watcher.on('all', function (event, path) {
+
+  watcher.on('all', (event, path) => {
     logger(event, path);
     runSequence(
-      'protoss/sprites-svg'
+      'protoss/sprites-svg',
     );
   });
 });
