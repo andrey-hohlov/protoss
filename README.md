@@ -1,9 +1,10 @@
 # Protoss
 [Gulp](http://gulpjs.com/)-tasks collection for frontend building.
 
-[Документация на русском](https://github.com/andrey-hohlov/protoss/blob/master/README-RU.md)
-
-English documentation in process...
+0. [Features](#features)
+0. [Installation](#install)
+0. [Tasks](#tasks)
+0. [Configuration](#configuration)
 
 ## Features
 
@@ -20,7 +21,8 @@ English documentation in process...
 - [BrowserSync](https://www.browsersync.io/) include.
 - Add Protoss-tasks to you workflow, configure it as you need.
 
-## Install
+
+## Installation
 
 Install gulp globally:
 
@@ -44,7 +46,8 @@ require('protoss')(gulp, config);
 
 Now you can use protoss-tasks.
 
-## Protoss tasks
+
+## Tasks
 
 ### Common
 
@@ -132,9 +135,9 @@ Now you can use protoss-tasks.
 `protoss/serve` - run browsersync
 
 
-## Protoss configuration
+## Configuration
 
-### Default parameters
+### Default
 
 ```javascript
 {
@@ -155,7 +158,6 @@ Now you can use protoss-tasks.
       src: './build/*.html'
     }
   },
-
   styles: {
     bundles: [
       {
@@ -173,7 +175,6 @@ Now you can use protoss-tasks.
       src: ['./src/styles/**/*.scss']
     }
   },
-
   scripts: {
     workflow: 'webpack',
     webpackConfig: require(`${process.cwd()}/webpack.config.js`),
@@ -192,13 +193,11 @@ Now you can use protoss-tasks.
       src: ['./src/scripts/**/*.js']
     }
   },
-
   images: {
     src: ['./src/resources/images/**/*.{png,jpg,gif,svg}'],
     dest: './build/static/images/',
     minPath: './build/static/images/**/*.{png,jpg,gif,svg}'
   },
-
   sprites: {
     enabled: true,
     src: './src/sprites/png/**/*.png',
@@ -209,7 +208,6 @@ Now you can use protoss-tasks.
     spritePath: '#{$pathToImages}sprites/',
     template: __dirname + '/assets/sprite.mustache'
   },
-
   spritesSvg: {
     enabled: true,
     src: './src/sprites/svg/',
@@ -220,24 +218,20 @@ Now you can use protoss-tasks.
     template: __dirname + '/assets/sprite-svg.mustache',
     fallback: false
   },
-
   icons: {
     enabled: true,
     src: './src/icons/',
     dest: './build/static/images/icons/'
   },
-
   copy: [
     {
       src: './src/resources/fonts/**/*',
       dest: './build/fonts/'
     }
   ],
-
   del: [
     './build'
   ],
-
   favicons: {
     enabled: true,
     src: './src/resources/favicon-master.png',
@@ -267,7 +261,6 @@ Now you can use protoss-tasks.
       }
     }
   },
-
   serve: {
     browsersync: {
       open: true,
@@ -306,4 +299,8 @@ Now you can use protoss-tasks.
 ### Serve
 
 
+## License
 
+The [MIT License](http://opensource.org/licenses/MIT)
+
+Copyright (c) 2017 Andrey Hohlov
