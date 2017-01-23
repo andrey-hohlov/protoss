@@ -2,7 +2,7 @@
 [Gulp](http://gulpjs.com/)-tasks collection for frontend building.
 
 0. [Features](#features)
-0. [Installation](#install)
+0. [Installation](#installation)
 0. [Tasks](#tasks)
 0. [Configuration](#configuration)
 
