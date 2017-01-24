@@ -84,6 +84,7 @@ if (config.workflow === 'concat') {
         bundleScripts(bundle);
       });
     };
+
     config.bundles.forEach(runWatcher);
   });
 }

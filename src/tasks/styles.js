@@ -106,7 +106,9 @@ protoss.gulp.task('protoss/styles:lint', () => { // eslint-disable-line  arrow-b
     }));
 });
 
-protoss.gulp.task('protoss/styles:watch', (cb) => {
+protoss.gulp.task('protoss/styles:watch', () => {
+  if (!config.bundles || !config.bundles.length) return;
+
   const runWatcher = function runWatcher(bundle) {
     const watcher = chokidar.watch(
       bundle.watch ? bundle.watch : bundle.src,
@@ -121,9 +123,5 @@ protoss.gulp.task('protoss/styles:watch', (cb) => {
     });
   };
 
-  if (!config.bundles || !config.bundles.length) {
-    config.bundles.forEach(runWatcher);
-  }
-
-  cb(null);
+  config.bundles.forEach(runWatcher);
 });
