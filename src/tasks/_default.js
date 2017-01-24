@@ -32,7 +32,7 @@ protoss.gulp.task('protoss/watch', (cb) => {
     }
     cb();
   });
-  runSequence.apply(...watchTasks);
+  runSequence.apply(null, watchTasks); // eslint-disable-line prefer-spread
 });
 
 protoss.gulp.task('protoss/build', (cb) => {
