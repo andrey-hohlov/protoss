@@ -15,10 +15,15 @@ const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove o
 const config = protoss.config.spritesSvg;
 
 protoss.gulp.task('protoss/sprites-svg', (cb) => {
-  const sprites = listDir(config.src);
-  let queue = sprites.length;
   const stylesStream = mergeStream();
   const padding = 4;
+  let sprites;
+  let queue;
+
+  if (config.enabled) {
+    sprites = listDir(config.src);
+    queue = sprites.length;
+  }
 
   const makeSprite = function makeSprite(sprite, index) {
     const handleQueue = function handleQueue() {

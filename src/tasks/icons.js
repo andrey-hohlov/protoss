@@ -10,8 +10,13 @@ const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove o
 const config = protoss.config.icons;
 
 protoss.gulp.task('protoss/icons', (cb) => {
-  const icons = listDir(config.src);
-  let queue = icons.length;
+  let icons;
+  let queue;
+
+  if (config.enabled) {
+    icons = listDir(config.src);
+    queue = icons.length;
+  }
 
   const makeSprite = function makeSprite(iconSet) {
     const handleQueue = function handleQueue() {
