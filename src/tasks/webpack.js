@@ -21,9 +21,7 @@ if (config.workflow === 'webpack') {
 
         if (jsonStats.errors.length) {
           jsonStats.errors.forEach((message) => {
-            webpackErrorHandler.call({
-              emit() { /* noop */ },
-            }, { message });
+            webpackErrorHandler.call({ emit() { /* noop */ } }, { message });
           });
         }
 
