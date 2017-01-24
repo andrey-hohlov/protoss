@@ -1,3 +1,6 @@
+const fs = require('fs');
+const webpackConfigPath = `${process.cwd()}/webpack.config.js`;
+
 module.exports = {
   templates: {
     src: './src/templates/**/*.jade',
@@ -37,7 +40,7 @@ module.exports = {
 
   scripts: {
     workflow: 'webpack', // 'webpack' or 'concat'
-    webpackConfig: require(`${process.cwd()}/webpack.config.js`),
+    webpackConfig: fs.existsSync(webpackConfigPath) ? require(webpackConfigPath) : null,
     bundles: [
       {
         name: 'app',
