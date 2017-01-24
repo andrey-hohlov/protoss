@@ -15,6 +15,7 @@ if (config.workflow === 'webpack') {
         webpackConfig = config.webpackConfig;
       }
       webpackConfig.watch = watch;
+      // TODO: no config
       return webpack(webpackConfig, (error, stats) => {
         const jsonStats = stats.toJson();
 
