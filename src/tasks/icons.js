@@ -1,5 +1,4 @@
 import plumber from 'gulp-plumber';
-import cheerio from 'gulp-cheerio';
 import svgSprite from 'gulp-svg-sprite';
 import chokidar from 'chokidar';
 import listDir from '../helpers/list-child-dirs';
@@ -29,17 +28,6 @@ protoss.gulp.task('protoss/icons', (cb) => {
       protoss.gulp.src(`${config.src + iconSet}/*.svg`)
         .pipe(plumber({
           errorHandler: protoss.errorHandler('Error in icons task'),
-        }))
-        .pipe(cheerio({
-          run($, file) {
-            const $svg = $('svg');
-            // TODO: Need this?
-            // http://www.carsonshold.com/2015/11/svg-icon-workflow-with-gulp-and-shopify/
-            if (file.relative.indexOf('--colored') >= 0) {
-              $svg.addClass('svg-icon svg-icon--colored');
-            }
-            $svg.addClass('svg-icon');
-          },
         }))
         .pipe(svgSprite({
           svg: {

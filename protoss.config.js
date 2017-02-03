@@ -49,12 +49,12 @@ module.exports = {
         watch: './src/scripts/**/*.js',
         concat: true,
         minify: true,
-        sourceMaps: true
+        sourceMaps: true,
       }
     ],
     lint: {
-      src: ['./src/scripts/**/*.js']
-    }
+      src: ['./src/scripts/**/*.js'],
+    },
   },
 
   images: {
@@ -70,8 +70,10 @@ module.exports = {
     retina: true,
     stylesName: '_sprites.scss',
     stylesDest: './src/styles/_global/_sprites/',
-    spritePath: '#{$pathToImages}sprites/',
-    template: __dirname + '/assets/sprite.mustache'
+    template: __dirname + '/assets/sprite.mustache',
+    templateData: {
+      spritePath: '#{$pathToImages}sprites/',
+    },
   },
 
   spritesSvg: {
@@ -80,26 +82,28 @@ module.exports = {
     dest: './build/static/images/sprites-svg/',
     stylesName: '_sprites-svg.scss',
     stylesDest: './src/styles/_global/_sprites/',
-    spritePath: '#{$pathToImages}sprites-svg/',
     template: __dirname + '/assets/sprite-svg.mustache',
-    fallback: false
+    templateData: {
+      spritePath: '#{$pathToImages}sprites-svg/',
+    },
+    fallback: false,
   },
 
   icons: {
     enabled: true,
     src: './src/icons/',
-    dest: './build/static/images/icons/'
+    dest: './build/static/images/icons/',
   },
 
   copy: [
     {
       src: './src/resources/fonts/**/*',
-      dest: './build/fonts/'
-    }
+      dest: './build/fonts/',
+    },
   ],
 
   del: [
-    './build'
+    './build',
   ],
 
   favicons: {
@@ -127,9 +131,9 @@ module.exports = {
         firefox: false,
         opengraph: false,
         twitter: false,
-        yandex: false
-      }
-    }
+        yandex: false,
+      },
+    },
   },
 
   serve: {
@@ -138,7 +142,7 @@ module.exports = {
       port: 9001,
       server: {
         directory: true,
-        baseDir: './build/'
+        baseDir: './build/',
       },
       reloadDelay: 200,
       logConnections: true,
@@ -149,9 +153,9 @@ module.exports = {
       ghostMode: {
         clicks: false,
         forms: false,
-        scroll: false
-      }
+        scroll: false,
+      },
     },
-    watch: './build/'
+    watch: './build/',
   }
 };

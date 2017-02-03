@@ -11,11 +11,8 @@ const config = protoss.config.sprites;
 
 protoss.gulp.task('protoss/sprites', () => {
   const src = [config.src];
+  const templateData = config.templateData || {};
   let index = 0;
-
-  if (!config.retina) {
-    src.push(`!${config.src}**/*@2x.png`);
-  }
 
   const spriteData = protoss.gulp.src(src)
     .pipe(plumber({
@@ -29,8 +26,8 @@ protoss.gulp.task('protoss/sprites', () => {
         options.Algorithms = 'diagonal';
         options.padding = 2;
         options.cssOpts = {
+          templateData,
           spriteName: sprite,
-          spritePath: config.spritePath,
           retina: config.retina,
           mixin: index === 0, // Create mixin only for first sprite
         };

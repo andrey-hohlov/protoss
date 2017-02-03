@@ -3,14 +3,14 @@
 @mixin sprite-svg($filename) {
   width: nth($filename, 5);
   height: nth($filename, 6);
-  background-image: url('{{{spritePath}}}' +  nth($filename, 7));
+  background-image: url('{{{templateData.spritePath}}}' +  nth($filename, 7));
   background-size: nth($filename, 3) nth($filename, 4);
   background-position: (nth($filename, 1) - {{spritePadding}}) (nth($filename, 2) - {{spritePadding}}) ; // sprite padding include
   background-repeat: no-repeat;
   {{#spriteFallback}}
 
     .no-svg & {
-      background-image: url('{{{spritePath}}}' +  nth($filename, 8));
+      background-image: url('{{{templateData.spritePath}}}' +  nth($filename, 8));
     }
   {{/spriteFallback}}
 }

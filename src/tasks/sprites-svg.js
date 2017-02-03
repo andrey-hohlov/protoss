@@ -43,6 +43,7 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
     const make = function make() {
       const imagesFilter = filter(['*.svg'], { restore: true });
       const stylesFilter = filter(['*.scss']);
+      const templateData = config.templateData || {};
 
       stylesStream.add(
         protoss.gulp.src(`${config.src + sprite}/*.svg`)
@@ -67,9 +68,9 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
                   },
                 },
                 variables: {
+                  templateData,
                   spritePadding: padding,
                   spriteName: sprite,
-                  spritePath: config.spritePath,
                   spriteSvg: `${sprite}.svg`,
                   spriteFallback: config.fallback ? `${sprite}.fallback.png` : false,
                   mixin: index === queue - 1, // Create mixin only for last sprite
