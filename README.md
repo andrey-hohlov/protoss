@@ -291,88 +291,151 @@ Now you can use protoss-tasks.
 ### Templates
 
 `templates.src` (string|array) - path to templates source files
+
 `templates.filterFunc` (function) - 
+
 `templates.inhBaseDir` (string) - 
+
 `templates.dest` (string) - 
+
 `templates.data` (object) - 
+
 `templates.prettify` (boolean) - 
+
 `templates.posthtml` (boolean|) -  
-`templates.hashes.enabled` (boolean) - 
+
+`templates.hashes.enabled` (boolean) -
+ 
 `templates.hashes.build_dir` - 
+
 `templates.hashes.src_path` - 
+
 `templates.w3c.src` (string|array) - 
 
 ### Styles
+
 `styles.bundles` (array) - 
+
 `styles.bundles.%bundle%.name` (string) - 
+
 `styles.bundles.%bundle%.src` (string|array) - 
+
 `styles.bundles.%bundle%.dest` (string) - 
+
 `styles.bundles.%bundle%.watch` (string|array) - 
+
 `styles.bundles.%bundle%.minify` (boolean) - 
+
 `styles.bundles.%bundle%.hashes` (boolean) - 
+
 `styles.bundles.%bundle%.postcss` (boolean|) - 
+
 `styles.bundles.%bundle%.sourceMaps` (boolean) - 
+
 `styles.lint.src` (string|array) - 
 
 ### Scripts
+
 `scripts.workflow` (string) - 
+
 `scripts.webpackConfig`
+
 `scripts.bundles` (array) - 
+
 `scripts.bundles.%bundle%.name` (string) - 
+
 `scripts.bundles.%bundle%.src` (string|array) - 
+
 `scripts.bundles.%bundle%.dest` (string) - 
+
 `scripts.bundles.%bundle%.watch` (string|array) - 
+
 `scripts.bundles.%bundle%.concat` (boolean) - 
+
 `scripts.bundles.%bundle%.minify` (boolean) - 
+
 `scripts.bundles.%bundle%.sourceMaps` (boolean) - 
+
 `scripts.lint.src` (string|array) - 
     
 ### Images
+
 `images.src` (string|array) - 
+
 `images.dest` (string) - 
+
 `images.minPath` (string|array) - 
  
 ### Sprites
+
 `sprites.enabled` (boolean) - 
+
 `sprites.src` (string) - 
+
 `sprites.dest` (string) - 
+
 `sprites.retina` (boolean) - 
+
 `sprites.stylesName` (string) - 
+
 `sprites.stylesDest` (string) - 
+
 `sprites.templateData` (object) - 
+
 `sprites.template` (string) - 
 
 ### SVG sprites
+
 `spritesSvg.enabled` (boolean) - 
+
 `spritesSvg.src` (string) - 
+
 `spritesSvg.dest` (string) - 
+
 `spritesSvg.stylesName` (string) - 
+
 `spritesSvg.stylesDest` (string) - 
+
 `spritesSvg.spritePath` (string) - 
+
 `spritesSvg.template` (string) - 
+
 `spritesSvg.fallback` (boolean) - 
 
 ### Icons
+
 `icons.enabled` (boolean) - 
+
 `icons.src` (string) - 
+
 `icons.dest` (string) - 
 
 ### Copy
+
 `copy` (array) - 
+
 `copy.%item%.src` (string) -
+
 `copy.%item%.dest` (string) -
 
 ### Del
 `del` (array) -
 
 ### Favicons
+
 `favicons.enabled` (boolean) - 
+
 `favicons.src` (string) - 
+
 `favicons.dest` (string) - 
+
 `favicons.config` (object) - 
 
+
 ### Serve
+
 `serve.browsersync` (object) - 
+
 `serve.watch` (string|array) - 
 
 ## License
