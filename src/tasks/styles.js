@@ -8,7 +8,6 @@ import csso from 'gulp-csso';
 import autoprefixer from 'gulp-autoprefixer';
 import gmq from 'gulp-group-css-media-queries';
 import postcss from 'gulp-postcss';
-import prettify from 'gulp-jsbeautifier';
 import hashSrc from 'gulp-hash-src';
 import stylelint from 'gulp-stylelint';
 import chokidar from 'chokidar';
@@ -62,9 +61,6 @@ function bundleStyles(bundle) {
         })))
         // TODO: remove when cssnano get 'remove overridden rules' feature
         .pipe(gulpif(isProduction, csso()))
-        .pipe(gulpif(isProduction && !bundleData.minify, prettify({
-          indentSize: 2,
-        })))
         .pipe(gulpif(isProduction && !bundleData.minify, csscomb()))
         // TODO: why hashes added only after save files?
         .pipe(protoss.gulp.dest(bundleData.dest))
