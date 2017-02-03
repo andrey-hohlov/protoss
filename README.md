@@ -8,7 +8,7 @@
 
 ## Features
 
-- Compile [Pug](https://pugjs.org/api/getting-started.html) (Jade) templates. Use [PostHTML]() plugins and validate HTML with W3C.
+- Compile [Pug](https://pugjs.org/api/getting-started.html) (Jade) templates. Use [PostHTML]() plugins.
 - Compile [SCSS](http://sass-lang.com/) in separate result files (bundles), use `glod` imports. Add vendor prefixes, optimize css, write source maps. Support [PostCSS](http://postcss.org/).
 - Use Webpack 2 for bundle JavaScript, or just concatenate in separate bundles and minify. Source maps support.
 - Generate multiple png-sprites with retina support.
@@ -17,7 +17,7 @@
 - Optimize images.
 - Generate favicons.
 - Add cache busting hashes to links in HTML and CSS.
-- Lint SCSS adn JavaScript.
+- Lint SCSS and JavaScript. Validate  HTML with W3C.
 - [BrowserSync](https://www.browsersync.io/) include.
 - Add Protoss-tasks to you workflow, configure it as you need.
 
@@ -39,8 +39,8 @@ $ npm install --save-dev gulp protoss
 Add protoss require in you `gulpfile.js`:
 
 ```javascript
-var gulp = require('gulp');
-var config = {};
+const gulp = require('gulp');
+const config = {};
 require('protoss')(gulp, config);
 ```
 
@@ -109,19 +109,17 @@ Now you can use protoss-tasks.
  
 `protoss/images:build` - run protoss/images and then protoss/images:optimize tasks
 
-`protoss/icons` -
+`protoss/icons` - make icons sprite (svg symbols)
 
-`protoss/icons:watch` -
+`protoss/icons:watch` - watch for icons changes and make sprite
+
+`protoss/sprites` - generate png-sprites
+
+`protoss/sprites:watch` - watch for changes and generate png-sprites
  
-`protoss/icons` -
+`protoss/sprites-svg` - generate svg-sprites
 
-`protoss/sprites` -
-
-`protoss/sprites:watch` -
- 
-`protoss/sprites-svg` -
-
-`protoss/sprites-svg:watch` - 
+`protoss/sprites-svg:watch` - watch for changes and generate svg-sprites
  
 `protoss/favicons` - generate favicons
 
@@ -205,8 +203,10 @@ Now you can use protoss-tasks.
     retina: true,
     stylesName: '_sprites.scss',
     stylesDest: './src/styles/_global/_sprites/',
-    spritePath: '#{$pathToImages}sprites/',
-    template: __dirname + '/assets/sprite.mustache'
+    template: __dirname + '/assets/sprite.mustache',
+    templateData: {
+      spritePath: '#{$pathToImages}sprites/',
+    }
   },
   spritesSvg: {
     enabled: true,
@@ -214,8 +214,10 @@ Now you can use protoss-tasks.
     dest: './build/static/images/sprites-svg/',
     stylesName: '_sprites-svg.scss',
     stylesDest: './src/styles/_global/_sprites/',
-    spritePath: '#{$pathToImages}sprites-svg/',
     template: __dirname + '/assets/sprite-svg.mustache',
+    templateData: {
+      spritePath: '#{$pathToImages}sprites-svg/',
+    },
     fallback: false
   },
   icons: {
@@ -287,17 +289,91 @@ Now you can use protoss-tasks.
 ```
 
 ### Templates
-### Styles
-### Scripts
-### Images
-### Sprites
-### SVG sprites
-### SVG icons
-### Copy
-### Del
-### Favicons
-### Serve
 
+`templates.src` (string|array) - path to templates source files
+`templates.filterFunc` (function) - 
+`templates.inhBaseDir` (string) - 
+`templates.dest` (string) - 
+`templates.data` (object) - 
+`templates.prettify` (boolean) - 
+`templates.posthtml` (boolean|) -  
+`templates.hashes.enabled` (boolean) - 
+`templates.hashes.build_dir` - 
+`templates.hashes.src_path` - 
+`templates.w3c.src` (string|array) - 
+
+### Styles
+`styles.bundles` (array) - 
+`styles.bundles.%bundle%.name` (string) - 
+`styles.bundles.%bundle%.src` (string|array) - 
+`styles.bundles.%bundle%.dest` (string) - 
+`styles.bundles.%bundle%.watch` (string|array) - 
+`styles.bundles.%bundle%.minify` (boolean) - 
+`styles.bundles.%bundle%.hashes` (boolean) - 
+`styles.bundles.%bundle%.postcss` (boolean|) - 
+`styles.bundles.%bundle%.sourceMaps` (boolean) - 
+`styles.lint.src` (string|array) - 
+
+### Scripts
+`scripts.workflow` (string) - 
+`scripts.webpackConfig`
+`scripts.bundles` (array) - 
+`scripts.bundles.%bundle%.name` (string) - 
+`scripts.bundles.%bundle%.src` (string|array) - 
+`scripts.bundles.%bundle%.dest` (string) - 
+`scripts.bundles.%bundle%.watch` (string|array) - 
+`scripts.bundles.%bundle%.concat` (boolean) - 
+`scripts.bundles.%bundle%.minify` (boolean) - 
+`scripts.bundles.%bundle%.sourceMaps` (boolean) - 
+`scripts.lint.src` (string|array) - 
+    
+### Images
+`images.src` (string|array) - 
+`images.dest` (string) - 
+`images.minPath` (string|array) - 
+ 
+### Sprites
+`sprites.enabled` (boolean) - 
+`sprites.src` (string) - 
+`sprites.dest` (string) - 
+`sprites.retina` (boolean) - 
+`sprites.stylesName` (string) - 
+`sprites.stylesDest` (string) - 
+`sprites.templateData` (object) - 
+`sprites.template` (string) - 
+
+### SVG sprites
+`spritesSvg.enabled` (boolean) - 
+`spritesSvg.src` (string) - 
+`spritesSvg.dest` (string) - 
+`spritesSvg.stylesName` (string) - 
+`spritesSvg.stylesDest` (string) - 
+`spritesSvg.spritePath` (string) - 
+`spritesSvg.template` (string) - 
+`spritesSvg.fallback` (boolean) - 
+
+### Icons
+`icons.enabled` (boolean) - 
+`icons.src` (string) - 
+`icons.dest` (string) - 
+
+### Copy
+`copy` (array) - 
+`copy.%item%.src` (string) -
+`copy.%item%.dest` (string) -
+
+### Del
+`del` (array) -
+
+### Favicons
+`favicons.enabled` (boolean) - 
+`favicons.src` (string) - 
+`favicons.dest` (string) - 
+`favicons.config` (object) - 
+
+### Serve
+`serve.browsersync` (object) - 
+`serve.watch` (string|array) - 
 
 ## License
 
