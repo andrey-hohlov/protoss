@@ -10,13 +10,8 @@ const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove o
 const config = protoss.config.icons;
 
 protoss.gulp.task('protoss/icons', (cb) => {
-  let icons;
-  let queue;
-
-  if (config.enabled) {
-    icons = listDir(config.src);
-    queue = icons.length;
-  }
+  let icons = listDir(config.src);
+  let queue = icons.length;
 
   const makeSprite = function makeSprite(iconSet) {
     const handleQueue = function handleQueue() {
@@ -65,16 +60,10 @@ protoss.gulp.task('protoss/icons', (cb) => {
     return make();
   };
 
-  if (queue && config.enabled) {
-    icons.forEach(makeSprite);
-  } else {
-    cb(null);
-  }
+  queue ? icons.forEach(makeSprite) : cb(null);
 });
 
 protoss.gulp.task('protoss/icons:watch', () => {
-  if (!config.enabled) return;
-
   const watcher = chokidar.watch(
     config.src,
     {

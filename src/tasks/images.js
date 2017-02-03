@@ -47,9 +47,6 @@ protoss.gulp.task('protoss/images:watch', () => {
 });
 
 protoss.gulp.task('protoss/images:optimize', (cb) => {
-  const isProduction = process.env.NODE_ENV === 'production';
-  if (!isProduction) return;
-
   protoss.gulp.src(config.minPath)
     .pipe(plumber({
       errorHandler: protoss.errorHandler('Error in imagemin task'),

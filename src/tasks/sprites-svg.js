@@ -17,13 +17,8 @@ const config = protoss.config.spritesSvg;
 protoss.gulp.task('protoss/sprites-svg', (cb) => {
   const stylesStream = mergeStream();
   const padding = 4;
-  let sprites;
-  let queue;
-
-  if (config.enabled) {
-    sprites = listDir(config.src);
-    queue = sprites.length;
-  }
+  let sprites = listDir(config.src);
+  let queue = sprites.length;
 
   const makeSprite = function makeSprite(sprite, index) {
     const handleQueue = function handleQueue() {
@@ -97,16 +92,10 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
     return make();
   };
 
-  if (queue && config.enabled) {
-    sprites.forEach(makeSprite);
-  } else {
-    cb(null);
-  }
+  queue ? sprites.forEach(makeSprite) : cb(null);
 });
 
 protoss.gulp.task('protoss/sprites-svg:watch', () => {
-  if (!config.enabled) return;
-
   const watcher = chokidar.watch(
     config.src,
     {

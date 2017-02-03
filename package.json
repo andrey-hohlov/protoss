@@ -31,7 +31,7 @@
     "compile": "rimraf lib/* && babel src -d lib",
     "prepublish": "npm run compile",
     "watch": "chokidar './src/**/*.js' -c 'babel src -d lib'",
-    "eslint": "eslint src/**/*.js",
+    "eslint": "eslint src/**",
     "test": "mocha"
   },
   "main": "lib/protoss.js",
@@ -77,7 +77,6 @@
     "gulp.spritesmith-multi": "^3.1.0",
     "merge": "^1.2.0",
     "merge-stream": "^1.0.1",
-    "require-dir": "^0.3.1",
     "run-sequence": "^1.2.2",
     "webpack": "^2.2.0"
   },

@@ -64,27 +64,25 @@ function bundleScripts(bundle) {
   }
 }
 
-if (config.workflow === 'concat') {
-  protoss.gulp.task('protoss/scripts', () => { // eslint-disable-line  arrow-body-style
-    return bundleScripts();
-  });
+protoss.gulp.task('protoss/scripts', () => { // eslint-disable-line  arrow-body-style
+  return bundleScripts();
+});
 
-  protoss.gulp.task('protoss/scripts:watch', () => {
-    if (!config.bundles || !config.bundles.length) return;
+protoss.gulp.task('protoss/scripts:watch', () => {
+  if (!config.bundles || !config.bundles.length) return;
 
-    const runWatcher = function runWatcher(bundle) {
-      const watcher = chokidar.watch(
-        bundle.watch ? bundle.watch : bundle.src,
-        {
-          ignoreInitial: true,
-        },
-      );
-      watcher.on('all', (event, path) => {
-        logger(event, path);
-        bundleScripts(bundle);
-      });
-    };
+  const runWatcher = function runWatcher(bundle) {
+    const watcher = chokidar.watch(
+      bundle.watch ? bundle.watch : bundle.src,
+      {
+        ignoreInitial: true,
+      },
+    );
+    watcher.on('all', (event, path) => {
+      logger(event, path);
+      bundleScripts(bundle);
+    });
+  };
 
-    config.bundles.forEach(runWatcher);
-  });
-}
+  config.bundles.forEach(runWatcher);
+});

@@ -10,8 +10,6 @@ const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove o
 const config = protoss.config.sprites;
 
 protoss.gulp.task('protoss/sprites', () => {
-  if (!config.enabled) return false;
-
   const src = [config.src];
   let index = 0;
 
@@ -55,8 +53,6 @@ protoss.gulp.task('protoss/sprites', () => {
 });
 
 protoss.gulp.task('protoss/sprites:watch', () => {
-  if (!config.enabled) return;
-
   const watcher = chokidar.watch(
     config.src,
     {
