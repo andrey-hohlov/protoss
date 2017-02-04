@@ -61,9 +61,13 @@ protoss.gulp.task('protoss/build', (cb) => {
 });
 
 protoss.gulp.task('protoss/dev', (cb) => {
-  const devTasks = [];
   const firstTasks = [
     'protoss/images',
+  ];
+  const secondTasks = [
+    'protoss/copy',
+    isWebpack ? 'protoss/webpack' : 'protoss/scripts',
+    'protoss/styles',
   ];
 
   if (isSprites) {
@@ -75,19 +79,13 @@ protoss.gulp.task('protoss/dev', (cb) => {
   if (isIcons) {
     firstTasks.push('protoss/icons');
   }
+
+  const devTasks = [firstTasks, secondTasks, 'protoss/templates'];
+
   if (isFavicons) {
     firstTasks.push('protoss/favicons');
   }
 
-  const secondTasks = [
-    'protoss/copy',
-    isWebpack ? 'protoss/webpack' : 'protoss/scripts',
-    'protoss/templates',
-    'protoss/styles',
-  ];
-
-  devTasks.push(firstTasks);
-  devTasks.push(secondTasks);
   devTasks.push(() => {
     protoss.notifier.success('Development version was built successfully!');
     cb();

@@ -18,11 +18,11 @@ module.exports = {
     prettify: true,
     posthtml: false,
     hashes: {
-      enabled: true,
-      config: {
-        build_dir: './',
-        src_path: './',
-      },
+      build_dir: './',
+      src_path: './',
+      query_name: 'v',
+      hash_len: 10,
+      exts: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.pdf', '.ico'],
     },
     w3c: {
       src: './build/*.html',
@@ -37,7 +37,13 @@ module.exports = {
         dest: './build/static/css/',
         watch: './src/styles/**/*.scss',
         minify: true,
-        hashes: true,
+        hashes:  {
+          build_dir: './',
+          src_path: './',
+          query_name: 'v',
+          hash_len: 10,
+          exts: ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'],
+        },
         postcss: false,
         sourceMaps: true,
       },

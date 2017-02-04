@@ -64,13 +64,7 @@ function bundleStyles(bundle) {
         .pipe(gulpif(isProduction, csso()))
         // TODO: why hashes added only after save files?
         .pipe(protoss.gulp.dest(bundleData.dest))
-        .pipe(gulpif(isProduction && bundleData.hashes, hashSrc({
-          build_dir: './',
-          src_path: './',
-          query_name: 'v',
-          hash_len: 10,
-          exts: ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'],
-        })))
+        .pipe(gulpif(isProduction && bundleData.hashes, hashSrc(bundleData.hashes)))
         .pipe(gulpif(!isProduction && bundleData.sourceMaps, sourcemaps.write()))
         .pipe(protoss.gulp.dest(bundleData.dest))
         .on('end', handleQueue);

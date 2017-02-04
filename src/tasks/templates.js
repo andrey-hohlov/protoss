@@ -40,13 +40,7 @@ protoss.gulp.task('protoss/templates', (cb) => {
     .pipe(gulpif(isProduction && config.prettify, prettify()))
     .pipe(rename({ dirname: '.' }))
     .pipe(protoss.gulp.dest(config.dest)) // TODO: remove double saving
-    .pipe(gulpif(isProduction && config.hashes.enabled, hashSrc({
-      build_dir: config.hashes.build_dir,
-      src_path: config.hashes.src_path,
-      query_name: 'v',
-      hash_len: 10,
-      exts: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.pdf', '.ico'],
-    })))
+    .pipe(gulpif(isProduction && config.hashes, hashSrc(config.hashes)))
     .pipe(protoss.gulp.dest(config.dest))
     .on('end', () => {
       protoss.notifier.success('Templates compiled');
