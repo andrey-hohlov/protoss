@@ -3,7 +3,6 @@ import gulpif from 'gulp-if';
 import sass from 'gulp-sass';
 import sassGlob from 'gulp-sass-glob';
 import cssnano from 'gulp-cssnano';
-import csscomb from 'gulp-csscomb';
 import csso from 'gulp-csso';
 import autoprefixer from 'gulp-autoprefixer';
 import gmq from 'gulp-group-css-media-queries';
@@ -13,6 +12,8 @@ import stylelint from 'gulp-stylelint';
 import chokidar from 'chokidar';
 import sourcemaps from 'gulp-sourcemaps';
 import logger from '../helpers/watcher-log';
+
+const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 
 const config = protoss.config.styles;
 
@@ -61,7 +62,6 @@ function bundleStyles(bundle) {
         })))
         // TODO: remove when cssnano get 'remove overridden rules' feature
         .pipe(gulpif(isProduction, csso()))
-        .pipe(gulpif(isProduction && !bundleData.minify, csscomb()))
         // TODO: why hashes added only after save files?
         .pipe(protoss.gulp.dest(bundleData.dest))
         .pipe(gulpif(isProduction && bundleData.hashes, hashSrc({
@@ -90,18 +90,6 @@ protoss.gulp.task('protoss/styles', () => { // eslint-disable-line  arrow-body-s
   return bundleStyles();
 });
 
-protoss.gulp.task('protoss/styles:lint', () => { // eslint-disable-line  arrow-body-style
-  return protoss.gulp.src(config.lint.src)
-    .pipe(stylelint({
-      reporters: [
-        {
-          formatter: 'string',
-          console: true,
-        },
-      ],
-    }));
-});
-
 protoss.gulp.task('protoss/styles:watch', () => {
   if (!config.bundles || !config.bundles.length) return;
   protoss.isWatch = true;
@@ -121,4 +109,42 @@ protoss.gulp.task('protoss/styles:watch', () => {
   };
 
   config.bundles.forEach(runWatcher);
+});
+
+protoss.gulp.task('protoss/styles:build', (cb) => {
+  process.env.NODE_ENV = 'production';
+
+  const stylesDeps = [];
+  const stylesTasks = [];
+  const isSprites = protoss.config.sprites.enabled;
+  const isSpritesSvg = protoss.config.spritesSvg.enabled;
+
+  if (isSprites) {
+    stylesDeps.push('protoss/sprites');
+  }
+  if (isSpritesSvg) {
+    stylesDeps.push('protoss/sprites-svg');
+  }
+
+
+  if (stylesDeps.length > 0) {
+    stylesTasks.push(stylesDeps);
+  }
+
+  stylesTasks.push('protoss/styles');
+  stylesTasks.push(cb);
+
+  runSequence.apply(null, stylesTasks); // eslint-disable-line prefer-spread
+});
+
+protoss.gulp.task('protoss/styles:lint', () => { // eslint-disable-line  arrow-body-style
+  return protoss.gulp.src(config.lint.src)
+    .pipe(stylelint({
+      reporters: [
+        {
+          formatter: 'string',
+          console: true,
+        },
+      ],
+    }));
 });
