@@ -8,11 +8,11 @@ protoss.gulp.task('protoss/copy', () => {
   const copy = config || [];
 
   copy.forEach((files) => {
-    const copyStream = protoss.gulp.src(files[0])
+    const copyStream = protoss.gulp.src(files.src)
       .pipe(plumber({
         errorHandler: protoss.errorHandler('Error in copy task'),
       }))
-      .pipe(protoss.gulp.dest(files[1]));
+      .pipe(protoss.gulp.dest(files.dest));
     streams.add(copyStream);
   });
 

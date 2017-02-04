@@ -10,13 +10,13 @@
 @mixin sprite($filename) {
   width: nth($filename, 1);
   height: nth($filename, 2);
-  background-image: url('{{{options.spritePath}}}' + nth($filename, 7));
+  background-image: url('{{{options.templateData.spritePath}}}' + nth($filename, 7));
   background-size: nth($filename, 5) nth($filename, 6);
   background-position: nth($filename, 3) nth($filename, 4);
   background-repeat: no-repeat;
 {{#if options.retina}}
   @media screen and (-webkit-min-device-pixel-ratio: 2), only screen and ( min-resolution: 192dpi), only screen and ( min-resolution: 2dppx), only screen and (min-device-pixel-ratio: 2) {
-  background-image: url('{{{options.spritePath}}}' + nth($filename, 8));
+  background-image: url('{{{options.templateData.spritePath}}}' + nth($filename, 8));
   }
 {{/if}}
 }

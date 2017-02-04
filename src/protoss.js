@@ -2,25 +2,58 @@
  * Protoss
  * Gulp tasks bundle for fast front-end development
  */
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-global.protoss = {};
-protoss.notifier = require('./helpers/notifier');
-protoss.errorHandler = require('./helpers/error-handler');
-protoss.isWatch = false;
+/* eslint-disable global-require */
+function runProtoss(gulp, userConfig) {
+  if (!gulp) throw new Error('No Gulp passed to Protoss!');
 
-require('./helpers/set-ulimit')();
+  process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-module.exports = function(gulp, userConfig) {
-  if (!gulp) throw new Error('No gulp passed!'); // TODO: error text
+  require('./helpers/set-ulimit')(); // eslint-disable-line
+
+  global.protoss = {};
 
   protoss.gulp = gulp;
 
+  // Helpers
+  protoss.notifier = require('./helpers/notifier');
+  protoss.errorHandler = require('./helpers/error-handler');
+
+  // Flags
+  protoss.isWatch = false;
+
   // Prepare config
-  let defaultConfig = require('../protoss-config.js');
-  protoss.config = require('./helpers/merge-config')(defaultConfig, userConfig);
+  const mergeConfig = require('./helpers/merge-config');
+  const defaultConfig = require('../protoss.config.js');
+  protoss.config = mergeConfig(defaultConfig, userConfig);
 
   // Load tasks
-  require('require-dir')('tasks', {recurse: true});
-  // TODO: 'make config' task
-};
+  const config = protoss.config;
+  require('./tasks/main');
+  require('./tasks/templates');
+  require('./tasks/styles');
+  if (config.scripts.workflow === 'webpack') {
+    require('./tasks/webpack');
+  }
+  if (config.scripts.workflow === 'concat') {
+    require('./tasks/scripts');
+  }
+  if (config.icons.enabled) {
+    require('./tasks/icons');
+  }
+  if (config.sprites.enabled) {
+    require('./tasks/sprites');
+  }
+  if (config.spritesSvg.enabled) {
+    require('./tasks/sprites-svg');
+  }
+  require('./tasks/images');
+  require('./tasks/serve');
+  require('./tasks/copy');
+  require('./tasks/del');
+  if (config.favicons.enabled) {
+    require('./tasks/favicons');
+  }
+}
+
+module.exports = runProtoss;

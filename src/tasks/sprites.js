@@ -6,63 +6,61 @@ import chokidar from 'chokidar';
 import logger from '../helpers/watcher-log';
 
 const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
+
 const config = protoss.config.sprites;
 
 protoss.gulp.task('protoss/sprites', () => {
-  if (!config.enabled) return;
-
-  let src = [config.src];
+  const src = [config.src];
+  const templateData = config.templateData || {};
   let index = 0;
 
-  if(!config.retina) {
-    src.push('!'+config.src + '**/*@2x.png');
-  }
-
-  let spriteData = protoss.gulp.src(src)
-    .pipe(plumber({errorHandler: protoss.errorHandler(`Error in \'sprites\' task`)}))
+  const spriteData = protoss.gulp.src(src)
+    .pipe(plumber({
+      errorHandler: protoss.errorHandler('Error in sprites task'),
+    }))
     .pipe(spritesmithMulti({
-      spritesmith: function(options, sprite) {
-        options.imgName = sprite+'.png';
-        options.cssName = 'sprite-' + sprite + '.scss';
+      spritesmith(options, sprite) {
+        /* eslint-disable no-param-reassign */
+        options.imgName = `${sprite}.png`;
+        options.cssName = `sprite-${sprite}.scss`;
         options.Algorithms = 'diagonal';
         options.padding = 2;
         options.cssOpts = {
+          templateData,
           spriteName: sprite,
-          spritePath: config.spritePath,
           retina: config.retina,
-          mixin: index == 0 // Create mixin only for first sprite
+          mixin: index === 0, // Create mixin only for first sprite
         };
         options.cssTemplate = config.template;
-        index++;
-      }
+        index += 1;
+        return options;
+        /* eslint-enable no-param-reassign */
+      },
     }));
 
-  let imgStream = spriteData.img
+  const imgStream = spriteData.img
     .pipe(protoss.gulp.dest(config.dest))
     .pipe(protoss.gulp.dest(config.dest));
 
-  let cssStream = spriteData.css
+  const cssStream = spriteData.css
     .pipe(concat(config.stylesName))
     .pipe(protoss.gulp.dest(config.stylesDest));
 
-  return mergeStream(imgStream, cssStream).pipe(
-    protoss.notifier.success('Png-sprites ready')
-  );
+  return mergeStream(imgStream, cssStream).pipe(protoss.notifier.success('Png-sprites ready'));
 });
 
 protoss.gulp.task('protoss/sprites:watch', () => {
-  if (!config.enabled) return;
-
-  let watcher = chokidar.watch(
+  protoss.isWatch = true;
+  const watcher = chokidar.watch(
     config.src,
     {
-      ignoreInitial: true
-    }
+      ignoreInitial: true,
+    },
   );
-  watcher.on('all', function (event, path) {
+  watcher.on('all', (event, path) => {
     logger(event, path);
     runSequence(
-      'protoss/sprites'
+      'protoss/sprites',
     );
   });
 });
