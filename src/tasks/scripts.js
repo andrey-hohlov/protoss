@@ -70,6 +70,7 @@ protoss.gulp.task('protoss/scripts', () => { // eslint-disable-line  arrow-body-
 
 protoss.gulp.task('protoss/scripts:watch', () => {
   if (!config.bundles || !config.bundles.length) return;
+  protoss.isWatch = true;
 
   const runWatcher = function runWatcher(bundle) {
     const watcher = chokidar.watch(

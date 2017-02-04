@@ -97,6 +97,8 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
 });
 
 protoss.gulp.task('protoss/sprites-svg:watch', () => {
+  protoss.isWatch = true;
+
   const watcher = chokidar.watch(
     config.src,
     {

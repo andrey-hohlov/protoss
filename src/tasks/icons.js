@@ -52,6 +52,8 @@ protoss.gulp.task('protoss/icons', (cb) => {
 });
 
 protoss.gulp.task('protoss/icons:watch', () => {
+  protoss.isWatch = true;
+
   const watcher = chokidar.watch(
     config.src,
     {

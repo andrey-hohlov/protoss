@@ -104,6 +104,7 @@ protoss.gulp.task('protoss/styles:lint', () => { // eslint-disable-line  arrow-b
 
 protoss.gulp.task('protoss/styles:watch', () => {
   if (!config.bundles || !config.bundles.length) return;
+  protoss.isWatch = true;
 
   const runWatcher = function runWatcher(bundle) {
     const watcher = chokidar.watch(

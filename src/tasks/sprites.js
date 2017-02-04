@@ -50,6 +50,7 @@ protoss.gulp.task('protoss/sprites', () => {
 });
 
 protoss.gulp.task('protoss/sprites:watch', () => {
+  protoss.isWatch = true;
   const watcher = chokidar.watch(
     config.src,
     {

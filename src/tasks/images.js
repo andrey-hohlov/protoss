@@ -24,6 +24,8 @@ protoss.gulp.task('protoss/images', (cb) => {
 });
 
 protoss.gulp.task('protoss/images:watch', () => {
+  protoss.isWatch = true;
+
   const watcher = chokidar.watch(
     config.src,
     {

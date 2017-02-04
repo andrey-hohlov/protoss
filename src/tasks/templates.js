@@ -69,6 +69,8 @@ protoss.gulp.task('protoss/templates:w3c-test', (cb) => {
 });
 
 protoss.gulp.task('protoss/templates:watch', () => {
+  protoss.isWatch = true;
+
   const watcher = chokidar.watch(
     config.watch ? config.watch : config.src,
     {
