@@ -6,6 +6,10 @@
 0. [Tasks](#tasks)
 0. [Configuration](#configuration)
 
+[2.0 branch](https://github.com/andrey-hohlov/protoss/tree/2.0).
+
+## [Usage example](https://github.com/andrey-hohlov/layout-starter)
+
 ## Features
 
 - Compile [Pug](https://pugjs.org/api/getting-started.html) (ex Jade) templates. Use [PostHTML](https://github.com/posthtml) plugins.
@@ -347,7 +351,11 @@ module.exports = {
 
 `styles.bundles.%bundle%.hashes` (boolean|object) - config for [gulp-hash-src](https://www.npmjs.com/package/gulp-hash-src). Set `false` for disable hashes.
 
-`styles.bundles.%bundle%.postcss` (boolean|) - 
+`styles.bundles.%bundle%.postcss` (boolean|array) - array of [PostCSS](http://postcss.org/) plugins.
+
+`styles.bundles.%plugin%.processor` (object) - PostCSS processor.
+
+`styles.bundles.%plugin%.options` (options) - options for processor.
 
 `styles.bundles.%bundle%.sourceMaps` (boolean) - generate sourcemaps for this bundle.
 
