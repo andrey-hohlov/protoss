@@ -159,6 +159,7 @@ module.exports = {
         directory: true,
         baseDir: './build/',
       },
+      files: ['./build/'],
       reloadDelay: 200,
       logConnections: true,
       debugInfo: true,
@@ -171,6 +172,5 @@ module.exports = {
         scroll: false,
       },
     },
-    watch: './build/',
-  }
+  },
 };
