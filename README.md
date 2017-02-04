@@ -8,7 +8,7 @@
 
 ## Features
 
-- Compile [Pug](https://pugjs.org/api/getting-started.html) (Jade) templates. Use [PostHTML]() plugins.
+- Compile [Pug](https://pugjs.org/api/getting-started.html) (ex Jade) templates. Use [PostHTML](https://github.com/posthtml) plugins.
 - Compile [SCSS](http://sass-lang.com/) in separate result files (bundles), use `glod` imports. Add vendor prefixes, optimize css, write source maps. Support [PostCSS](http://postcss.org/).
 - Use Webpack 2 for bundle JavaScript, or just concatenate in separate bundles and minify. Source maps support.
 - Generate multiple png-sprites with retina support.
@@ -44,7 +44,7 @@ const config = {};
 require('protoss')(gulp, config);
 ```
 
-Now you can use protoss-tasks.
+Now you can use Protoss tasks.
 
 
 ## Tasks
@@ -138,12 +138,15 @@ Now you can use protoss-tasks.
 ### Default
 
 ```javascript
-{
+module.exports = {
   templates: {
     src: './src/templates/**/*.jade',
-    filterFunc: false,
-    inhBaseDir: './src/',
     dest: './build/',
+    filter: false,
+    inheritance: {
+      basedir: '/src/templates/',
+      skip: 'node_modules'
+    },
     data: {},
     prettify: true,
     posthtml: false,

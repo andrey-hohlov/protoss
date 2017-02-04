@@ -2,8 +2,8 @@ import plumber from 'gulp-plumber';
 import filter from 'gulp-filter';
 import cached from 'gulp-cached';
 import gulpif from 'gulp-if';
-import compile from 'gulp-jade';
-import inheritance from 'gulp-jade-inheritance';
+import compile from 'gulp-pug';
+import inheritance from 'gulp-pug-inheritance';
 import prettify from 'gulp-jsbeautifier';
 import hashSrc from 'gulp-hash-src';
 import rename from 'gulp-rename';
@@ -25,16 +25,14 @@ protoss.gulp.task('protoss/templates', (cb) => {
       errorHandler: protoss.errorHandler('Error in templates task'),
     }))
     .pipe(gulpif(isWatch, cached()))
-    .pipe(gulpif(isWatch, inheritance({
-      basedir: config.inhBaseDir,
-    })))
+    .pipe(gulpif(isWatch, inheritance(config.inheritance)))
     .pipe(filter((file) => {
       const path = file.path.replace(/\\/g, '/');
       const relative = file.relative.replace(/\\/g, '/');
       if (/\/_/.test(path) || /^_/.test(relative)) return false;
 
-      if (config.filterFunc && typeof config.filterFunc === 'function') {
-        return config.filterFunc(file);
+      if (config.filter && typeof config.filter === 'function') {
+        return config.filter(file);
       }
 
       return true;

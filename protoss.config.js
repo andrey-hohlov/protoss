@@ -4,9 +4,12 @@ const webpackConfigPath = `${process.cwd()}/webpack.config.js`;
 module.exports = {
   templates: {
     src: './src/templates/**/*.jade',
-    filterFunc: false,
-    inhBaseDir: './src/',
     dest: './build/',
+    filter: false,
+    inheritance: {
+      basedir: '/src/templates/',
+      skip: 'node_modules',
+    },
     data: {},
     prettify: true,
     posthtml: false,
