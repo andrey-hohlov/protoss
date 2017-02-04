@@ -27,15 +27,10 @@ protoss.gulp.task('protoss/templates', (cb) => {
     .pipe(gulpif(isWatch, cached()))
     .pipe(gulpif(isWatch, inheritance(config.inheritance)))
     .pipe(filter((file) => {
-      const path = file.path.replace(/\\/g, '/');
-      const relative = file.relative.replace(/\\/g, '/');
-      if (/\/_/.test(path) || /^_/.test(relative)) return false;
-
       if (config.filter && typeof config.filter === 'function') {
         return config.filter(file);
       }
-
-      return true;
+      return file;
     }))
     .pipe(compile({
       pretty: false,

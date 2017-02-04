@@ -5,7 +5,11 @@ module.exports = {
   templates: {
     src: './src/templates/**/*.jade',
     dest: './build/',
-    filter: false,
+    filter: function(file) {
+      const path = file.path.replace(/\\/g, '/');
+      const relative = file.relative.replace(/\\/g, '/');
+      return !/\/_/.test(path) && !/^_/.test(relative);
+    },
     inheritance: {
       basedir: '/src/templates/',
       skip: 'node_modules',
@@ -15,12 +19,14 @@ module.exports = {
     posthtml: false,
     hashes: {
       enabled: true,
-      build_dir: './',
-      src_path: './'
+      config: {
+        build_dir: './',
+        src_path: './',
+      },
     },
     w3c: {
-      src: './build/*.html'
-    }
+      src: './build/*.html',
+    },
   },
 
   styles: {
@@ -33,12 +39,12 @@ module.exports = {
         minify: true,
         hashes: true,
         postcss: false,
-        sourceMaps: true
-      }
+        sourceMaps: true,
+      },
     ],
     lint: {
-      src: ['./src/styles/**/*.scss']
-    }
+      src: ['./src/styles/**/*.scss'],
+    },
   },
 
   scripts: {
@@ -53,7 +59,7 @@ module.exports = {
         concat: true,
         minify: true,
         sourceMaps: true,
-      }
+      },
     ],
     lint: {
       src: ['./src/scripts/**/*.js'],
@@ -63,7 +69,7 @@ module.exports = {
   images: {
     src: ['./src/resources/images/**/*.{png,jpg,gif,svg}'],
     dest: './build/static/images/',
-    minPath: './build/static/images/**/*.{png,jpg,gif,svg}'
+    minPath: './build/static/images/**/*.{png,jpg,gif,svg}',
   },
 
   sprites: {
