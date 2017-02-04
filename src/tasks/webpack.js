@@ -1,8 +1,9 @@
 import webpack from 'webpack';
 import gutil from 'gulp-util';
 
-const config = protoss.config.scripts;
+const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 
+const config = protoss.config.scripts;
 const webpackErrorHandler = protoss.errorHandler('Error in \'webpack\' task');
 
 const runWebpack = function runWebpack(watch = false) {
@@ -35,3 +36,11 @@ const runWebpack = function runWebpack(watch = false) {
 protoss.gulp.task('protoss/webpack', runWebpack(false));
 
 protoss.gulp.task('protoss/webpack:watch', runWebpack(true));
+
+protoss.gulp.task('protoss/webpack:build', (cb) => {
+  process.env.NODE_ENV = 'production';
+  runSequence(
+    'protoss/webpack',
+    cb,
+  );
+});

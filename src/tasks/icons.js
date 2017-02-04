@@ -9,7 +9,7 @@ const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove o
 const config = protoss.config.icons;
 
 protoss.gulp.task('protoss/icons', (cb) => {
-  let icons = listDir(config.src);
+  const icons = listDir(config.src);
   let queue = icons.length;
 
   const makeSprite = function makeSprite(iconSet) {
@@ -48,7 +48,7 @@ protoss.gulp.task('protoss/icons', (cb) => {
     return make();
   };
 
-  queue ? icons.forEach(makeSprite) : cb(null);
+  queue ? icons.forEach(makeSprite) : cb(null); // eslint-disable-line no-unused-expressions
 });
 
 protoss.gulp.task('protoss/icons:watch', () => {

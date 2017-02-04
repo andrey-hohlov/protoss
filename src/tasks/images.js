@@ -74,3 +74,12 @@ protoss.gulp.task('protoss/images:optimize', (cb) => {
       cb(null);
     });
 });
+
+protoss.gulp.task('protoss/images:build', (cb) => {
+  process.env.NODE_ENV = 'production';
+  runSequence(
+    'protoss/images',
+    'protoss/images:optimize',
+    cb,
+  );
+});

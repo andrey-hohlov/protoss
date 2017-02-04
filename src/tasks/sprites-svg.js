@@ -17,7 +17,7 @@ const config = protoss.config.spritesSvg;
 protoss.gulp.task('protoss/sprites-svg', (cb) => {
   const stylesStream = mergeStream();
   const padding = 4;
-  let sprites = listDir(config.src);
+  const sprites = listDir(config.src);
   let queue = sprites.length;
 
   const makeSprite = function makeSprite(sprite, index) {
@@ -93,7 +93,7 @@ protoss.gulp.task('protoss/sprites-svg', (cb) => {
     return make();
   };
 
-  queue ? sprites.forEach(makeSprite) : cb(null);
+  queue ? sprites.forEach(makeSprite) : cb(null); // eslint-disable-line no-unused-expressions
 });
 
 protoss.gulp.task('protoss/sprites-svg:watch', () => {

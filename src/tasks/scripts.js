@@ -7,14 +7,9 @@ import chokidar from 'chokidar';
 import sourcemaps from 'gulp-sourcemaps';
 import logger from '../helpers/watcher-log';
 
-const config = protoss.config.scripts;
+const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 
-protoss.gulp.task('protoss/scripts:lint', () => { // eslint-disable-line  arrow-body-style
-  return protoss.gulp.src(config.lint.src)
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
-});
+const config = protoss.config.scripts;
 
 function bundleScripts(bundle) {
   if (!config.bundles || !config.bundles.length) return;
@@ -86,4 +81,19 @@ protoss.gulp.task('protoss/scripts:watch', () => {
   };
 
   config.bundles.forEach(runWatcher);
+});
+
+protoss.gulp.task('protoss/scripts:build', (cb) => {
+  process.env.NODE_ENV = 'production';
+  runSequence(
+    'protoss/scripts',
+    cb,
+  );
+});
+
+protoss.gulp.task('protoss/scripts:lint', () => { // eslint-disable-line  arrow-body-style
+  return protoss.gulp.src(config.lint.src)
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
 });

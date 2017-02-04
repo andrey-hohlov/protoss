@@ -59,15 +59,6 @@ protoss.gulp.task('protoss/templates', (cb) => {
     });
 });
 
-protoss.gulp.task('protoss/templates:w3c-test', (cb) => {
-  protoss.gulp.src(config.w3c.src)
-    .pipe(w3cjs())
-    .pipe(w3cjs.reporter())
-    .on('end', () => {
-      cb(null);
-    });
-});
-
 protoss.gulp.task('protoss/templates:watch', () => {
   protoss.isWatch = true;
 
@@ -84,4 +75,21 @@ protoss.gulp.task('protoss/templates:watch', () => {
       'protoss/templates',
     );
   });
+});
+
+protoss.gulp.task('protoss/templates:build', (cb) => {
+  process.env.NODE_ENV = 'production';
+  runSequence(
+    'protoss/templates',
+    cb,
+  );
+});
+
+protoss.gulp.task('protoss/templates:w3c-test', (cb) => {
+  protoss.gulp.src(config.w3c.src)
+    .pipe(w3cjs())
+    .pipe(w3cjs.reporter())
+    .on('end', () => {
+      cb(null);
+    });
 });
