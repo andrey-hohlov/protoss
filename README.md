@@ -10,14 +10,14 @@
 
 - Compile [Pug](https://pugjs.org/api/getting-started.html) (ex Jade) templates. Use [PostHTML](https://github.com/posthtml) plugins.
 - Compile [SCSS](http://sass-lang.com/) in separate result files (bundles), use `glod` imports. Add vendor prefixes, optimize css, write source maps. Support [PostCSS](http://postcss.org/).
-- Use Webpack 2 for bundle JavaScript, or just concatenate in separate bundles and minify. Source maps support.
+- Use [Webpack 2](https://webpack.js.org/) for bundle JavaScript. Or just concatenate files in separate bundles and minify. Source maps support.
 - Generate multiple png-sprites with retina support.
 - Generate multiple svg-sprites with png-fallback.
 - Generate multiple svg-icons sets.
 - Optimize images.
 - Generate favicons.
 - Add cache busting hashes to links in HTML and CSS.
-- Lint SCSS and JavaScript. Validate  HTML with W3C.
+- Lint SCSS and JavaScript. Validate HTML with W3C.
 - [BrowserSync](https://www.browsersync.io/) include.
 - Add Protoss-tasks to you workflow, configure it as you need.
 
@@ -79,11 +79,7 @@ Now you can use Protoss tasks.
 
 `protoss/styles:lint` - lint SCSS with stylelint
 
-### Scripts
-
-`protoss/scripts:lint` - lint JavaScript files with ESLint
-
-#### Webpack workflow
+### Scripts - webpack workflow
 
 `protoss/webpack` - run webpack
 
@@ -91,13 +87,15 @@ Now you can use Protoss tasks.
 
 `protoss/webpack:watch` - run webpack with force set `watch: true`
 
-#### Concat workflow
+### Scripts - concat workflow
 
-`protoss/scripts:build` - build scripts bundles
+`protoss/scripts` - build scripts bundles
 
 `protoss/scripts:build` - build scripts bundles with all optimizations
 
 `protoss/scripts:watch` - watch for scripts sources and recompile css after changes
+
+`protoss/scripts:lint` - lint JavaScript files with ESLint
 
 ### Images
 
@@ -142,23 +140,30 @@ module.exports = {
   templates: {
     src: './src/templates/**/*.jade',
     dest: './build/',
-    filter: false,
+    filter: function(file) {
+      const path = file.path.replace(/\\/g, '/');
+      const relative = file.relative.replace(/\\/g, '/');
+      return !/\/_/.test(path) && !/^_/.test(relative);
+    },
     inheritance: {
       basedir: '/src/templates/',
-      skip: 'node_modules'
+      skip: 'node_modules',
     },
     data: {},
     prettify: true,
     posthtml: false,
     hashes: {
-      enabled: true,
       build_dir: './',
-      src_path: './'
+      src_path: './',
+      query_name: 'v',
+      hash_len: 10,
+      exts: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.pdf', '.ico'],
     },
     w3c: {
-      src: './build/*.html'
-    }
+      src: './build/*.html',
+    },
   },
+
   styles: {
     bundles: [
       {
@@ -167,18 +172,25 @@ module.exports = {
         dest: './build/static/css/',
         watch: './src/styles/**/*.scss',
         minify: true,
-        hashes: true,
+        hashes:  {
+          build_dir: './',
+          src_path: './',
+          query_name: 'v',
+          hash_len: 10,
+          exts: ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'],
+        },
         postcss: false,
-        sourceMaps: true
-      }
+        sourceMaps: true,
+      },
     ],
     lint: {
-      src: ['./src/styles/**/*.scss']
-    }
+      src: ['./src/styles/**/*.scss'],
+    },
   },
+
   scripts: {
-    workflow: 'webpack',
-    webpackConfig: require(`${process.cwd()}/webpack.config.js`),
+    workflow: 'webpack', // 'webpack' or 'concat'
+    webpackConfig: fs.existsSync(webpackConfigPath) ? require(webpackConfigPath) : null,
     bundles: [
       {
         name: 'app',
@@ -187,18 +199,20 @@ module.exports = {
         watch: './src/scripts/**/*.js',
         concat: true,
         minify: true,
-        sourceMaps: true
-      }
+        sourceMaps: true,
+      },
     ],
     lint: {
-      src: ['./src/scripts/**/*.js']
-    }
+      src: ['./src/scripts/**/*.js'],
+    },
   },
+
   images: {
     src: ['./src/resources/images/**/*.{png,jpg,gif,svg}'],
     dest: './build/static/images/',
-    minPath: './build/static/images/**/*.{png,jpg,gif,svg}'
+    minPath: './build/static/images/**/*.{png,jpg,gif,svg}',
   },
+
   sprites: {
     enabled: true,
     src: './src/sprites/png/**/*.png',
@@ -209,8 +223,9 @@ module.exports = {
     template: __dirname + '/assets/sprite.mustache',
     templateData: {
       spritePath: '#{$pathToImages}sprites/',
-    }
+    },
   },
+
   spritesSvg: {
     enabled: true,
     src: './src/sprites/svg/',
@@ -221,22 +236,26 @@ module.exports = {
     templateData: {
       spritePath: '#{$pathToImages}sprites-svg/',
     },
-    fallback: false
+    fallback: false,
   },
+
   icons: {
     enabled: true,
     src: './src/icons/',
-    dest: './build/static/images/icons/'
+    dest: './build/static/images/icons/',
   },
+
   copy: [
     {
       src: './src/resources/fonts/**/*',
-      dest: './build/fonts/'
-    }
+      dest: './build/fonts/',
+    },
   ],
+
   del: [
-    './build'
+    './build',
   ],
+
   favicons: {
     enabled: true,
     src: './src/resources/favicon-master.png',
@@ -262,18 +281,20 @@ module.exports = {
         firefox: false,
         opengraph: false,
         twitter: false,
-        yandex: false
-      }
-    }
+        yandex: false,
+      },
+    },
   },
+
   serve: {
     browsersync: {
       open: true,
       port: 9001,
       server: {
         directory: true,
-        baseDir: './build/'
+        baseDir: './build/',
       },
+      files: ['./build/'],
       reloadDelay: 200,
       logConnections: true,
       debugInfo: true,
@@ -283,163 +304,157 @@ module.exports = {
       ghostMode: {
         clicks: false,
         forms: false,
-        scroll: false
-      }
+        scroll: false,
+      },
     },
-    watch: './build/'
   }
 }
 ```
 
 ### Templates
 
-`templates.src` (string|array) - path to templates source files
+`templates.src` (string|array) - path to templates source files.
 
-`templates.filterFunc` (function) - 
+`templates.dest` (string) - compiled HTML destination.
 
-`templates.inhBaseDir` (string) - 
+`templates.filter` (function) - function for filter out files.
 
-`templates.dest` (string) - 
+`templates.inheritance` (object) - configuration for [gulp-pug-inheritance](https://www.npmjs.com/package/gulp-pug-inheritance).
 
-`templates.data` (object) - 
+`templates.data` (object) - data, passed to templates.
 
-`templates.prettify` (boolean) - 
+`templates.prettify` (boolean) - prettify final HTML (use config from `.jsbeautifyrc` file in project root).
 
-`templates.posthtml` (boolean|) -  
+`templates.posthtml` (boolean|object) - config for [https://www.npmjs.com/package/gulp-posthtml](https://www.npmjs.com/package/gulp-posthtml).  
 
-`templates.hashes.enabled` (boolean) -
- 
-`templates.hashes.build_dir` - 
+`templates.hashes` (boolean|object) - config for [gulp-hash-src](https://www.npmjs.com/package/gulp-hash-src). Set `false` for disable hashes.
 
-`templates.hashes.src_path` - 
-
-`templates.w3c.src` (string|array) - 
+`templates.w3c.src` (string|array) - path to HTML files to test validity with W3C.
 
 ### Styles
 
-`styles.bundles` (array) - 
+`styles.bundles` (array) - array of bundles.
 
-`styles.bundles.%bundle%.name` (string) - 
+`styles.bundles.%bundle%.name` (string) - name of bundle (name of final file).
 
-`styles.bundles.%bundle%.src` (string|array) - 
+`styles.bundles.%bundle%.src` (string|array) - path to bundle source files.
 
-`styles.bundles.%bundle%.dest` (string) - 
+`styles.bundles.%bundle%.dest` (string) - destination of bundle file.
 
-`styles.bundles.%bundle%.watch` (string|array) - 
+`styles.bundles.%bundle%.watch` (string|array) - path for watch files of this bundle. If not set `src` will be used.
 
-`styles.bundles.%bundle%.minify` (boolean) - 
+`styles.bundles.%bundle%.minify` (boolean) - minify this bundle.
 
-`styles.bundles.%bundle%.hashes` (boolean) - 
+`styles.bundles.%bundle%.hashes` (boolean|object) - config for [gulp-hash-src](https://www.npmjs.com/package/gulp-hash-src). Set `false` for disable hashes.
 
 `styles.bundles.%bundle%.postcss` (boolean|) - 
 
-`styles.bundles.%bundle%.sourceMaps` (boolean) - 
+`styles.bundles.%bundle%.sourceMaps` (boolean) - generate sourcemaps for this bundle.
 
-`styles.lint.src` (string|array) - 
+`styles.lint.src` (string|array) - path to files that will be checked by stylelint.
 
 ### Scripts
 
-`scripts.workflow` (string) - 
+`scripts.workflow` (string) - scripts workflow: `concat` or `webpack`.
 
-`scripts.webpackConfig`
+`scripts.webpackConfig` (object|function) - webpack config.
 
-`scripts.bundles` (array) - 
+`scripts.bundles` (array) - array of bundles (only concat workflow).
 
-`scripts.bundles.%bundle%.name` (string) - 
+`scripts.bundles.%bundle%.name` (string) - name of bundle (name of final file).
 
-`scripts.bundles.%bundle%.src` (string|array) - 
+`scripts.bundles.%bundle%.src` (string|array) - path to bundle source files.
 
-`scripts.bundles.%bundle%.dest` (string) - 
+`scripts.bundles.%bundle%.dest` (string) - destination of bundle file.
 
-`scripts.bundles.%bundle%.watch` (string|array) - 
+`scripts.bundles.%bundle%.watch` (string|array) - path for watch files of this bundle. If not set `src` will be used.
 
-`scripts.bundles.%bundle%.concat` (boolean) - 
+`scripts.bundles.%bundle%.concat` (boolean) - concat files in this bundle or copy it separate.
 
-`scripts.bundles.%bundle%.minify` (boolean) - 
+`scripts.bundles.%bundle%.minify` (boolean) - minify this bundle.
 
-`scripts.bundles.%bundle%.sourceMaps` (boolean) - 
+`scripts.bundles.%bundle%.sourceMaps` (boolean) - generate sourcemaps for this bundle.
 
-`scripts.lint.src` (string|array) - 
+`scripts.lint.src` (string|array) - path to files that will be checked by ESlint (only for concat workflow).
     
 ### Images
 
-`images.src` (string|array) - 
+`images.src` (string|array) - images source.
 
-`images.dest` (string) - 
+`images.dest` (string) - images destination.
 
-`images.minPath` (string|array) - 
+`images.minPath` (string|array) - path for minifying images.
  
 ### Sprites
 
-`sprites.enabled` (boolean) - 
+`sprites.enabled` (boolean) - use png sprites.
 
-`sprites.src` (string) - 
+`sprites.src` (string) - path to source *folders*. Each folder - separate sprite.
 
-`sprites.dest` (string) - 
+`sprites.dest` (string) - destination for sprite.
 
-`sprites.retina` (boolean) - 
+`sprites.retina` (boolean) - create retina sprites (each icon need to be in to sizes: `icon.png` and `icon@2x.png`).
 
-`sprites.stylesName` (string) - 
+`sprites.stylesName` (string) - name of sprite styles file.
 
-`sprites.stylesDest` (string) - 
+`sprites.stylesDest` (string) - destination of sprite styles file.
 
-`sprites.templateData` (object) - 
+`sprites.template` (string) - template for styles file.
 
-`sprites.template` (string) - 
+`sprites.templateData` (object) - data, passed to styles template.
 
 ### SVG sprites
 
-`spritesSvg.enabled` (boolean) - 
+`spritesSvg.enabled` (boolean) - use svg sprites.
 
-`spritesSvg.src` (string) - 
+`spritesSvg.src` (string) - path to source *folders*. Each folder - separate sprite.
 
-`spritesSvg.dest` (string) - 
+`spritesSvg.dest` (string) - destination for sprite.
 
-`spritesSvg.stylesName` (string) - 
+`spritesSvg.stylesName` (string) - name of sprite styles file.
 
-`spritesSvg.stylesDest` (string) - 
+`spritesSvg.stylesDest` (string) - destination of sprite styles file.
 
-`spritesSvg.spritePath` (string) - 
+`spritesSvg.template` (string) - template for styles file.
 
-`spritesSvg.template` (string) - 
+`sprites.templateData` (object) - data, passed to styles template.
 
-`spritesSvg.fallback` (boolean) - 
+`spritesSvg.fallback` (boolean) - create png-fallback.
 
 ### Icons
 
-`icons.enabled` (boolean) - 
+`icons.enabled` (boolean) - use [svg icons](https://css-tricks.com/svg-symbol-good-choice-icons/).
 
-`icons.src` (string) - 
+`icons.src` (string) - path to source *folders*. Each folder - separate icon set.
 
-`icons.dest` (string) - 
+`icons.dest` (string) - destination for icon sets.
 
 ### Copy
 
-`copy` (array) - 
+`copy` (array) - copy tasks.
 
-`copy.%item%.src` (string) -
+`copy.%tasks%.src` (string) - path to source files.
 
-`copy.%item%.dest` (string) -
+`copy.%tasks%.dest` (string) - path to copy destination.
 
 ### Del
-`del` (array) -
+
+`del` (array) - array of pathes to delete.
 
 ### Favicons
 
-`favicons.enabled` (boolean) - 
+`favicons.enabled` (boolean) - generate favicons.
 
-`favicons.src` (string) - 
+`favicons.src` (string) - path to favicon source file.
 
-`favicons.dest` (string) - 
+`favicons.dest` (string) - favicons destination.
 
-`favicons.config` (object) - 
-
+`favicons.config` (object) - config for [Favicons](https://github.com/haydenbleasel/favicons).
 
 ### Serve
 
-`serve.browsersync` (object) - 
+`serve.browsersync` (object) - [BrowserSync](https://www.browsersync.io/docs/options) config.
 
-`serve.watch` (string|array) - 
 
 ## License
 
