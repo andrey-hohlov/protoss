@@ -1,3 +1,11 @@
+#### 3.0.0: February 4th, 2017
+* Global refactoring
+* Add Webpack 2
+* Jade -> Pug
+* Drop css prettifying
+* Add tests
+
+
 #### 2.0.0: November 26th, 2016
 * Rename  `svgIcons` option to `icons` ([4df44bc](https://github.com/andrey-hohlov/protoss/commit/4df44bc))
 * Use node environment variable instead protoss flags ([663e6b0](https://github.com/andrey-hohlov/protoss/commit/663e6b0))
