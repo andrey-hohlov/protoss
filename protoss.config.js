@@ -140,7 +140,7 @@ module.exports = {
         favicons: true,
         android: true,
         appleIcon: true,
-        windows: true,
+        windows: false,
         appleStartup: false,
         coast: false,
         firefox: false,
