@@ -1,12 +1,12 @@
 # Protoss
 [Gulp](http://gulpjs.com/)-tasks collection for frontend building.
 
+*2.0 branch [here](https://github.com/andrey-hohlov/protoss/tree/2.0).*
+
 0. [Features](#features)
 0. [Installation](#installation)
 0. [Tasks](#tasks)
 0. [Configuration](#configuration)
-
-[2.0 branch](https://github.com/andrey-hohlov/protoss/tree/2.0).
 
 ## [Usage example](https://github.com/andrey-hohlov/layout-starter)
 
