@@ -19,7 +19,7 @@ function filterTasks(tasks) {
       const tasksGroup = filterTasks(task);
       if (tasksGroup.length > 0) filtered.push(tasksGroup);
     } else if (task !== null) {
-     filtered.push(task);
+      filtered.push(task);
     }
   });
   return filtered;
