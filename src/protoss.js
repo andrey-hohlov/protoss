@@ -29,14 +29,17 @@ function runProtoss(gulp, userConfig) {
 
   // Load tasks
   const config = protoss.config;
+
   require('./tasks/main');
-  require('./tasks/templates');
-  require('./tasks/styles');
-  if (config.scripts.workflow === 'webpack') {
-    require('./tasks/webpack');
+  if (config.templates.enabled) {
+    require('./tasks/templates');
   }
-  if (config.scripts.workflow === 'concat') {
-    require('./tasks/scripts');
+  if (config.styles.enabled) {
+    require('./tasks/styles');
+  }
+  if (config.scripts.enabled) {
+    // eslint-disable-next-line no-unused-expressions
+    config.scripts.workflow === 'webpack' ? require('./tasks/webpack') : require('./tasks/scripts');
   }
   if (config.icons.enabled) {
     require('./tasks/icons');
@@ -47,7 +50,9 @@ function runProtoss(gulp, userConfig) {
   if (config.spritesSvg.enabled) {
     require('./tasks/sprites-svg');
   }
-  require('./tasks/images');
+  if (config.images.enabled) {
+    require('./tasks/images');
+  }
   require('./tasks/serve');
   require('./tasks/copy');
   require('./tasks/del');

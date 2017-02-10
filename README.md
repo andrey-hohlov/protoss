@@ -142,6 +142,7 @@ Now you can use Protoss tasks.
 ```javascript
 module.exports = {
   templates: {
+    enabled: true,
     src: './src/templates/**/*.jade',
     dest: './build/',
     filter: function(file) {
@@ -212,6 +213,7 @@ module.exports = {
   },
 
   images: {
+    enabled: true,
     src: ['./src/resources/images/**/*.{png,jpg,gif,svg}'],
     dest: './build/static/images/',
     minPath: './build/static/images/**/*.{png,jpg,gif,svg}',
@@ -317,6 +319,8 @@ module.exports = {
 
 ### Templates
 
+`templates.enabled` (boolean) - use templates tasks.
+
 `templates.src` (string|array) - path to templates source files.
 
 `templates.dest` (string) - compiled HTML destination.
@@ -336,6 +340,8 @@ module.exports = {
 `templates.w3c.src` (string|array) - path to HTML files to test validity with W3C.
 
 ### Styles
+
+`styles.enabled` (boolean) - use styles tasks.
 
 `styles.bundles` (array) - array of bundles.
 
@@ -363,6 +369,8 @@ module.exports = {
 
 ### Scripts
 
+`scripts.enabled` (boolean) - use scripts tasks.
+
 `scripts.workflow` (string) - scripts workflow: `concat` or `webpack`.
 
 `scripts.webpackConfig` (object|function) - webpack config.
@@ -386,6 +394,8 @@ module.exports = {
 `scripts.lint.src` (string|array) - path to files that will be checked by ESlint (only for concat workflow).
     
 ### Images
+
+`images.enabled` (boolean) - use images tasks.
 
 `images.src` (string|array) - images source.
 

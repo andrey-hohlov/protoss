@@ -3,6 +3,7 @@ const webpackConfigPath = `${process.cwd()}/webpack.config.js`;
 
 module.exports = {
   templates: {
+    enabled: true,
     src: './src/templates/**/*.jade',
     dest: './build/',
     filter: function(file) {
@@ -30,6 +31,7 @@ module.exports = {
   },
 
   styles: {
+    enabled: true,
     bundles: [
       {
         name: 'app',
@@ -54,6 +56,7 @@ module.exports = {
   },
 
   scripts: {
+    enabled: true,
     workflow: 'webpack', // 'webpack' or 'concat'
     webpackConfig: fs.existsSync(webpackConfigPath) ? require(webpackConfigPath) : null,
     bundles: [
@@ -73,6 +76,7 @@ module.exports = {
   },
 
   images: {
+    enabled: true,
     src: ['./src/resources/images/**/*.{png,jpg,gif,svg}'],
     dest: './build/static/images/',
     minPath: './build/static/images/**/*.{png,jpg,gif,svg}',
