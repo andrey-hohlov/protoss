@@ -1,3 +1,6 @@
+#### 3.1.0: February 10th, 2017
+* Add 'enabled' option for all main tasks group
+
 #### 3.0.0: February 4th, 2017
 * Global refactoring
 * Add Webpack 2
