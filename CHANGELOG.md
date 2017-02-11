@@ -1,3 +1,6 @@
+#### 3.2.0: February 10th, 2017
+* Add config for config for [gulp-stylelint](https://github.com/olegskl/gulp-stylelint) in options
+
 #### 3.1.0: February 10th, 2017
 * Add 'enabled' option for all main tasks group
 

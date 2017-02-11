@@ -190,6 +190,11 @@ module.exports = {
     ],
     lint: {
       src: ['./src/styles/**/*.scss'],
+      config: {
+        reporters: [
+          { formatter: 'string', console: true },
+        ],
+      },
     },
   },
 
@@ -366,6 +371,8 @@ module.exports = {
 `styles.bundles.%bundle%.sourceMaps` (boolean) - generate sourcemaps for this bundle.
 
 `styles.lint.src` (string|array) - path to files that will be checked by stylelint.
+
+`styles.lint.config` (object) - config for [gulp-stylelint](https://github.com/olegskl/gulp-stylelint).
 
 ### Scripts
 

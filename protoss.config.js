@@ -52,6 +52,11 @@ module.exports = {
     ],
     lint: {
       src: ['./src/styles/**/*.scss'],
+      config: {
+        reporters: [
+          { formatter: 'string', console: true },
+        ],
+      },
     },
   },
 

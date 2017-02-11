@@ -133,12 +133,5 @@ protoss.gulp.task('protoss/styles:build', (cb) => {
 
 protoss.gulp.task('protoss/styles:lint', () => { // eslint-disable-line  arrow-body-style
   return protoss.gulp.src(config.lint.src)
-    .pipe(stylelint({
-      reporters: [
-        {
-          formatter: 'string',
-          console: true,
-        },
-      ],
-    }));
+    .pipe(stylelint(config.lint.config));
 });
