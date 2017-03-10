@@ -65,7 +65,9 @@ protoss.gulp.task('protoss/images:optimize', (cb) => {
         ],
       }),
       imagemin.gifsicle(),
-      imagemin.jpegtran(),
+      imagemin.jpegtran({
+        progressive: true,
+      }),
       imagemin.optipng(),
     ]))
     .pipe(protoss.gulp.dest(config.dest))
