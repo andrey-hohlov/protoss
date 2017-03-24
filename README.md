@@ -173,9 +173,12 @@ module.exports = {
     bundles: [
       {
         name: 'app',
-        src: ['./src/styles/app.scss'],
+        src: './src/styles/app.scss',
         dest: './build/static/css/',
-        watch: './src/styles/**/*.scss',
+        watch: [
+          './src/styles/**/*.scss',
+          './temp/**/*.scss',
+        ],
         minify: true,
         hashes:  {
           build_dir: './',
@@ -189,7 +192,10 @@ module.exports = {
       },
     ],
     lint: {
-      src: ['./src/styles/**/*.scss'],
+      src: [
+        './src/styles/**/*.scss',
+        '!./temp/**/*.scss',
+      ],
       config: {
         reporters: [
           { formatter: 'string', console: true },
@@ -230,7 +236,7 @@ module.exports = {
     dest: './build/static/images/sprites/',
     retina: true,
     stylesName: '_sprites.scss',
-    stylesDest: './src/styles/_global/_sprites/',
+    stylesDest: './temp/sprites/',
     template: __dirname + '/assets/sprite.mustache',
     templateData: {
       spritePath: '#{$pathToImages}sprites/',
@@ -242,7 +248,7 @@ module.exports = {
     src: './src/sprites/svg/',
     dest: './build/static/images/sprites-svg/',
     stylesName: '_sprites-svg.scss',
-    stylesDest: './src/styles/_global/_sprites/',
+    stylesDest: './temp/sprites/',
     template: __dirname + '/assets/sprite-svg.mustache',
     templateData: {
       spritePath: '#{$pathToImages}sprites-svg/',
@@ -265,6 +271,7 @@ module.exports = {
 
   del: [
     './build',
+    './temp',
   ],
 
   favicons: {
