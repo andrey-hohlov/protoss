@@ -143,7 +143,7 @@ Now you can use Protoss tasks.
 module.exports = {
   templates: {
     enabled: true,
-    src: './src/templates/**/*.jade',
+    src: './src/templates/**/*.pug',
     dest: './build/',
     filter: function(file) {
       const path = file.path.replace(/\\/g, '/');
@@ -189,6 +189,16 @@ module.exports = {
         },
         postcss: false,
         sourceMaps: true,
+        cssnanoConfig: {
+          autoprefixer: false,
+          discardComments: {
+            removeAll: true,
+          },
+          colormin: false,
+          convertValues: false,
+          zindex: false,
+          discardDuplicates: true,
+        },
       },
     ],
     lint: {
@@ -376,6 +386,8 @@ module.exports = {
 `styles.bundles.%plugin%.options` (options) - options for processor.
 
 `styles.bundles.%bundle%.sourceMaps` (boolean) - generate sourcemaps for this bundle.
+
+`styles.bundles.%bundle%.cssnanoConfig` (object) - config for [cssnano](http://cssnano.co/).
 
 `styles.lint.src` (string|array) - path to files that will be checked by stylelint.
 

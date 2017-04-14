@@ -3,7 +3,6 @@ import gulpif from 'gulp-if';
 import sass from 'gulp-sass';
 import sassGlob from 'gulp-sass-glob';
 import cssnano from 'gulp-cssnano';
-import csso from 'gulp-csso';
 import autoprefixer from 'gulp-autoprefixer';
 import gmq from 'gulp-group-css-media-queries';
 import postcss from 'gulp-postcss';
@@ -51,17 +50,7 @@ function bundleStyles(bundle) {
         .pipe(postcss(postProcessors))
         .pipe(gulpif(isProduction, autoprefixer()))
         .pipe(gulpif(isProduction, gmq()))
-        .pipe(gulpif(isProduction, cssnano({
-          autoprefixer: false,
-          discardComments: {
-            removeAll: bundleData.minify,
-          },
-          colormin: false,
-          convertValues: false,
-          zindex: false,
-        })))
-        // TODO: remove when cssnano get 'remove overridden rules' feature
-        .pipe(gulpif(isProduction, csso()))
+        .pipe(gulpif(isProduction, cssnano(bundleData.cssnanoConfig)))
         // TODO: why hashes added only after save files?
         .pipe(protoss.gulp.dest(bundleData.dest))
         .pipe(gulpif(isProduction && bundleData.hashes, hashSrc(bundleData.hashes)))

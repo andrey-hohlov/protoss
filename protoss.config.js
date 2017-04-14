@@ -4,7 +4,7 @@ const webpackConfigPath = `${process.cwd()}/webpack.config.js`;
 module.exports = {
   templates: {
     enabled: true,
-    src: './src/templates/**/*.jade',
+    src: './src/templates/**/*.pug',
     dest: './build/',
     filter: function(file) {
       const path = file.path.replace(/\\/g, '/');
@@ -50,6 +50,16 @@ module.exports = {
         },
         postcss: false,
         sourceMaps: true,
+        cssnanoConfig: {
+          autoprefixer: false,
+          discardComments: {
+            removeAll: true,
+          },
+          colormin: false,
+          convertValues: false,
+          zindex: false,
+          discardDuplicates: true,
+        },
       },
     ],
     lint: {

@@ -1,18 +1,21 @@
-#### 3.2.0: February 10th, 2017
-* Add config for config for [gulp-stylelint](https://github.com/olegskl/gulp-stylelint) in options
+#### 3.3.0
+* Add config for config for config for [cssnano](http://cssnano.co/)
+* Drop csso usage
 
-#### 3.1.0: February 10th, 2017
+#### 3.2.0
+* Add config for config for [gulp-stylelint](https://github.com/olegskl/gulp-stylelint)
+
+#### 3.1.0
 * Add 'enabled' option for all main tasks group
 
-#### 3.0.0: February 4th, 2017
+#### 3.0.0
 * Global refactoring
 * Add Webpack 2
 * Jade -> Pug
 * Drop css prettifying
 * Add tests
 
-
-#### 2.0.0: November 26th, 2016
+#### 2.0.0
 * Rename  `svgIcons` option to `icons` ([4df44bc](https://github.com/andrey-hohlov/protoss/commit/4df44bc))
 * Use node environment variable instead protoss flags ([663e6b0](https://github.com/andrey-hohlov/protoss/commit/663e6b0))
 * Rewrite watchers and browsersync ([bc137eb](https://github.com/andrey-hohlov/protoss/commit/bc137eb))
