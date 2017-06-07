@@ -1,5 +1,8 @@
+#### 3.4.0
+* Drop csso usage
+
 #### 3.3.0
-* Add config for config for config for [cssnano](http://cssnano.co/)
+* Add config for [cssnano](http://cssnano.co/)
 * Drop csso usage
 
 #### 3.2.0

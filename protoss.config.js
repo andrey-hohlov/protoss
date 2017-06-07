@@ -18,13 +18,6 @@ module.exports = {
     data: {},
     prettify: true,
     posthtml: false,
-    hashes: {
-      build_dir: './',
-      src_path: './',
-      query_name: 'v',
-      hash_len: 10,
-      exts: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.pdf', '.ico'],
-    },
     w3c: {
       src: './build/*.html',
     },
@@ -41,13 +34,6 @@ module.exports = {
           './src/styles/**/*.scss',
         ],
         minify: true,
-        hashes:  {
-          build_dir: './',
-          src_path: './',
-          query_name: 'v',
-          hash_len: 10,
-          exts: ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'],
-        },
         postcss: false,
         sourceMaps: true,
         cssnanoConfig: {

@@ -6,7 +6,6 @@ import cssnano from 'gulp-cssnano';
 import autoprefixer from 'gulp-autoprefixer';
 import gmq from 'gulp-group-css-media-queries';
 import postcss from 'gulp-postcss';
-import hashSrc from 'gulp-hash-src';
 import stylelint from 'gulp-stylelint';
 import chokidar from 'chokidar';
 import sourcemaps from 'gulp-sourcemaps';
@@ -51,9 +50,6 @@ function bundleStyles(bundle) {
         .pipe(gulpif(isProduction, autoprefixer()))
         .pipe(gulpif(isProduction, gmq()))
         .pipe(gulpif(isProduction, cssnano(bundleData.cssnanoConfig)))
-        // TODO: why hashes added only after save files?
-        .pipe(protoss.gulp.dest(bundleData.dest))
-        .pipe(gulpif(isProduction && bundleData.hashes, hashSrc(bundleData.hashes)))
         .pipe(gulpif(!isProduction && bundleData.sourceMaps, sourcemaps.write()))
         .pipe(protoss.gulp.dest(bundleData.dest))
         .on('end', handleQueue);

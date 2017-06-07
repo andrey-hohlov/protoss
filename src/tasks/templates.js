@@ -5,7 +5,6 @@ import gulpif from 'gulp-if';
 import compile from 'gulp-pug';
 import inheritance from 'gulp-pug-inheritance';
 import prettify from 'gulp-jsbeautifier';
-import hashSrc from 'gulp-hash-src';
 import rename from 'gulp-rename';
 import posthtml from 'gulp-posthtml';
 import w3cjs from 'gulp-w3cjs';
@@ -39,8 +38,6 @@ protoss.gulp.task('protoss/templates', (cb) => {
     .pipe(gulpif(config.posthtml, posthtml(config.posthtml.plugins, config.posthtml.options)))
     .pipe(gulpif(isProduction && config.prettify, prettify()))
     .pipe(rename({ dirname: '.' }))
-    .pipe(protoss.gulp.dest(config.dest)) // TODO: remove double saving
-    .pipe(gulpif(isProduction && config.hashes, hashSrc(config.hashes)))
     .pipe(protoss.gulp.dest(config.dest))
     .on('end', () => {
       protoss.notifier.success('Templates compiled');

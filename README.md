@@ -14,13 +14,12 @@
 
 - Compile [Pug](https://pugjs.org/api/getting-started.html) (ex Jade) templates. Use [PostHTML](https://github.com/posthtml) plugins.
 - Compile [SCSS](http://sass-lang.com/) in separate result files (bundles), use `glod` imports. Add vendor prefixes, optimize css, write source maps. Support [PostCSS](http://postcss.org/).
-- Use [Webpack 2](https://webpack.js.org/) for bundle JavaScript. Or just concatenate files in separate bundles and minify. Source maps support.
+- Use [Webpack 2](https://webpack.js.org/) for bundle JavaScript. Or just concatenate files in separate bundles and minify. Source maps supports.
 - Generate multiple png-sprites with retina support.
 - Generate multiple svg-sprites with png-fallback.
 - Generate multiple svg-icons sets.
 - Optimize images.
 - Generate favicons.
-- Add cache busting hashes to links in HTML and CSS.
 - Lint SCSS and JavaScript. Validate HTML with W3C.
 - [BrowserSync](https://www.browsersync.io/) include.
 - Add Protoss-tasks to you workflow, configure it as you need.
@@ -157,13 +156,6 @@ module.exports = {
     data: {},
     prettify: true,
     posthtml: false,
-    hashes: {
-      build_dir: './',
-      src_path: './',
-      query_name: 'v',
-      hash_len: 10,
-      exts: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.pdf', '.ico'],
-    },
     w3c: {
       src: './build/*.html',
     },
@@ -180,13 +172,6 @@ module.exports = {
           './temp/**/*.scss',
         ],
         minify: true,
-        hashes:  {
-          build_dir: './',
-          src_path: './',
-          query_name: 'v',
-          hash_len: 10,
-          exts: ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'],
-        },
         postcss: false,
         sourceMaps: true,
         cssnanoConfig: {
@@ -357,8 +342,6 @@ module.exports = {
 
 `templates.posthtml` (boolean|object) - config for [https://www.npmjs.com/package/gulp-posthtml](https://www.npmjs.com/package/gulp-posthtml).  
 
-`templates.hashes` (boolean|object) - config for [gulp-hash-src](https://www.npmjs.com/package/gulp-hash-src). Set `false` for disable hashes.
-
 `templates.w3c.src` (string|array) - path to HTML files to test validity with W3C.
 
 ### Styles
@@ -376,8 +359,6 @@ module.exports = {
 `styles.bundles.%bundle%.watch` (string|array) - path for watch files of this bundle. If not set `src` will be used.
 
 `styles.bundles.%bundle%.minify` (boolean) - minify this bundle.
-
-`styles.bundles.%bundle%.hashes` (boolean|object) - config for [gulp-hash-src](https://www.npmjs.com/package/gulp-hash-src). Set `false` for disable hashes.
 
 `styles.bundles.%bundle%.postcss` (boolean|array) - array of [PostCSS](http://postcss.org/) plugins.
 
