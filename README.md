@@ -14,7 +14,7 @@
 ## Features
 
 - Compile [Pug](https://pugjs.org/api/getting-started.html) (ex Jade) templates. Use [PostHTML](https://github.com/posthtml) plugins.
-- Compile [SCSS](http://sass-lang.com/) in separate result files (bundles), use `glob` imports. Add vendor prefixes, optimize css, write source maps. Support [PostCSS](http://postcss.org/).
+- Compile [SCSS](http://sass-lang.com/) in separate result files (bundles), use `glob` imports. Add vendor prefixes, optimize css, write source maps. Support custom [PostCSS](http://postcss.org/).
 - Bundle JavaScript with [Webpack](https://webpack.js.org/).
 - Generate multiple png-sprites with retina support.
 - Generate multiple svg-sprites with png-fallback.
@@ -83,7 +83,7 @@ Now you can use Protoss tasks.
 
 `protoss/styles:lint` - lint SCSS with stylelint
 
-### Scripts - webpack workflow
+### Webpack
 
 `protoss/webpack` - run webpack
 
@@ -162,7 +162,6 @@ module.exports = {
           './src/styles/**/*.scss',
           './temp/**/*.scss',
         ],
-        minify: true,
         postcss: false,
         sourceMaps: true,
         cssnanoConfig: {
@@ -341,9 +340,7 @@ module.exports = {
 
 `styles.bundles.%bundle%.watch` (string|array) - path for watch files of this bundle. If not set `src` will be used.
 
-`styles.bundles.%bundle%.minify` (boolean) - minify this bundle.
-
-`styles.bundles.%bundle%.postcss` (boolean|array) - array of [PostCSS](http://postcss.org/) plugins.
+`styles.bundles.%bundle%.postcss` (boolean|array) - array of [PostCSS](http://postcss.org/) plugins. In build included: cssnano, autoprefixer and css-mqpacker.
 
 `styles.bundles.%plugin%.processor` (object) - PostCSS processor.
 

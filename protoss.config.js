@@ -33,7 +33,6 @@ module.exports = {
         watch: [
           './src/styles/**/*.scss',
         ],
-        minify: true,
         postcss: false,
         sourceMaps: true,
         cssnanoConfig: {

@@ -2,9 +2,9 @@ import plumber from 'gulp-plumber';
 import gulpif from 'gulp-if';
 import sass from 'gulp-sass';
 import sassGlob from 'gulp-sass-glob';
-import cssnano from 'gulp-cssnano';
-import autoprefixer from 'gulp-autoprefixer';
-import gmq from 'gulp-group-css-media-queries';
+import cssnano from 'cssnano';
+import autoprefixer from 'autoprefixer';
+import mqpacker from 'css-mqpacker';
 import postcss from 'gulp-postcss';
 import stylelint from 'gulp-stylelint';
 import chokidar from 'chokidar';
@@ -39,6 +39,15 @@ function bundleStyles(bundle) {
         });
       }
 
+      if (isProduction) {
+        postProcessors.push(autoprefixer());
+        postProcessors.push(mqpacker());
+      }
+
+      if (isProduction && bundleData.minify) {
+        postProcessors.push(cssnano(bundleData.cssnanoConfig));
+      }
+
       protoss.gulp.src(bundleData.src)
         .pipe(plumber({
           errorHandler: protoss.errorHandler('Error in styles task'),
@@ -47,9 +56,6 @@ function bundleStyles(bundle) {
         .pipe(gulpif(!isProduction && bundleData.sourceMaps, sourcemaps.init()))
         .pipe(sass())
         .pipe(postcss(postProcessors))
-        .pipe(gulpif(isProduction, autoprefixer()))
-        .pipe(gulpif(isProduction, gmq()))
-        .pipe(gulpif(isProduction, cssnano(bundleData.cssnanoConfig)))
         .pipe(gulpif(!isProduction && bundleData.sourceMaps, sourcemaps.write()))
         .pipe(protoss.gulp.dest(bundleData.dest))
         .on('end', handleQueue);
