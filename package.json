@@ -92,14 +92,6 @@
       "eslint:recommended",
       "airbnb-base"
     ],
-    "env": {
-      "es6": true,
-      "node": true
-    },
-    "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module"
-    },
     "rules": {
       "no-plusplus": 0,
       "no-new": 0,

@@ -42,9 +42,6 @@ function bundleStyles(bundle) {
       if (isProduction) {
         postProcessors.push(autoprefixer());
         postProcessors.push(mqpacker());
-      }
-
-      if (isProduction && bundleData.minify) {
         postProcessors.push(cssnano(bundleData.cssnanoConfig));
       }
 
