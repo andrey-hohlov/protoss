@@ -31,31 +31,39 @@ function runProtoss(gulp, userConfig) {
   const config = protoss.config;
 
   require('./tasks/main');
+
   if (config.templates.enabled) {
     require('./tasks/templates');
   }
+
   if (config.styles.enabled) {
     require('./tasks/styles');
   }
+
   if (config.scripts.enabled) {
-    // eslint-disable-next-line no-unused-expressions
-    config.scripts.workflow === 'webpack' ? require('./tasks/webpack') : require('./tasks/scripts');
+    require('./tasks/webpack');
   }
+
   if (config.icons.enabled) {
     require('./tasks/icons');
   }
+
   if (config.sprites.enabled) {
     require('./tasks/sprites');
   }
+
   if (config.spritesSvg.enabled) {
     require('./tasks/sprites-svg');
   }
+
   if (config.images.enabled) {
     require('./tasks/images');
   }
+
   require('./tasks/serve');
   require('./tasks/copy');
   require('./tasks/del');
+
   if (config.favicons.enabled) {
     require('./tasks/favicons');
   }

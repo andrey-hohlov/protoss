@@ -1,7 +1,8 @@
 # Protoss
 [Gulp](http://gulpjs.com/)-tasks collection for frontend building.
 
-*2.0 branch [here](https://github.com/andrey-hohlov/protoss/tree/2.0).*
+* [2.0 branch](https://github.com/andrey-hohlov/protoss/tree/2.0)
+* [3.0 branch](https://github.com/andrey-hohlov/protoss/tree/3.0)
 
 0. [Features](#features)
 0. [Installation](#installation)
@@ -13,24 +14,24 @@
 ## Features
 
 - Compile [Pug](https://pugjs.org/api/getting-started.html) (ex Jade) templates. Use [PostHTML](https://github.com/posthtml) plugins.
-- Compile [SCSS](http://sass-lang.com/) in separate result files (bundles), use `glod` imports. Add vendor prefixes, optimize css, write source maps. Support [PostCSS](http://postcss.org/).
-- Use [Webpack 2](https://webpack.js.org/) for bundle JavaScript. Or just concatenate files in separate bundles and minify. Source maps supports.
+- Compile [SCSS](http://sass-lang.com/) in separate result files (bundles), use `glob` imports. Add vendor prefixes, optimize css, write source maps. Support [PostCSS](http://postcss.org/).
+- Bundle JavaScript with [Webpack](https://webpack.js.org/).
 - Generate multiple png-sprites with retina support.
 - Generate multiple svg-sprites with png-fallback.
 - Generate multiple svg-icons sets.
 - Optimize images.
 - Generate favicons.
-- Lint SCSS and JavaScript. Validate HTML with W3C.
+- Lint SCSS. Validate HTML with W3C.
 - [BrowserSync](https://www.browsersync.io/) include.
 - Add Protoss-tasks to you workflow, configure it as you need.
 
 
 ## Installation
 
-Install gulp globally:
+Install gulp-cli:
 
 ```bash
-$ npm install -g gulp
+$ npm install -g gulp-cli
 ```
 
 Install gulp and protoss local in you project:
@@ -89,16 +90,6 @@ Now you can use Protoss tasks.
 `protoss/webpack:build` - set `NODE_ENV = 'production'` and run webpack
 
 `protoss/webpack:watch` - run webpack with force set `watch: true`
-
-### Scripts - concat workflow
-
-`protoss/scripts` - build scripts bundles
-
-`protoss/scripts:build` - build scripts bundles with all optimizations
-
-`protoss/scripts:watch` - watch for scripts sources and recompile css after changes
-
-`protoss/scripts:lint` - lint JavaScript files with ESLint
 
 ### Images
 
@@ -200,22 +191,8 @@ module.exports = {
   },
 
   scripts: {
-    workflow: 'webpack', // 'webpack' or 'concat'
+    enabled: true,
     webpackConfig: fs.existsSync(webpackConfigPath) ? require(webpackConfigPath) : null,
-    bundles: [
-      {
-        name: 'app',
-        src: ['./src/scripts/**/*.js'],
-        dest: './build/static/js/',
-        watch: './src/scripts/**/*.js',
-        concat: true,
-        minify: true,
-        sourceMaps: true,
-      },
-    ],
-    lint: {
-      src: ['./src/scripts/**/*.js'],
-    },
   },
 
   images: {
@@ -378,28 +355,8 @@ module.exports = {
 
 `scripts.enabled` (boolean) - use scripts tasks.
 
-`scripts.workflow` (string) - scripts workflow: `concat` or `webpack`.
-
 `scripts.webpackConfig` (object|function) - webpack config.
 
-`scripts.bundles` (array) - array of bundles (only concat workflow).
-
-`scripts.bundles.%bundle%.name` (string) - name of bundle (name of final file).
-
-`scripts.bundles.%bundle%.src` (string|array) - path to bundle source files.
-
-`scripts.bundles.%bundle%.dest` (string) - destination of bundle file.
-
-`scripts.bundles.%bundle%.watch` (string|array) - path for watch files of this bundle. If not set `src` will be used.
-
-`scripts.bundles.%bundle%.concat` (boolean) - concat files in this bundle or copy it separate.
-
-`scripts.bundles.%bundle%.minify` (boolean) - minify this bundle.
-
-`scripts.bundles.%bundle%.sourceMaps` (boolean) - generate sourcemaps for this bundle.
-
-`scripts.lint.src` (string|array) - path to files that will be checked by ESlint (only for concat workflow).
-    
 ### Images
 
 `images.enabled` (boolean) - use images tasks.

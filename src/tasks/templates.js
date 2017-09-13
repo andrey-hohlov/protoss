@@ -1,6 +1,7 @@
 import plumber from 'gulp-plumber';
 import filter from 'gulp-filter';
-import cached from 'gulp-cached';
+// import cached from 'gulp-cached';
+// import changed from 'gulp-changed'; TODO:
 import gulpif from 'gulp-if';
 import compile from 'gulp-pug';
 import inheritance from 'gulp-pug-inheritance';
@@ -23,7 +24,7 @@ protoss.gulp.task('protoss/templates', (cb) => {
     .pipe(plumber({
       errorHandler: protoss.errorHandler('Error in templates task'),
     }))
-    .pipe(gulpif(isWatch, cached()))
+    // .pipe(gulpif(isWatch, cached()))
     .pipe(gulpif(isWatch, inheritance(config.inheritance)))
     .pipe(filter((file) => {
       if (config.filter && typeof config.filter === 'function') {

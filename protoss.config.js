@@ -63,22 +63,7 @@ module.exports = {
 
   scripts: {
     enabled: true,
-    workflow: 'webpack', // 'webpack' or 'concat'
     webpackConfig: fs.existsSync(webpackConfigPath) ? require(webpackConfigPath) : null,
-    bundles: [
-      {
-        name: 'app',
-        src: ['./src/scripts/**/*.js'],
-        dest: './build/static/js/',
-        watch: './src/scripts/**/*.js',
-        concat: true,
-        minify: true,
-        sourceMaps: true,
-      },
-    ],
-    lint: {
-      src: ['./src/scripts/**/*.js'],
-    },
   },
 
   images: {

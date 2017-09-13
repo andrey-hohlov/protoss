@@ -1,5 +1,8 @@
+#### 4.0.0
+* Drop scripts concat workflow, now only webpack
+
 #### 3.4.0
-* Drop csso usage
+* Drop hashSrc usage
 
 #### 3.3.0
 * Add config for [cssnano](http://cssnano.co/)
