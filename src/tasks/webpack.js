@@ -1,36 +1,41 @@
-import webpack from 'webpack';
+import gulp from 'gulp'
 import gutil from 'gulp-util';
+import webpackStream from 'webpack-stream';
 
 const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 
-const config = protoss.config.scripts;
+const config = protoss.config.webpack;
 const webpackErrorHandler = protoss.errorHandler('Error in \'webpack\' task');
 
-const runWebpack = function runWebpack(watch = false) {
-  return (callback) => {
-    let webpackConfig = config.webpackConfig;
+const runWebpack = function runWebpack(watch) {
+  return () => {
+    let webpackConfig = config.config;
 
     if (typeof webpackConfig === 'function') {
       webpackConfig = webpackConfig();
     }
-    webpackConfig.watch = watch;
 
-    return webpack(webpackConfig, (error, stats) => {
-      const jsonStats = stats.toJson();
+    if (watch !== undefined) {
+      webpackConfig.watch = watch;
+    }
 
-      if (jsonStats.errors.length) {
-        jsonStats.errors.forEach((message) => {
-          webpackErrorHandler.call({ emit() { /* noop */ } }, { message });
-        });
-      }
+    return gulp.src(config.src)
+      .pipe(webpackStream(webpackConfig, null, (err, stats) => {
+        const jsonStats = stats.toJson();
 
-      gutil.log(stats.toString({ colors: true }));
+        if (jsonStats.errors.length) {
+          jsonStats.errors.forEach((message) => {
+            webpackErrorHandler.call({
+              emit() { /* noop */
+              }
+            }, {message});
+          });
+        }
 
-      if (webpackConfig.watch === false) {
-        callback();
-      }
-    });
-  };
+        gutil.log(stats.toString({colors: true}));
+      }))
+      .pipe(gulp.dest(config.dest))
+  }
 };
 
 protoss.gulp.task('protoss/webpack', runWebpack(false));

@@ -40,7 +40,7 @@ function runProtoss(gulp, userConfig) {
     require('./tasks/styles');
   }
 
-  if (config.scripts.enabled) {
+  if (config.webpack.enabled) {
     require('./tasks/webpack');
   }
 

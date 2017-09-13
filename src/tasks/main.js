@@ -1,15 +1,25 @@
 const runSequence = require('run-sequence').use(protoss.gulp); // TODO: remove on Gulp 4
 
 const config = protoss.config;
-const useTemplates = config.templates.enabled;
-const useScripts = config.scripts.enabled;
-const useStyles = config.styles.enabled;
-const useImages = config.images.enabled;
-const useIcons = config.icons.enabled;
-const useSprites = config.sprites.enabled;
-const useSpritesSvg = config.spritesSvg.enabled;
-const useFavicons = config.favicons.enabled;
-const useWebpack = config.scripts.workflow === 'webpack';
+
+const templatesTask = config.templates.enabled ? 'protoss/templates' : null;
+const stylesTask = config.styles.enabled ? 'protoss/styles' : null;
+const webpackTask = config.webpack.enabled ? 'protoss/webpack' : null;
+const imagesTask = config.images.enabled ? 'protoss/images' : null;
+const imagesOptimizeTask = config.images.enabled ? 'protoss/images:optimize' : null;
+const iconsTask = config.icons.enabled ? 'protoss/icons' : null;
+const spritesTask = config.sprites.enabled ? 'protoss/sprites' : null;
+const spritesSvgTask = config.spritesSvg.enabled ? 'protoss/sprites-svg' : null;
+const faviconsTask = config.favicons.enabled ? 'protoss/favicons' : null;
+const copyTask = 'protoss/copy';
+
+const templatesWatch = config.templates.enabled ? 'protoss/templates:watch' : null;
+const stylesWatch = config.styles.enabled ? 'protoss/styles:watch' : null;
+const imagesWatch = config.images.enabled ? 'protoss/images:watch' : null;
+const iconsWatch = config.icons.enabled ? 'protoss/icons:watch' : null;
+const spritesWatch = config.sprites.enabled ? 'protoss/sprites:watch' : null;
+const spritesSvgWatch = config.spritesSvg.enabled ? 'protoss/sprites-svg:watch' : null;
+const webpackWatch = config.webpack.enabled ? 'protoss/webpack:watch' : null;
 
 // Remove 'null' tasks
 function filterTasks(tasks) {
@@ -26,72 +36,82 @@ function filterTasks(tasks) {
 }
 
 protoss.gulp.task('protoss/watch-and-sync', (cb) => {
+  // TODO: Reorganize https://github.com/shama/webpack-stream/issues/79
   runSequence(
-    'protoss/watch',
     'protoss/serve',
+    'protoss/watch',
     cb,
   );
 });
 
 protoss.gulp.task('protoss/watch', (cb) => {
-  let watchTasks = [
-    'protoss/dev',
-    useStyles ? 'protoss/styles:watch' : null,
-    useImages ? 'protoss/images:watch' : null,
-    useTemplates ? 'protoss/templates:watch' : null,
-    useIcons ? 'protoss/icons:watch' : null,
-    useSprites ? 'protoss/sprites:watch' : null,
-    useSpritesSvg ? 'protoss/sprites-svg:watch' : null,
-    useScripts && !useWebpack ? 'protoss/scripts:watch' : null,
+  let tasks = [
+    [
+      iconsTask,
+      spritesTask,
+      spritesSvgTask,
+      faviconsTask,
+    ],
+    [
+      copyTask,
+      imagesTask,
+      stylesTask,
+      templatesTask,
+    ],
+    [
+      templatesWatch,
+      stylesWatch,
+      webpackWatch,
+      imagesWatch,
+      iconsWatch,
+      spritesWatch,
+      spritesSvgWatch,
+    ],
     () => {
       protoss.isWatch = true;
-      if (useScripts && useWebpack) {
-        protoss.notifier.warning('Run `protoss/webpack:watch` for start webpack!');
-      }
       cb();
     },
   ];
 
-  watchTasks = filterTasks(watchTasks);
-  runSequence.apply(null, watchTasks); // eslint-disable-line prefer-spread
+  tasks = filterTasks(tasks);
+  runSequence.apply(null, tasks); // eslint-disable-line prefer-spread
 });
 
 protoss.gulp.task('protoss/build', (cb) => {
   process.env.NODE_ENV = 'production';
-  let buildTasks = [
+  let tasks = [
     'protoss/del',
     'protoss/dev',
-    useImages ? 'protoss/images:optimize' : null,
+    imagesOptimizeTask,
     () => {
       cb();
     },
   ];
 
-  buildTasks = filterTasks(buildTasks);
-  runSequence.apply(null, buildTasks); // eslint-disable-line prefer-spread
+  tasks = filterTasks(tasks);
+  runSequence.apply(null, tasks); // eslint-disable-line prefer-spread
 });
 
 protoss.gulp.task('protoss/dev', (cb) => {
-  let devTasks = [
+  let tasks = [
     [
-      useImages ? 'protoss/images' : null,
-      useIcons ? 'protoss/icons' : null,
-      useSprites ? 'protoss/sprites' : null,
-      useSpritesSvg ? 'protoss/sprites-svg' : null,
+      imagesTask,
+      iconsTask,
+      spritesTask,
+      spritesSvgTask,
+      faviconsTask,
     ],
     [
-      'protoss/copy',
-      // eslint-disable-next-line no-nested-ternary
-      useScripts ? useWebpack ? 'protoss/webpack' : 'protoss/scripts' : null,
-      useStyles ? 'protoss/styles' : null,
+      copyTask,
+      webpackTask,
+      stylesTask,
+      templatesTask,
     ],
-    useTemplates ? 'protoss/templates' : null,
-    useFavicons ? 'protoss/favicons' : null,
     () => {
       cb();
     },
   ];
 
-  devTasks = filterTasks(devTasks);
-  runSequence.apply(null, devTasks); // eslint-disable-line prefer-spread
+  tasks = filterTasks(tasks);
+  runSequence.apply(null, tasks); // eslint-disable-line prefer-spread
 });

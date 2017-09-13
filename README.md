@@ -190,8 +190,10 @@ module.exports = {
     },
   },
 
-  scripts: {
+  webpack: {
     enabled: true,
+    src: './src/scripts/',
+    dest: './build/static/js/',
     webpackConfig: fs.existsSync(webpackConfigPath) ? require(webpackConfigPath) : null,
   },
 
@@ -285,19 +287,23 @@ module.exports = {
         baseDir: './build/',
       },
       files: ['./build/'],
-      reloadDelay: 200,
+      startPath: '/',
+      reloadDelay: 300,
+      reloadDebounce: 300,
+      injectChanges: false,
       logConnections: true,
       debugInfo: true,
-      injectChanges: false,
       browser: 'default',
-      startPath: '/',
       ghostMode: {
         clicks: false,
         forms: false,
         scroll: false,
       },
+      watchOptions: {
+        ignoreInitial: true,
+      },
     },
-  }
+  },
 }
 ```
 
