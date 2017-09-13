@@ -1,5 +1,6 @@
 #### 4.0.0
 * Drop scripts concat workflow, now only webpack
+* All css optimization moved to post-css plugins.
 
 #### 3.4.0
 * Drop hashSrc usage
