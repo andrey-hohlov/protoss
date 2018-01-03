@@ -1,3 +1,5 @@
+# DEPRECATED
+
 # Protoss
 [Gulp](http://gulpjs.com/)-tasks collection for frontend building.
 
@@ -8,8 +10,6 @@
 0. [Installation](#installation)
 0. [Tasks](#tasks)
 0. [Configuration](#configuration)
-
-## [Usage example](https://github.com/andrey-hohlov/layout-starter)
 
 ## Features
 
